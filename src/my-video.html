@@ -1,0 +1,678 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../public/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../public/components/youtube-search.html">
+<link rel="import" href="../public/components/youtube-lite.html">
+<link rel="import" href="../public/components/time-input.html">
+<link rel="import" href="../public/components/search-results.html">
+<link rel="import" href="../public/components/play-button.html">
+<link rel="import" href="../public/components/drag-button.html">
+<link rel="import" href="../public/components/vol-but.html">
+<dom-module id="my-video">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        height: calc(100vh - 60px);
+        --primary-color: var(--paper-red-500);
+        --primary-text-color: #fff;
+        --paper-toggle-button-unchecked-bar-color: #888;
+        /* background: linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
+      }
+
+      paper-input {
+        margin-left: -10%;
+        width: 74px;
+        margin-top: 23px;
+      }
+
+      paper-toggle-button {
+        padding-top: 31px;
+      }
+
+      #controls {
+        color: #fff;
+        @apply --layout-vertical;
+        @apply --layout-center-center;
+        position: relative;
+      }
+
+      #controls>div {
+        @apply --layout-horizontal;
+        padding-bottom: 1em;
+      }
+
+      .z2 {
+        position: relative;
+        z-index: 2;
+        margin-right: -5px;
+      }
+
+      .search {
+        display: none
+      }
+
+      .type {
+        font-family: sans-serif;
+        font-size: 11px;
+        letter-spacing: 1px;
+        height: 12px;
+        /* border: 1px solid; */
+        border-radius: 4px;
+        padding-top: 5px;
+        padding-left: 3px;
+        padding-right: 3px;
+        /*  background-color: #434b528a;
+        box-shadow: 2px 3px 4px #1f6cbb47;*/
+      }
+
+      .value {
+        margin-left: 25%;
+        margin-right: 19px;
+        visibility: hidden;
+        /* padding-right: 6px; */
+      }
+
+      .value2 {
+        /* margin-top: 5px; */
+        margin-left: 18px;
+        visibility: hidden;
+        /* margin-right: 2px; */
+        padding-left: 4px;
+        /* box-shadow: 2px 3px 9px #6378c59c; */
+      }
+
+      .navi {
+        display: -webkit-box;
+      }
+
+      .navtem {
+        padding: 2px;
+        margin-left: 8px;
+        color: #5e8aab;
+        font-weight: bold;
+      }
+
+      paper-icon-button {
+        position: relative;
+        color: #bd8130;
+        top: -16.5px;
+        left: 10px;
+      }
+
+      paper-icon-button[drop] {
+        top: -42px;
+        z-index: 1;
+        transition: z-index 0.5 ease, top 0.5 ease;
+      }
+
+      paper-icon-button.right {
+        left: 30.5%;
+        top: -6px;
+      }
+
+      .volumeButton {
+        border-radius: 12px;
+        position: relative;
+        width: 25px;
+        height: 25px;
+        top: 15px;
+        right: -27.5%;
+        background: #4c4c4c;
+        background: -moz-radial-gradient(ellipse at center, #4c4c4c 0%, #595959 8%, #595959 8%, #595959 11%, #666666 18%, #474747 20%, #2c2c2c 24%, rgba(0, 0, 0, 0.4) 47%, rgba(17, 17, 17, 0.14901960784313725) 60%, rgba(28, 28, 28, 0) 91%, rgba(43, 43, 43, 0) 94%, rgba(43, 43, 43, 0) 94%, rgba(19, 19, 19, 0) 100%);
+        background: -webkit-radial-gradient(ellipse at center, #4c4c4c 0%, #595959 8%, #595959 8%, #595959 11%, #666666 18%, #474747 20%, #2c2c2c 24%, rgba(0, 0, 0, 0.4) 47%, rgba(17, 17, 17, 0.14901960784313725) 60%, rgba(28, 28, 28, 0) 91%, rgba(43, 43, 43, 0) 94%, rgba(43, 43, 43, 0) 94%, rgba(19, 19, 19, 0) 100%);
+        background: radial-gradient(ellipse at center, #403f3f 0%, #595959 8%, rgb(89, 89, 89) 8%, #616060 11%, #666666 18%, #474747 20%, rgba(103, 144, 125, 0.67) 24%, rgba(125, 123, 123, 0.4) 47%, rgba(17, 17, 17, 0.14901960784313725) 60%, rgb(56, 75, 89) 91%, rgba(43, 43, 43, 0) 94%, rgb(45, 138, 210) 94%, rgba(19, 19, 19, 0) 100%);
+        transition: border-radius 1s ease-out
+      }
+
+      .volumeButton[show] {
+        border-radius: 5px;
+      }
+
+      .navbar {
+        /* background: linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
+        top: 0px;
+        padding-top: 32px;
+        padding-left: 19px;
+      }
+
+      .navbar[wide] {
+        width: 95%;
+      }
+
+      .navbar-bottom {
+        background: linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);
+        height: auto;
+        min-height: 28px
+      }
+
+      youtube-lite.player[default] {
+        width: 100% !important;
+        height: 43vh !important;
+      }
+
+      .mie[default] {
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-top: -1px;
+        background: linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);
+      }
+
+      .mie[wide] {
+        position: fixed;
+        top: -187px;
+        background: linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);
+        -webkit-transition: top 0.5s ease-out;
+        -moz-transition: top 0.5s ease-out;
+        transition: top 0.5s ease-out;
+      }
+
+      .mie[drop] {
+        top: 37px;
+        background: transparent
+      }
+
+      .navbar-expand-lg {
+        overflow: hidden;
+      }
+
+      .drag {
+        display: none
+      }
+
+      .drag[wide] {
+        display: block
+      }
+
+      .volume {
+        position: relative;
+        opacity: 0;
+        top: 44px;
+        z-index: 0;
+        height: 0px;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+      }
+
+      .volume[show] {
+        top: 9px;
+        position: relative;
+        opacity: 1;
+        z-index: 1;
+        width: auto;
+        height: 31px;
+        margin-bottom: 52px;
+      }
+
+      @media (min-width: 992px) {
+        .navbar-expand-lg {
+          top: -24px
+        }
+        .player {
+          top: -6px;
+        }
+
+      }
+
+      @media (min-height: 992px) {
+        .slider {
+          margin-top: -25px;
+        }
+        .navbar-expand-lg {
+          top: -24px;
+        }
+        #controls {
+          height: 137px;
+        }
+      }
+
+      .topy {
+        padding-top: 12px;
+        height: 30px;
+      }
+
+      .state {
+        visibility: hidden
+      }
+
+      .right {
+        float: right
+      }
+
+      .container {
+        width: 100%;
+      }
+    </style>
+
+    <!-- This app-route consumes the route which was provided by the tail of
+    a app-route in the host of this element. This means that the parent that
+    provides this route decides where this element lives in the URL space. In
+    this case, the parent, which uses hashes, matches #/video and hence this
+    element lives in <App serving point>?querParams#/video/:vid -->
+    <app-route route="{{route}}" pattern="/:vid" data="{{data}}" tail="{{videoTail}}" query-params="{{queryParams}}" active="{{videoPageActive}}">
+    </app-route>
+
+    <!-- You can bind any element's state into the URL by binding their
+    properties into the queryParams object. youtube-lite doesn't have any code
+    that's even aware of routing or the URL. -->
+    <div class="container">
+      <nav id="navYt" wide$="[[wide]]" class="navbar navbar-expand-lg">
+        <youtube-lite class="player" default$="[[default]]" id="player" video-id="{{videoId}}" state="{{queryParams.state}}" current-time="{{queryParams.time}}"
+          start-time="{{queryParams.time}}">
+        </youtube-lite>
+      </nav>
+      <div id="heg" class="slider">
+        <nav class="navi nav" id="nav">
+          <div class="nav-item navtem">
+            <div class="volumeButton" show$="[[show]]">
+              <paper-icon-button class="right" on-click="_volume"></paper-icon-button>
+            </div>
+          </div>
+          <div class="nav-item navtem">
+            <p>
+              <div id="valu" class="value"> {{transformedTime}} </div>
+            </p>
+          </div>
+          <div class="nav-item navtem">
+            <span>
+              <p></p>
+            </span>
+          </div>
+          <div class="nav-item navtem topy">
+            <play-button class="state" id="state" active="{{playing}}">
+            </play-button>
+          </div>
+          <div class="nav-item navtem">
+            <p>
+              <!--div class="type">duration</div-->
+              <div id="valu2" class="value2"> {{fulTime}}</div>
+            </p>
+          </div>
+        </nav>
+        <div class="row">
+          <div class="coll-xs-12">
+            <vol-but class="nav volume" id="volume" show$="[[show]]" show-me="[[show]]"></vol-but>
+          </div>
+        </div>
+      </div>
+      <nav id="controls" class="nav">
+        <div class="nav-item">
+          <!--time-input id="fds" class="z2" resize="{{resize}}" query="{{queryParams.time}}" time="[[time]]" real-time="{{realTime}}"
+            on-down="pause" on-up="play"></time-input-->
+        </div>
+      </nav>
+      
+      <youtube-search search="{{videData.page}}" api="[[Details]]" class="search" hide="true" video-data="{{timeData}}">
+      </youtube-search>
+    </div>
+  </template>
+
+  <script>
+    class myVideo extends Polymer.Element {
+      static get is() {
+        return 'my-video'
+      }
+      static get properties() {
+        return {
+          route: {
+            type: Object,
+            notify: true
+          },
+          timeData: {
+            type: Object,
+            observer: '_toSeconds',
+          },
+          realTime: {
+            type: String,
+            obsever: 'setTime'
+          },
+          playing: {
+            type: Boolean,
+            notify: true,
+            observer: '_playingChanged'
+          },
+          videoId: {
+            type: String,
+            notify: true,
+            observer: 'log'
+          },
+          transformedTime: {
+            type: String,
+            notify: true
+          },
+          videoPageActive: {
+            type: Boolean,
+            reflectToAttribute: true,
+            observer: '_videoPageActiveChanged'
+          },
+          queryParams: {
+            type: Object,
+          },
+          resize: {
+            type: Boolean,
+            notify: true,
+          },
+          change: {
+            type: Boolean,
+            notify: true,
+            observer: 'setItems'
+          },
+          hours: {
+            type: String,
+            value: "0"
+          },
+          minutes: {
+            type: String,
+            value: "0"
+          },
+          seconds: {
+            type: String,
+            value: "0"
+          },
+          time: {
+            type: String,
+            notify: true,
+            observer: 'log'
+          },
+          fulTime: {
+            type: String,
+            notify: true
+          },
+          sideWays: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          bottom: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          toggle: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          default: {
+            type: Boolean,
+            value: true,
+            notify: true,
+            reflectToAttribute: true
+          },
+          wide: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          show: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          lock: {
+            type: Boolean,
+            value: false
+          },
+          items: {
+            type: Array,
+            notify: true,
+            //value: window.searches[window.searches.q]
+          },
+          Details: {
+            type: Object,
+            value: function () {
+              return {
+                method: "videoDetails",
+                api: "videos"
+              }
+            }
+          }
+        }
+      }
+
+      ready() {
+        super.ready()
+        window.addEventListener("orientation-change", (function (e) {
+          this.orient("layout", e.detail)
+        }).bind(this))
+        setTimeout(() => {
+          var magic
+          if (window.innerWidth <= 400) {
+            magic = 9
+            if (window.innerWidth <= 320) {
+              magic = 15
+            }
+          } else {
+            magic = 6
+          }
+          //coloca o time, o play e no lugar certo em todas os devices        
+
+          this.$.state.style.visibility = "visible"
+          this.$.valu.style.visibility = "visible"
+          this.$.valu2.style.visibility = "visible"
+
+          this.$.valu.style.marginRight = magic = Math.floor((window.innerWidth / magic) - 5) + "px"
+          this.$.valu.style.transition = "margin-right 0.5s ease-in-out"
+          this.$.valu2.style.marginLeft = Math.floor(window.innerWidth / 7) + "px"
+          this.$.valu2.style.transition = "margin-right 0.5s ease-in-out"
+        }, 750)
+
+      }
+      static get observers() {
+        return [
+          '_playingChanged(playing)',
+          '_stateChanged(queryParams.state)',
+          '_time(queryParams)',
+          '_seethisshit()'
+        ]
+      }
+      log(data) {
+        console.log(data)
+      }
+      setItems() {
+        //this.items = window.searches[window.searches.q]
+      }
+      setVideo(data) {
+
+      }
+      _seethisshit() {
+        window.scrollTo({}, 0)
+      }
+
+      _drToggle() {
+        this.bottom = !this.bottom
+      }
+      _volume() {
+        this.show = !this.show
+      }
+      orient(data, detail) {
+        //o lock não é para mexer
+        //garante que tudo corre bem
+        if (detail === 90 && this.lock !== true) {
+          this.lock = true
+          this.default = false
+          this.wide = true
+          this.sideWays = true
+          this.$.heg.style.display = "none"
+          this.$.player.style.display = "none"
+          this.$.bottom.style.display = "none"
+          this.$.player.style.marginBottom = "83px"
+          setTimeout(() => {
+            window.document.body.style.overflowY = "hidden"
+            window.document.body.style.overflowX = "hidden"
+            this.style.position = "fixed"
+            this.$.player.style.top = "-10px"
+            this.$.player.style.width = (window.innerWidth - 40) + "px"
+            this.$.player.style.height = (window.screen.height - 60) + "px"
+            this.$.player.style.display = "block"
+          }, 1000)
+        }
+        if (detail === 0 && this.lock !== false) {
+          this.default = true
+          this.wide = false
+          this.sideWays = false
+          this.lock = false
+          window.document.body.style.overflowY = "auto"
+          this.style.position = "relative"
+          setTimeout(() => {
+            this.$.player.style.marginBottom = "0px"
+            this.$.player.style.top = "0px"
+            this.$.heg.style.display = "block"
+            this.$.bottom.style.display = "block"
+          }, 500)
+        }
+      }
+
+
+      pause() {
+        this.set('queryParams.state', 'paused');
+      }
+
+      play() {
+        setTimeout(() => {
+          this.set('queryParams.state', 'playing');
+
+        }, 200)
+      }
+
+      _playingChanged(playing) {
+        this.set('queryParams.state', playing ? 'playing' : 'paused');
+        if (this.queryParams.state === "playing") {
+          this.playing = true
+          setTimeout(() => {
+            this.orient("orient", window.screen.orientation.angle)
+            this.$.player.$.player.play()
+          }, 1000)
+        }
+        this.getTime(this.queryParams)
+      }
+
+      _stateChanged(state) {
+        setTimeout(() => {
+          this.set("fulTime", this.$.player.$.player.durationformatted)
+          this.fullVolVal = this.$.player.$.player.volume
+        }, 250)
+        this.playing = state === 'playing';
+        this.getTime(this.queryParams)
+      }
+      _videoPageActiveChanged(videoPageActive, previousValue) {
+        this._time({})
+        // change color of page on page change       
+        var newColor;
+        this.routePage = "videos"
+        if (videoPageActive) {
+          newColor = 0;
+        } else {
+          // white
+          newColor = 255;
+          this.style.display = ""
+        }
+        this._time({})
+        this.$.heg.style.background = 'linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%)';
+        this.style.zIndex = 1
+        // on first load, set the color then allow color transition animations
+        if (previousValue === undefined) {
+          document.body.style.transition = 'background .2s linear';
+          this._time({})
+          setTimeout(() => {
+            this.set("queryParams.state", "playing")
+          }, 200)
+          return;
+        }
+      }
+
+      setTime(time) {
+        getTime({
+          time: time
+        })
+      }
+      /*_toSeconds(obj) {
+           if (obj !== null && obj !== undefined && obj.hasOwnProperty("items") === true) {
+             let time, mTime, sTime, hTime, seconds
+             if (obj.items[0].contentDetails.duration.indexOf("H") > 0) {
+               time = obj.items[0].contentDetails.duration.split("H")
+               hTime = time[0].split("PT")[1]
+               mTime = time[1].split("M")[0]
+               sTime = time[1].split("M")[1].split("S").join()
+               hTime = parseInt(hTime)
+               mTime = parseInt(mTime)
+               sTime = parseInt(sTime)
+               hTime = hTime < 10 ? `0${hTime}` : `${hTime}`
+               mTime = mTime < 10 ? `0${mTime}` : `${mTime}`
+               sTime = sTime < 10 ? `0${sTime}` : `${sTime}`
+               time = hTime + ":" + mTime + ":" + sTime
+               seconds = (parseInt(hTime) * 3600) + (parseInt(mTime) * 60) + parseInt(sTime)
+             } else {
+               time = obj.items[0].contentDetails.duration.split("M")
+               mTime = time[0].split("PT")[1]
+               sTime = time[1].split("S")[0]
+               mTime = parseInt(mTime)
+               sTime = parseInt(sTime)
+               mTime = mTime < 10 ? `0${mTime}` : `${mTime}`
+               sTime = sTime < 10 ? `0${sTime}` : `${sTime}`
+               time = mTime + ":" + sTime
+               seconds = (parseInt(mTime) * 60) + parseInt(sTime)
+             }
+             this.set("time", seconds.toString())
+             //this.set("fulTime", time.toString())
+           }
+         }*/
+
+      _time(data) {
+        if (data.hasOwnProperty("state") === false) {
+          this.transformedTime = `00:00:00`
+          //this.$.fds.query = "0"
+        }
+        if (data.state === 'playing') {
+          this.set("seconds", (data.time % 60) < 10 ? `0${(data.time % 60)}` : `${(data.time % 60)}`)
+          this.set("transformedTime", `${this.hours}:${this.minutes}:${this.seconds}`)
+          if ((parseInt(data.time) % 60) === 0) {
+            this.getTime(data)
+          }
+        }
+      }
+
+      getTime(data) {
+        if (data.hasOwnProperty("time") === true) {
+          var realTime = (data.time / 60),
+            toDec = realTime.toString().split("."),
+            mins, hours;
+          if (data.time >= 3600) {
+            realTime = parseFloat(toDec[0]) / 60
+            if (realTime % 60 > 0) {
+              hours = parseFloat((data.time / 3600)).toString().split(".")[0]
+              mins = toDec[0] % 60
+            }
+            if (realTime % 60 === 0) {
+              hours = parseInt(this.hours.value) + 1
+              mins = toDec[0] % 60
+            }
+          } else {
+            mins = toDec[0] % 60
+            hours = "0"
+          }
+          mins = mins < 10 ? `0${mins}` : `${mins}`
+          this.set("minutes", mins)
+          hours = hours < 10 ? `0${hours}` : `${hours}`
+          this.set("hours", hours)
+        }
+      }
+
+    }
+    window.customElements.define(myVideo.is, myVideo);
+  </script>
+</dom-module>

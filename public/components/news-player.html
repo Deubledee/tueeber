@@ -1,0 +1,313 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="youtube-lite.html">
+<dom-module id="news-player">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                --app-primary-color: rgba(46, 90, 61, 0.76);
+                --app-secondary-color: rgba(64, 51, 161, 0.568);
+                --app-third-color: rgb(26, 27, 27);
+                --app-background-color: tranparent;
+            }
+
+            .content {
+                height: 40px;
+                width: 100%;
+                margin-top: 8px;
+                background: var(--app-background-color);
+                -webkit-transition: all 0.5s ease-in 1s;
+                -moz-transition: all 0.5s ease-in 1s;
+                transition: all 0.5s ease-in 1s;
+            }
+
+            #up::-webkit-scrollbar {
+                height: 8px;
+                z-index: 2;
+            }
+
+            #up::-webkit-scrollbar-thumb {
+                height: 8px;
+                margin-top: -12px;
+                background: var(--app-primary-color);
+                margin-right: 2px;
+            }
+
+            #up::-webkit-scrollbar-thumb:hover {
+                height: 8px;
+                background: linear-gradient(to bottom, var(--app-primary-color) 0%, var(--app-primary-color) 5%,
+                rgba(221, 221, 111, 0.829) 50%, var(--app-primary-color) 95%, var(--app-primary-color) 100%);
+            }
+
+            #up::-webkit-scrollbar-track {
+                height: 8px;
+                background-color: rgba(44, 49, 44, 0);
+                margin-right: 2px;
+            }
+
+            .player {
+                height: 400px;
+            }
+
+            .playing {
+                z-index: 3;
+                overflow-x: scroll;
+                width: 100%;
+                height: 40px;
+                -webkit-transition: height 1s ease-in-out 1s, background 1s ease-in-out 1s;
+                -moz-transition: height 1s ease-in-out 1s, background 1s ease-in-out 1s;
+                transition: height 1s ease-in-out 1s, background 1s ease-in-out 1s;
+            }
+
+            .playingB {
+                background: linear-gradient(to bottom, transparent 49%, #9e8f8f 51%, transparent 87%);
+                width: 100%;
+                height: 10px;
+                margin-top: 38px;
+                transition: margin-top 1s ease-in-out 1s;
+            }
+
+            /* .playingB[open] {               
+                margin-top: 3px;
+            }*/
+
+            .playing>paper-button {
+                color: aquamarine;
+                padding-left: 1px;
+                padding-right: 1px;
+                margin: 1px;
+                min-height: 20px;
+                margin-bottom: 0px;
+                width: 25px;
+                overflow-y: hidden;
+                text-transform: initial;
+                background: #202121;
+            }
+
+            .flex-vertical {
+                @apply --layout-vertical;
+            }
+
+            .flex-horizontal {
+                @apply --layout-horizontal;
+            }
+
+            .flexchild-vertical {
+                @apply --layout-flex;
+            }
+
+            .flexchild-vertical2 {
+                @apply --layout-flex-2;
+            }
+
+            paper-button {
+                color: rgb(85, 49, 49);
+                font-weight: bold;
+            }
+        </style>
+
+        <div id="content" class="content" open$="[[open]]" on-click="openThisShit">
+            <div id="up" class="playing  container flex-horizontal" open$="[[open]]">
+                <paper-button class="flexchild-vertical" on-click="_fox">
+                    Fox
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_cnn">
+                    CNN
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_abc">
+                    ABC
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_bbc">
+                    BBC
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_sky">
+                    Sky
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_n3Sports">
+                    N3 Sports
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_snookerLive">
+                    Snooker
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_esperss">
+                    Express
+                </paper-button>
+
+                <paper-button class="flexchild-vertical" on-click="_france24">
+                    France24
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_alJazeera">
+                    AlJazeera
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_onlineNews">
+                    BBTSIP
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_nasa">
+                    Nasa
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_bloomberg">
+                    Bloomberg
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_euronews">
+                    Euronews
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_newsmax">
+                    Newsmax
+                </paper-button>
+                <paper-button class="flexchild-vertical" on-click="_nbc2">
+                    NBC2
+                </paper-button>
+            </div>
+            <youtube-lite id="player" class="player" video-id="{{videoId}}"></youtube-lite>
+            <div id="down" class="playingB" open$="[[open]]"></div>
+    </template>
+    <script>
+        class newsPlayer extends Polymer.Element {
+            static get is() {
+                return 'news-player';
+            }
+            constructor() {
+                super();
+            }
+            ready() {
+                super.ready()
+
+            }
+            static get properties() {
+                return {
+                    open: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    toggle: {
+                        type: Boolean,
+                        value: false,
+                        notify: true
+                    },
+                    videoId: {
+                        type: String,
+                        value: "Q9Q5PNFMJlY",
+                        notify: true
+                    },
+                    liveNow: {
+                        type: String,
+                        notify: true,
+                        value: 'fox'
+                    },
+                    pause: {
+                        type: Boolean,
+                        notify: true,
+                        observer: '_pause'
+                    }
+                }
+            }
+            openThisShit() {
+                this.toggle = !this.toggle
+                this.open = !this.open
+            }
+
+            _pause(data) {
+                if (data === true) {
+                    this.$.player.$.player.pause()
+                    console.log(this.$.player.$.player)
+                } else {
+                    this.$.player.$.player.play() 
+                }
+            }
+
+            _cnn() {
+                this.videoId = 'yL-0DWobve0'
+                this.$.player.$.player.play()
+                this.liveNow = 'cnn'
+            }
+
+            _fox() {
+                this.videoId = 'Q9Q5PNFMJlY'
+                this.$.player.$.player.play()
+                this.liveNow = 'fox'
+            }
+
+            _sky() {
+                this.videoId = 'XOacA3RYrXk'
+                this.$.player.$.player.play()
+                this.liveNow = 'sky'
+            }
+            _bbc() {
+                this.videoId = 'HXeGpCFGu-k'
+                this.$.player.$.player.play()
+                this.liveNow = 'bbc'
+            }
+            _esperss() {
+                this.videoId = 'ZntopWITxYg'
+                this.$.player.$.player.play()
+                this.liveNow = 'esperss'
+            }
+            _abc() {
+                this.videoId = 'BAvMpdOckR8'
+                this.$.player.$.player.play()
+                this.liveNow = 'abc'
+            }
+            _n3Sports() {
+                this.videoId = 'IrKzxERBa-c'
+                this.$.player.$.player.play()
+                this.liveNow = 'n3 Sports'
+            }
+            _snookerLive() {
+                this.videoId = 'EfVWJo7DUiQ'
+                this.$.player.$.player.play()
+                this.liveNow = 'snooker Live'
+            }
+            _france24() {
+                this.videoId = '9c_Bac-17Rk'
+                this.$.player.$.player.play()
+                this.liveNow = 'france24'
+            }
+            _alJazeera() {
+                this.videoId = 'nVHt1_SWTZg'
+                this.$.player.$.player.play()
+                this.liveNow = 'alJazeera'
+            }
+            _onlineNews() {
+                this.videoId = 'bqanTi-fz9o'
+                this.$.player.$.player.play()
+                this.liveNow = 'bbbtsip'
+            }
+            _bloomberg() {
+                this.videoId = 'Ga3maNZ0x0w'
+                this.$.player.$.player.play()
+                this.liveNow = 'bloomberg'
+            }
+            _euronews() {
+                this.videoId = '3Dhtg0GWpbU'
+                this.$.player.$.player.play()
+                this.liveNow = 'euronews'
+            }
+            _nasa() {
+                this.videoId = 'RtU_mdL2vBM'
+                this.$.player.$.player.play()
+                this.liveNow = 'nasa'
+            }
+            _newsmax() {
+                this.videoId = 'FbjHJD5iVJU'
+                this.$.player.$.player.play()
+                this.liveNow = 'newsmax'
+            }
+            _nbc2() {
+                this.videoId = '_egSTyWb1gk'
+                this.$.player.$.player.play()
+                this.liveNow = 'nbc2'
+            }
+        }
+        window.customElements.define(newsPlayer.is, newsPlayer);
+    </script>
+</dom-module>

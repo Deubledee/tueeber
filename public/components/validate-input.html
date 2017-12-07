@@ -1,0 +1,88 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../../bower_components/iron-validator-behavior/iron-validator-behavior.html">
+<link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="search-validator.html">"
+<dom-module id="validate-input">
+    <template>
+        <style is="custom-style">
+            :host {
+                display: inline-block;
+            }
+
+            #simpleInput[invalid] {
+                color: var(--google-red-500);
+                border: 2px solid var(--google-red-500);
+            }
+
+            #simpleInput:not([invalid]) {
+                color: var(--google-green-500);
+                border: 2px solid var(--google-green-500);
+            }
+        </style>
+        <search-validator id="validator" values="{{value}}" valid={{invalid}} json-data="[[jsonData]]"></search-validator>
+        <paper-input id="input" label="{{label}}" value="{{search}}" on-click="clear"></paper-input>
+    </template>
+    <script>
+        class validateInput extends Polymer.mixinBehaviors([Polymer.IronValidatorBehavior], Polymer.Element) {
+            static get is() {
+                return 'validate-input'
+            }
+            static get properties() {
+                return {
+                    invalid: {
+                        reflectToAttribute: true,
+                        type: Boolean,
+                        value: false,
+                        observer: '_onInput'
+                    },
+                    value: {
+                        type: String,
+                        notify: true
+                    },
+                    label: {
+                        type: String,
+                        notify: true
+                    },
+                    search: {
+                        type: String,
+                        observer: 'setValue'
+                    },
+                    jsonData: {
+                        type: Object,
+                        notify: true,
+                        value: function () {
+                          return {
+                            searches: [],
+                            alter: {}
+                          }
+                        }
+                      }
+                }
+            }
+
+            setValue(e) {
+                if (e.length > 1)
+                    this.set("value", e)
+            }
+
+            clear() {
+                this.$.input.value = ""
+            }
+
+            _onInput(e) {
+                if (e === true) {
+                    return
+                }
+            }
+        }
+        window.customElements.define(validateInput.is, validateInput);
+    </script>
+</dom-module>

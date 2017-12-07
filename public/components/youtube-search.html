@@ -1,0 +1,201 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<dom-module id="youtube-search">
+  <template>
+    <style>
+      :host {
+        --primary-color: #000000;
+        --paper-input-container-color: #000000;
+        display: block;
+        position: relative;
+        padding: 1em;
+      }
+
+      route-info {
+        color: #fff;
+      }
+    </style>
+    <!-- This app-route consumes the route which was provided by the tail of
+    a app-route in the host of this element -->
+    <!-- 
+    /*
+    *app-route /search/
+    */
+    -->
+    <app-route route="{{route}}" pattern="/:page" data="{{searchData}}" tail="{{searchTail}}" query-params="{{searchQuery}}">
+    </app-route>
+    <!-- 
+    /*
+    *app-route /channels/
+    */
+    -->
+    <iron-ajax auto id="youtubeSearch" url="[[url]]" params="[[params]]" last-response="{{videoData}}">
+    </iron-ajax>
+
+  </template>
+
+  <script>
+    class youtubeSearch extends Polymer.Element {
+
+      static get is() {
+        return 'youtube-search';
+      }
+
+      constructor() {
+        super();
+      }
+
+      static get properties() {
+        return {
+          route: {
+            type: Object,
+            notify: true
+          },
+          data: {
+            type: Object
+          },
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+            notify: true
+          },
+          url: {
+            type: String,
+            notify: true
+          },
+          category: {
+            type: String,
+            notify: true
+          },
+          label: {
+            type: String,
+            notify: true
+          },
+          hidden: String,
+          hide: {
+            type: String,
+            observer: '_hide'
+          },
+          searchQuery: {
+            type: String,
+            //observer: 'query',
+          },
+          search: {
+            type: String,
+            observer: 'queryon',
+          },
+          api: {
+            type: Object,
+            value: function () {
+              return {
+                method: "",
+                api: ""
+              }
+            }
+          },
+          searchData: {
+            type: Object,
+            //observer:'query(data.searchQuery)'
+          },
+          params: {
+            type: String,
+            notify: true
+          },
+          videoData: {
+            type: Object,
+            notify: true,
+            observer: 'seeThisShit'
+          }
+        }
+      }
+      observers() {
+        return ['_pathChanged(route.path)']
+      }
+      _pathChanged(data) {
+        this.async(function () {
+          if (!this.route.path) {
+            this.set('route.path', '/youtube/');
+          }
+        });
+      }
+      _hide(state) {
+        if (state === "false") {
+          this.set("hidden", "")
+        } else {
+          this.set("hidden", "hidden")
+        }
+      }
+      seeThisShit(data){
+       // console.log(data)
+      }
+      queryon(data) {
+        if (this.api.method.length > 0) {
+         // console.log("queryon", data)
+          let method, query;
+          method = "_" + this.api.method
+          query = data
+          this.set("url", `https://www.googleapis.com/youtube/v3/${this.api.api}/`)
+          this.params = this[method](query)
+         // console.log("this.params", this.params)
+        }
+      }
+
+      query(data) {
+        let method, query;
+        if (this.route) {
+          if (!data.api && this.route.prefix === "/youtube/search") { 
+            data = { api: "search" }
+            method = "_" + "list"
+            query = ""
+          } else if (this.route.prefix === "/youtube/search") {
+            method = "_" + this.searchData.page
+            query = data.q
+          }
+          if (this.route.prefix === "/youtube/search") {
+            this.set("url", `https://www.googleapis.com/youtube/v3/${data.api}/`)
+            this.params = this[method](query)
+          }
+        }
+      }
+      _channel(data) {
+        return {
+          part: 'snippet',
+          channelId: data,
+          maxResults: 30,
+          key: 'AIzaSyAvZS0WP2y0M9Yczpi8F-4JeagLnFCDMwU', //'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
+          type: 'video'
+        }
+      }
+
+      _list(data) {
+        return {
+          part: 'snippet',
+          maxResults: 30,
+          q: data || this.search || "",
+          key: 'AIzaSyAvZS0WP2y0M9Yczpi8F-4JeagLnFCDMwU', //'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
+          type: 'video'
+        }
+      }
+
+      _videoDetails(data) {
+        return {
+          part: 'contentDetails',
+          id: data,
+          key: 'AIzaSyAvZS0WP2y0M9Yczpi8F-4JeagLnFCDMwU', //'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
+        }
+      }
+    }
+    window.customElements.define(youtubeSearch.is, youtubeSearch);
+  </script>
+</dom-module>

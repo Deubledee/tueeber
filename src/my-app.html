@@ -1,0 +1,587 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!-- custom elements-->
+<link rel="import" href="imports.html">
+<link rel="import" href="../public/components/simple-menubar.html">
+<link rel="import" href="../public/components/news-player.html">
+<link rel="import" href="my-video.html">
+<link rel="import" href="my-icons.html">
+<!-- routes elements-->
+<link rel="lazy-import" href="my-news.html">
+<link rel="lazy-import" href="my-sports.html">
+<link rel="lazy-import" href="my-movies.html">
+<link rel="lazy-import" href="my-radio.html">
+<link rel="lazy-import" href="../public/components/search-results.html">
+<link rel="lazy-import" href="my-view404.html">
+<!-- shared styles-->
+
+<dom-module id="my-app">
+  <template>
+    <style include="shared-styles-nav">
+      :host {
+        --app-primary-color: #194850;
+        --app-secondary-color: var(--paper-blue-500);
+        --app-third-color: #adc6b7;
+        --app-fourth-color: #26717c;
+        --app-shadow-color: #46ff1e;
+        --app-shadow-color2: #1eb8ff;
+        --app-font-size-1: 0.6em;
+        --app-font-size-2: 1em;
+        display: block;
+      }
+
+      app-toolbar {
+        color: var(--app-primary-color);
+        font-weight: bold;
+      }
+
+      .drawer-list {
+        height: 34px;
+        position: relative;
+        margin-top: 2px;
+        /* background: var(--app-primary-color); */
+        transition: all 0.5s ease-in-out;
+        overflow-y: auto;
+        border-top: 2px solid #194850;
+      }
+
+      iron-selector.drawer-list[open] {
+        margin-top: 228px;
+        height: 195px;
+        background: var(--app-primary-color);
+        border-top: 2px solid var(--app-fourth-color);
+      }
+
+      iron-selector.drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+        line-height: 40px;
+      }
+
+      a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
+
+      #drawerList::-webkit-scrollbar {
+        width: 0px;
+      }
+
+      paper-tab {
+        border-bottom: 1px solid #185a63;
+        margin-left: 11px;
+        margin-right: 11px;
+      }
+
+      .togglePage {
+        height: 34px;
+        width: 43px;
+        background: var(--app-primary-color);
+        -webkit-transition: color 0.5s ease-in-out 0.5s;
+        -moz-transition: color 0.5s ease-in-out 0.5s;
+        transition: color 0.5s ease-in-out 0.5s;
+      }
+
+      .togglePage [open] {
+        color: var(--app-fourth-color)
+      }
+
+      .upButton {
+        border-bottom: 4px solid var(--app-primary-color);
+        height: 14.5px;
+        width: 15px;
+        background: rgb(22, 21, 21);
+        ;
+        float: left;
+      }
+
+      .downButton {
+        height: 14.5px;
+        width: 15px;
+        background: rgb(22, 21, 21);
+        ;
+        float: left;
+      }
+
+      .hidden {
+        width: 15px;
+        height: 30px;
+        float: left;
+      }
+
+      .dropButton {
+        display: block;
+        height: 29.5px;
+        width: 25px;
+        background: rgb(22, 21, 21);
+        float: left;
+        border-top: 2px solid var(--app-primary-color);
+        border-bottom: 2px solid var(--app-primary-color);
+        border-right: 2px solid var(--app-primary-color);
+        -webkit-transition: all 0.5s ease-in-out 0.5s;
+        -moz-transition: all 0.5s ease-in-out 0.5s;
+        transition: all 0.5s ease-in-out 0.5s
+      }
+
+      .dropButton[open] {
+        border-top: 2px solid var(--app-fourth-color);
+        border-bottom: 2px solid var(--app-fourth-color);
+        border-right: 2px solid var(--app-fourth-color);
+      }
+
+      .container {
+        position: relative;
+        top: 144px;
+        padding-left: 225px;
+        padding-right: 225px;
+      }
+
+      .container2 {
+        position: relative;
+        overflow-y: -webkit-paged-y
+      }
+
+      .container3 {
+        position: relative;
+        text-align: left;
+        overflow-y: -webkit-paged-y
+      }
+
+      .container4 {
+        position: relative;
+        bottom: -800px;
+      }
+
+      .navbar>div {
+        padding-left: 3px;
+        padding-right: 1px;
+        margin: 1px;
+        min-height: 20px;
+        margin-bottom: 0px;
+        width: 50%;
+      }
+
+      .flex-vertical {
+        @apply --layout-vertical;
+      }
+
+      .flex-horizontal {
+        @apply --layout-horizontal;
+      }
+
+      .flexchild-vertical {
+        @apply --layout-flex;
+      }
+
+      .flexchild-vertical2 {
+        @apply --layout-flex-2;
+      }
+
+      .flexchild-vertical3 {
+        @apply --layout-flex-3;
+        padding: 10px;
+      }
+
+      .flexchild-vertical4 {
+        @apply --layout-flex-4;
+      }
+
+      .flexchild-vertical12 {
+        @apply --layout-flex-12;
+      }
+
+      .flexchild-vertical-auto {
+        @apply --layout-flex-auto;
+      }
+
+      .bottomer {
+        position: relative;
+        top: 84px;
+        ;
+        margin-bottom: 150px;
+        height: 400px;
+      }
+
+      .pubArea {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+        height: 5em
+      }
+
+      .topfixed {
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        z-index: 3;
+        box-shadow: 0px 3px 5px #44ab72;
+        background: #000000c9;
+      }
+
+      .bottomfixed[video] {
+        position: fixed;
+        bottom: 0px;
+        height: -webkit-fill-available;
+        width: 100%;
+        z-index: 3;
+        box-shadow: 0px 3px 5px #44ab72;
+        background: #000000c9;
+        padding-left: 25%;
+        padding-top: 10%
+      }
+
+      .bottomfixed {
+        position: fixed;
+        bottom: 0px;
+        height: 0px;
+        width: 100%;
+        z-index: 0;
+        padding-left: 0%;
+        padding-top: 0%
+      }
+
+      .zaline {
+        font-size: var(--app-font-size-1);
+        letter-spacing: 12px;
+        font-family: sans-serif;
+        font-style: italic;
+        text-shadow: 1px 1px 1px var(--app-shadow-color);
+      }
+
+      .zalinePage {
+        text-align: left;
+        /* font-size: var(--app-font-size-2); */
+        margin-left: 30px;
+        font-variant: all-petite-caps;
+        letter-spacing: 22px;
+        color: var(--app-third-color);
+        font-family: sans-serif;
+        font-style: italic;
+        text-shadow: 1px 1px 1px var(--app-shadow-color2);
+      }
+
+      .redCircle {
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background: red
+      }
+
+      .someColor {
+        color: var(--google-green-300);
+        text-shadow: 1px 0px 1px var(--app-shadow-color2);
+        font-size: var(--app-font-size-1);
+        letter-spacing: 1px
+      }
+
+      .pageVideo {
+        position: absolute;
+        height: 800px;
+        width: 800px;
+        background: black
+      }
+
+      .closeButton {
+        color: white;
+        float: right;
+        height: 30px!important;
+        width: 30px!important;
+        background: black;
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+        margin: 0px!important;
+        margin-bottom: 0px!important;
+      }
+    </style>
+
+    <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
+    </app-location>
+
+    <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}" active="[[active]]">
+    </app-route>
+
+    <!-- Main content -->
+    <nav class="navbar navbar-dark topfixed flex-vertical">
+      <app-toolbar class="flex-horizontal">
+        <div main-title class="zaline flexchild-vertical">
+          Tueeber
+        </div>
+        <label for="circle" class="someColor"> live now</label>
+        <div id="circle" class="zalinePage flexchild-vertical">
+          <div class="redCircle"></div>
+          [[liveNow]]</div>
+        <iron-selector id="drawerList" open$="[[open]]" selected="[[page]]" attr-for-selected="name" class="drawer-list flexchild-vertical"
+          role="navigation">
+          <div class="container2 flex-vertical">
+            <div class="flexchild-vertical">
+              <div class="container3 flex-horizontal">
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view1" href="[[rootPath]]news">News</a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view2" href="[[rootPath]]sports">Sports</a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]movies">Movies</a>
+                </paper-tab>
+              </div>
+            </div>
+            <div class="flexchild-vertical">
+              <div class="container3 flex-horizontal">
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]radio">Radio</a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]movies">Music </a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]radio"> Animation</a>
+                </paper-tab>
+              </div>
+            </div>
+            <div class="flexchild-vertical">
+              <div class="container3 flex-horizontal">
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view1" href="[[rootPath]]news"> Learn</a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view2" href="[[rootPath]]sports">Channels</a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]movies">Finance</a>
+                </paper-tab>
+              </div>
+            </div>
+            <div class="flexchild-vertical">
+              <div class="container3 flex-horizontal">
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]radio">Teach</a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]movies"> Radio </a>
+                </paper-tab>
+                <paper-tab class="flexchild-vertical2">
+                  <a name="view3" href="[[rootPath]]radio">Technology</a>
+                </paper-tab>
+              </div>
+            </div>
+          </div>
+        </iron-selector>
+        <div class="togglePage" open$="[[open]]">
+          <div id="dropButton" class="dropButton" open$="[[open]]" on-click="openScroll">
+            <iron-icon icon="arrow-drop-down"></iron-icon>
+          </div>
+          <nav id="navHidden" class="hidden">
+            <iron-icon class="upButton" on-click="scrollUp" icon="arrow-drop-up"></iron-icon>
+            <iron-icon class="downButton" on-click="scrollDown" icon="arrow-drop-down"></iron-icon>
+          </nav>
+        </div>
+      </app-toolbar>
+    </nav>
+    <nav class="navbar bottomer flex-horizontal">
+      <div class="flexchild-vertical3">
+        <span></span>
+      </div>
+      <div class="flexchild-vertical3">
+        <news-player id="player" live-now="{{liveNow}}"></news-player>
+      </div>
+      <div class="flexchild-vertical3">
+        <search-results id="results4" mini="true" search="[[liveNow]] news" >
+          loading...
+      </search-results>
+      </div>
+    </nav>
+    <div class="container flex-horizontal">
+      <div class="row col-xs-12">
+        <div class="flexchild-vertical12">
+          <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <my-news name="news"></my-news>
+            <my-sports name="sports"></my-sports>
+            <my-movies name="movies" ></my-movies>
+            <my-radio name="radio"></my-radio>
+            <my-view404 name="view404"></my-view404>
+          </iron-pages>
+        </div>
+      </div>
+    </div>
+    <div class="container4">
+      <div class="navbar pubArea">
+        <div class="flex-vertical">
+          <div class="flexchild-vertical2">
+            <h3>SPAM</h3>
+            <span>
+              <label>
+                <h4>Owner</h4>
+              </label>
+              <p>
+                I have spam, spam, spam, sausage and eggs, spam and spam
+              </p>
+            </span>
+            <span>
+              <label>
+                <h4>Client</h4>
+              </label>
+              <p>
+                Can i have sausage and eggs without the spam?
+              </p>
+            </span>
+            <span>
+              <label>
+                <h4>Owner</h4>
+              </label>
+              <p>
+                You can't have sausage and eggs without the spam!!
+              </p>
+            </span>
+            <span>
+              <label>
+                <h4>Client</h4>
+              </label>
+              <p>
+                But i don't like SAPM..!!!
+              </p>
+            </span>
+            <span>
+              <label>
+                <h4>Clients (Choir)</h4>
+              </label>
+              <p>
+                spam, spam, spam, spam, spam...
+              </p>
+            </span>
+          </div>
+          <div class="flexchild-vertical2">
+            Foooooooooooooooooooooooooooooooooooooter
+          </div>
+          <div class="flexchild-vertical2">
+            Foooooooooooooooooooooooooooooooooooooter
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav id="pageVideo" class="navbar navbar-dark bottomfixed flex-vertical" video$="[[video]]">
+      <div class="closeButton" on-click="closeVideo">
+        <button>x</button>
+      </div>
+      <div class="flexchild-vertical">
+        <my-video id="video" route="route" sideways="true">
+        </my-video>
+      </div>
+    </nav>
+  </template>
+
+  <script>
+    // Gesture events like tap and track generated from touch will not be
+    // preventable, allowing for better scrolling performance.
+    Polymer.setPassiveTouchGestures(true);
+
+    class MyApp extends Polymer.Element {
+      static get is() { return 'my-app'; }
+
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+          },
+          routeData: Object,
+          num: {
+            type: Number,
+            value: 0
+          },
+          open: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          video: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          subroute: String,
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+          liveNow: {
+            type: String,
+            notify: true
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)',
+        ];
+      }
+
+      _routePageChanged(page) {
+        // If no page was found in the route data, page will be an empty string.
+        // Default to 'view1' in that case.
+        if (page === 'video') {
+          this.$.player.pause = true
+          this.video = !this.video
+          this.$.video.videoId = this.subroute.path.slice(1, this.subroute.path.length)
+          setTimeout(() => {
+            window.history.pushState({}, null, this.page)
+          }, 100)
+          console.log(this.subroute, "type video")
+        } else {
+          console.log(page, "type news")
+          this.video = this.video === true ? !this.video : this.video
+          this.page = page || 'news';
+        }
+      }
+
+      scrollUp() {
+        this.$.drawerList.scrollTo({}, (this.$.drawerList.scrollTop - 10))
+        if (this.$.drawerList.scrollTop <= 0)
+          this.$.drawerList.scrollTop = 0
+      }
+      scrollDown() {
+        this.$.drawerList.scrollTo({}, (this.$.drawerList.scrollTop + 10))
+        if (this.$.drawerList.scrollTop >= 140)
+          this.$.drawerList.scrollTop = 140
+      }
+      openScroll() {
+        this.open = !this.open       
+      }
+      closeVideo() {
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        this.video = false;
+        this.$.video.playing = false
+        this.$.player.pause = false
+      }
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        Polymer.importHref(
+          resolvedPageUrl,
+          null,
+          this._showPage404.bind(this),
+          true);
+      }
+
+      _showPage404() {
+        this.page = 'view404';
+      }
+    }
+
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>

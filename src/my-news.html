@@ -1,0 +1,228 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../public/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../public/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../public/bower_components/iron-flex-layout/iron-flex-layout.html">
+<!--link rel="import" href="page-video.html"-->
+<link rel="import" href="../public/components/search-results.html">
+<dom-module id="my-news">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                --app-primary-color: rgb(207, 29, 23);
+                --app-secondary-color: black;
+                --app-third-color: rgb(66, 133, 244);
+            }
+
+            .container {
+                padding: 0px;
+                /*background: var(--app-third-color);*/
+            }
+
+            .container>div {
+                padding-left: 15px;
+                padding-right: 15px;
+                margin: 1px;
+                min-height: 20px;
+                margin-bottom: 50px
+                /*background: rgb(27, 26, 26)*/
+            }
+
+            .flex-vertical[mobile] {
+                @apply --layout-vertical;
+            }
+
+            .flex-horizontal {
+                @apply --layout-horizontal;
+            }
+
+            .flexchild-vertical {
+                @apply --layout-flex;
+            }
+
+            .flexchild-vertical2 {
+                @apply --layout-flex-2;
+            }
+
+            .flexchild-vertical3 {
+                @apply --layout-flex-3;
+            }
+
+            .flexchild-vertical4 {
+                @apply --layout-flex-4;
+            }
+
+            .flexchild-vertical12 {
+                @apply --layout-flex-12;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+
+            .flexchild-vertical-auto {
+                @apply --layout-flex-auto;
+            }
+
+            .pubArea {
+                margin-top: 15px;
+                margin-bottom: 15px;
+                padding-left: 5px;
+                padding-right: 5px;
+                height: 5em
+            }
+
+            .bottomer {
+                margin-bottom: 150px;
+                height: 400px;
+            }
+
+            .player {
+                height: 400px;
+            }
+
+            search-results {
+                box-shadow: 1px, 1px, 1px grey;
+            }
+
+            paper-card {
+                --paper-card-header-color: rgb(231, 37, 79);
+                --paper-card-header-image: {
+                    height: 90px;
+                }
+            }
+        </style>
+        <app-route route="{{route}}" pattern="/:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
+        </app-route>
+        <div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
+            <div class="flexchild-vertical2">
+                <paper-card heading="donald trump" alt="donald trump" image="../public/images/donald-trump-headding.jpg">
+                </paper-card>
+                <search-results id="results1"  bottom="[[bottom]]" search="donald trump" mini="[[mini]]" ><!--background="../public/images/donald-trump.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+            <div class="flexchild-vertical2">
+                <paper-card heading="fox news" alt="fox news" image="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg">
+                </paper-card>
+                <search-results id="results2" bottom="[[bottom]]" search="fox news" ><!--background="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+            <div class="flexchild-vertical2">
+                <paper-card heading="Barack Obama" alt="barack obama" image="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
+                </paper-card>
+                <search-results id="results3" bottom="[[bottom]]" search="barack obama" ><!--background="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+            <div class="flexchild-vertical2">
+                <paper-card placeholderImage="NBA Sports" heading="NBA" alt="NBA logo" image="https://i0.wp.com/www.kickassfacts.com/wp-content/uploads/2013/09/NBA.jpeg?fit=420%2C330">
+                </paper-card>
+                <search-results id="results4" bottom="[[bottom]]" search="sports nba" ><!--background="http://redacao.mackenzie.br/wp-content/uploads/2017/10/nba-logo.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+        </div>
+        <div class="container flex-vertical flex-horizontal pubArea" mobilePub$="[[mobilePub]]">
+            <div class="flexchild-vertical2">
+                content here
+            </div>
+        </div>
+        <div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
+            <div class="flexchild-vertical2">
+                <paper-card heading="CNN news" alt="CNN news" image="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg">
+                </paper-card>
+                <search-results id="results4" bottom="[[bottom]]" search="CNN news"> <!-- background="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+            <div class="flexchild-vertical2">
+                <paper-card heading=" middle east news" alt="middle east news" image="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg">
+                </paper-card>
+                <search-results id="results5" bottom="[[bottom]]" search="middle east news" ><!--background="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+            <div class="flexchild-vertical2">
+                <paper-card heading="Barack Obama" alt="barack obama" image="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
+                </paper-card>
+                <search-results id="results6" bottom="[[bottom]]" search="barack obama"><!-- background="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+            <div class="flexchild-vertical2">
+                <paper-card placeholderImage="NBA Sports" heading="NBA" alt="NBA logo" image="https://i0.wp.com/www.kickassfacts.com/wp-content/uploads/2013/09/NBA.jpeg?fit=420%2C330">
+                </paper-card>
+                <search-results id="results7" bottom="[[bottom]]" search="sports nba" ><!--background="http://redacao.mackenzie.br/wp-content/uploads/2017/10/nba-logo.jpg"-->
+                    loading...
+                </search-results>
+            </div>
+        </div>
+    </template>
+    <script>
+        class myNews extends Polymer.Element {
+            static get is() {
+                return 'my-news';
+            }
+            constructor() {
+                super();
+            }
+            ready() {
+                super.ready()
+            }
+            static get properties() {
+                return {
+                    route: {
+                        type: Object,
+                        notify: true
+                    },
+                    mini: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    bottom: {
+                        type: Boolean,
+                        value: true,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    open: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    sideWays: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    mobile: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    }
+                }
+            }
+
+            fuckedYouUp(data) {
+                console.log('realy did..!!', data)
+            }
+            _seethisshit() {
+                window.scrollTo({}, 0)
+            }
+        }
+        window.customElements.define(myNews.is, myNews);
+    </script>
+</dom-module>
