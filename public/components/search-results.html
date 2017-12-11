@@ -97,10 +97,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .background {
-                width: 100%;
-                box-shadow: 2px 3px 4px #544d4d;
+                width: 100%;               
             }
-
+            .background[sideFix] {
+                width: 420px;               
+            }
             .nav {
                 width: 101%;
                 box-shadow: var(--app-shadow-value);
@@ -126,15 +127,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .card-content {
-                width: 101%;
+                width: 100%;
+                font-weight: bold;
                 text-overflow: ellipsis;
-                margin-bottom: 10px;
-                box-shadow: var(--app-shadow-value);
+                margin-bottom: 10px;               
             }
 
             .card-content[mini] {
-                width: 43%;
+                height: 97px;
+                font-size: large;                
+                width: 47%;
                 float: left;
+                padding-left: 3px;
             }
 
             .card-content[bottom] {
@@ -204,8 +208,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .float[mini] {
                 margin-top: -25px;
-                /* width: 379px; */
-                padding: 22px;
                 /* margin-left: 101px; */
             }
 
@@ -242,7 +244,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-route>
         <youtube-search api="[[Details]]" search="[[search]]" class="search" hide="true" video-data="{{videoData}}">
         </youtube-search>
-        <div class="background" id="background">
+        <div class="background" sideFix$="sideFix" id="background">
             <div id="content" class="content" mini$="[[mini]]" sideWays$="[[sideWays]]" mobile$="[[mobile]]"
                 bottom$="[[bottom]]" open$="[[open]]">
                 <iron-selector selected="[[routeTail.prefix]]" attr-for-selected="name" class="drawer-list" role="navigation">
@@ -307,6 +309,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         //observer: '_background'
                     },
                     mini: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    }, 
+                    sideFix: {
                         type: Boolean,
                         value: false,
                         notify: true,

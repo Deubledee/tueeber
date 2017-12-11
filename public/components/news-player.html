@@ -13,15 +13,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <style>
             :host {
                 width: 100%;
-                --app-primary-color: rgba(46, 90, 61, 0.76);
-                --app-secondary-color: rgba(64, 51, 161, 0.568);
+                --app-primary-color: rgba(136, 149, 153, 0.76);
+                --app-secondary-color: rgba(35, 34, 39, 0.568);
                 --app-third-color: rgb(26, 27, 27);
                 --app-background-color: tranparent;
             }
 
             .content {
-                height: 40px;
-                width: 100%;
+                float: right;
+                height: 393px;
+                width: 792px;
                 margin-top: 8px;
                 background: var(--app-background-color);
                 -webkit-transition: all 0.5s ease-in 1s;
@@ -44,7 +45,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             #up::-webkit-scrollbar-thumb:hover {
                 height: 8px;
                 background: linear-gradient(to bottom, var(--app-primary-color) 0%, var(--app-primary-color) 5%,
-                rgba(221, 221, 111, 0.829) 50%, var(--app-primary-color) 95%, var(--app-primary-color) 100%);
+                var(--google-blue-300) 50%, var(--app-primary-color) 95%, var(--app-primary-color) 100%);
             }
 
             #up::-webkit-scrollbar-track {
@@ -54,7 +55,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .player {
-                height: 400px;
+                float: right;
+                height: 393px;
+                width: 792px;
             }
 
             .playing {
@@ -80,7 +83,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }*/
 
             .playing>paper-button {
-                color: aquamarine;
+                background: #ffffff;
+                color:  var(--google-blue-300);
                 padding-left: 1px;
                 padding-right: 1px;
                 margin: 1px;
@@ -89,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 25px;
                 overflow-y: hidden;
                 text-transform: initial;
-                background: #202121;
+
             }
 
             .flex-vertical {
@@ -219,9 +223,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _pause(data) {
                 if (data === true) {
                     this.$.player.$.player.pause()
-                    console.log(this.$.player.$.player)
+                    //console.log(this.$.player.$.player)
                 } else {
-                    this.$.player.$.player.play() 
+                    this.$.player.$.player.play()
                 }
             }
 

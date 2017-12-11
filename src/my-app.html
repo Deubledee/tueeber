@@ -27,12 +27,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style include="shared-styles-nav">
       :host {
-        --app-primary-color: #194850;
-        --app-secondary-color: var(--paper-blue-500);
+        --app-primary-color: rgba(92, 132, 165, 0.8352941176470589);
+        --app-secondary-color: var(--paper-green-900);
         --app-third-color: #adc6b7;
-        --app-fourth-color: #26717c;
-        --app-shadow-color: #46ff1e;
-        --app-shadow-color2: #1eb8ff;
+        --app-fourth-color: #00bcd4;
+        --app-shadow-color: rgb(26, 30, 32);
+        --app-shadow-color2: #0b399e;
+        --app-shadow-color3: #0c2864;
         --app-font-size-1: 0.6em;
         --app-font-size-2: 1em;
         display: block;
@@ -43,28 +44,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
       }
 
-      .drawer-list {
-        height: 34px;
+      iron-selector.drawer-list {
+        height: 67px;
         position: relative;
         margin-top: 2px;
         /* background: var(--app-primary-color); */
         transition: all 0.5s ease-in-out;
         overflow-y: auto;
-        border-top: 2px solid #194850;
+        overflow-x: hidden;
       }
 
       iron-selector.drawer-list[open] {
-        margin-top: 228px;
-        height: 195px;
-        background: var(--app-primary-color);
-        border-top: 2px solid var(--app-fourth-color);
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        height: 1022px;
+        width: 100%;
+        background: rgba(25, 26, 27, 0.781);        
       }
 
       iron-selector.drawer-list a {
         display: block;
         padding: 0 16px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: var(--paper-cyan-500);
+        text-shadow: 1px 1px 1px var(--app-shadow-color3);
         line-height: 40px;
       }
 
@@ -77,40 +81,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 0px;
       }
 
-      paper-tab {
-        border-bottom: 1px solid #185a63;
+      paper-button {
+        /* border-bottom: 1px solid #185a63;*/
         margin-left: 11px;
         margin-right: 11px;
       }
 
+      paper-button.green[active] {
+        background-color: var(--paper-red-500);
+      }
+
       .togglePage {
+        color: white;
         height: 34px;
         width: 43px;
-        background: var(--app-primary-color);
-        -webkit-transition: color 0.5s ease-in-out 0.5s;
-        -moz-transition: color 0.5s ease-in-out 0.5s;
-        transition: color 0.5s ease-in-out 0.5s;
+        background: transparent;
+        border-bottom-right-radius: 15px;
+        -webkit-transition: all 0.5s ease-in-out 0.5s;
+        -moz-transition: all 0.5s ease-in-out 0.5s;
+        transition: all 0.5s ease-in-out 0.5s;
       }
 
-      .togglePage [open] {
-        color: var(--app-fourth-color)
+      .togglePage[open] {
+        position: relative;
+        left: 46.5%;
+        color: var(--app-fourth-color);        
       }
 
-      .upButton {
-        border-bottom: 4px solid var(--app-primary-color);
+      .upButton {        
         height: 14.5px;
         width: 15px;
-        background: rgb(22, 21, 21);
-        ;
+        background: transparent;        
         float: left;
       }
 
-      .downButton {
+      .downButton {        
         height: 14.5px;
         width: 15px;
-        background: rgb(22, 21, 21);
-        ;
-        float: left;
+        background: transparent;
+        float: left;        
       }
 
       .hidden {
@@ -121,29 +130,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .dropButton {
         display: block;
-        height: 29.5px;
+        height: 31px;
         width: 25px;
-        background: rgb(22, 21, 21);
+        background: transparent;
+        /* border-bottom-right-radius: 10px;
+        border-top-right-radius: 10px;*/
         float: left;
-        border-top: 2px solid var(--app-primary-color);
-        border-bottom: 2px solid var(--app-primary-color);
-        border-right: 2px solid var(--app-primary-color);
         -webkit-transition: all 0.5s ease-in-out 0.5s;
         -moz-transition: all 0.5s ease-in-out 0.5s;
         transition: all 0.5s ease-in-out 0.5s
       }
 
+      /*
       .dropButton[open] {
+        margin-top: 11px;
         border-top: 2px solid var(--app-fourth-color);
         border-bottom: 2px solid var(--app-fourth-color);
         border-right: 2px solid var(--app-fourth-color);
       }
+*/
 
       .container {
         position: relative;
         top: 144px;
-        padding-left: 225px;
-        padding-right: 225px;
+        width: 65%
       }
 
       .container2 {
@@ -154,12 +164,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .container3 {
         position: relative;
         text-align: left;
-        overflow-y: -webkit-paged-y
+        overflow-y: -webkit-paged-y;
+        overflow-x: hidden
       }
 
       .container4 {
         position: relative;
         bottom: -800px;
+      }
+
+      .container5 {
+        padding-left: 70px;
+        padding-right: 60px;
       }
 
       .navbar>div {
@@ -182,6 +198,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .flexchild-vertical {
         @apply --layout-flex;
       }
+
+      .flexchild-verticalext {
+        @apply --layout-flex;
+        width: 640px !important;
+      }
+
 
       .flexchild-vertical2 {
         @apply --layout-flex-2;
@@ -225,8 +247,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         top: 0px;
         width: 100%;
         z-index: 3;
-        box-shadow: 0px 3px 5px #44ab72;
-        background: #000000c9;
+        box-shadow: 0px 3px 5px rgb(131, 136, 131);
+        background: var(--app-primary-color)
       }
 
       .bottomfixed[video] {
@@ -235,10 +257,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: -webkit-fill-available;
         width: 100%;
         z-index: 3;
+        opacity: 1;
         box-shadow: 0px 3px 5px #44ab72;
         background: #000000c9;
-        padding-left: 25%;
-        padding-top: 10%
+        transition: all 0.7s ease-in;
       }
 
       .bottomfixed {
@@ -247,39 +269,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 0px;
         width: 100%;
         z-index: 0;
-        padding-left: 0%;
-        padding-top: 0%
+        opacity: 0;
+        -webkit-transition: all 0.5s ease-in;
+        -moz-transition: all 0.5s ease-in;
+        transition: all 0.7s ease-in;
       }
 
-      .zaline {
-        font-size: var(--app-font-size-1);
+
+      .zaline {         
+        width: 25%;
+        font-size: var(--app-font-size-2);
         letter-spacing: 12px;
         font-family: sans-serif;
         font-style: italic;
         text-shadow: 1px 1px 1px var(--app-shadow-color);
       }
 
-      .zalinePage {
-        text-align: left;
-        /* font-size: var(--app-font-size-2); */
-        margin-left: 30px;
+      .zalinePage { 
+        padding-top: 5px; 
+        padding-left: 4%;       
+        text-align: center;
+        height: 61px;       
         font-variant: all-petite-caps;
-        letter-spacing: 22px;
+        letter-spacing: 15px;
         color: var(--app-third-color);
         font-family: sans-serif;
         font-style: italic;
         text-shadow: 1px 1px 1px var(--app-shadow-color2);
+        overflow-x: hidden;
       }
 
       .redCircle {
         width: 10px;
         height: 10px;
         border-radius: 100%;
-        background: red
+        background: red;
+        float: left;
       }
 
       .someColor {
-        color: var(--google-green-300);
+        position: relative;
+        top: 25px;
+        height: 61px;
+        float: left;
+        color: var(--paper-cyan-500);
         text-shadow: 1px 0px 1px var(--app-shadow-color2);
         font-size: var(--app-font-size-1);
         letter-spacing: 1px
@@ -293,16 +326,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .closeButton {
-        color: white;
-        float: right;
+        position: relative;
+        left: 94%;
+        cursor: pointer;
+        color: rgba(7, 7, 7, 0.712);
+        text-shadow: 1px 1px 0px rgba(158, 142, 142, 0.767);
+        font-size: -webkit-xxx-large;
+        font-weight: 100;
         height: 30px!important;
         width: 30px!important;
         background: black;
-        padding-left: 0px!important;
+        padding-left: 16px!important;
         padding-right: 0px!important;
         margin: 0px!important;
         margin-bottom: 0px!important;
       }
+
+
+      .video {
+        margin-left: 15% !important;
+        margin-top: 5% !important;
+        width: 70% !important;
+      }
+
+      #results4 {
+        position: relative;
+        top: 21px;
+      }
+
+      @media (min-width: 576px) {
+        .container5 {
+          max-width: 540px;
+        }
+        .container {
+          max-width: 540px;
+
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container5 {
+          max-width: 720px;
+        }
+        .container {
+          max-width: 540px;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .container5 {
+          max-width: 960px;
+        }
+        .container {
+          max-width: 540px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .container5 {
+          max-width: 1140px;
+          margin-left: 9%;
+          margin-right: 0%
+        }
+        .container {
+          max-width: 1140px;
+          margin-left: 2%;
+          margin-right: 5%
+        }
+      }
+
+      @media (min-width: 1300px) {
+        .container5 {
+          max-width: 1140px;
+          margin-left: 15%;
+          margin-right: 15%
+        }
+        .container {
+          max-width: 1140px;
+          margin-left: 10%;
+          margin-right: 5%
+        }
+      }
+
+      @media (max-width: 575px) {}
+
+      @media (max-width: 767px) {}
+
+      @media (max-width: 991px) {}
+
+      @media (max-width: 1199px) {}
     </style>
 
     <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
@@ -313,74 +425,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Main content -->
     <nav class="navbar navbar-dark topfixed flex-vertical">
-      <app-toolbar class="flex-horizontal">
-        <div main-title class="zaline flexchild-vertical">
+      <app-toolbar class="">
+        <div class="zaline">
           Tueeber
         </div>
-        <label for="circle" class="someColor"> live now</label>
-        <div id="circle" class="zalinePage flexchild-vertical">
-          <div class="redCircle"></div>
-          [[liveNow]]</div>
+        <div class="zaline">
+          <div class="someColor"> 
+            <div class="redCircle"></div>
+            live now
+          </div>
+          <div id="circle" class="zalinePage">
+            [[liveNow]]</div>
+        </div>
         <iron-selector id="drawerList" open$="[[open]]" selected="[[page]]" attr-for-selected="name" class="drawer-list flexchild-vertical"
           role="navigation">
           <div class="container2 flex-vertical">
             <div class="flexchild-vertical">
               <div class="container3 flex-horizontal">
-                <paper-tab class="flexchild-vertical2">
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view1" href="[[rootPath]]news">News</a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view2" href="[[rootPath]]sports">Sports</a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]movies">Movies</a>
-                </paper-tab>
+                </paper-button>
               </div>
             </div>
             <div class="flexchild-vertical">
               <div class="container3 flex-horizontal">
-                <paper-tab class="flexchild-vertical2">
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]radio">Radio</a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]movies">Music </a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]radio"> Animation</a>
-                </paper-tab>
+                </paper-button>
               </div>
             </div>
             <div class="flexchild-vertical">
               <div class="container3 flex-horizontal">
-                <paper-tab class="flexchild-vertical2">
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view1" href="[[rootPath]]news"> Learn</a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view2" href="[[rootPath]]sports">Channels</a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]movies">Finance</a>
-                </paper-tab>
+                </paper-button>
               </div>
             </div>
             <div class="flexchild-vertical">
               <div class="container3 flex-horizontal">
-                <paper-tab class="flexchild-vertical2">
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]radio">Teach</a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]movies"> Radio </a>
-                </paper-tab>
-                <paper-tab class="flexchild-vertical2">
+                </paper-button>
+                <paper-button toggles class="flexchild-vertical">
                   <a name="view3" href="[[rootPath]]radio">Technology</a>
-                </paper-tab>
+                </paper-button>
               </div>
             </div>
           </div>
         </iron-selector>
         <div class="togglePage" open$="[[open]]">
           <div id="dropButton" class="dropButton" open$="[[open]]" on-click="openScroll">
-            <iron-icon icon="arrow-drop-down"></iron-icon>
+            <iron-icon icon="menu"></iron-icon>
           </div>
           <nav id="navHidden" class="hidden">
             <iron-icon class="upButton" on-click="scrollUp" icon="arrow-drop-up"></iron-icon>
@@ -389,17 +505,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </app-toolbar>
     </nav>
-    <nav class="navbar bottomer flex-horizontal">
-      <div class="flexchild-vertical3">
-        <span></span>
-      </div>
-      <div class="flexchild-vertical3">
+    <nav class="navbar container5 bottomer flex-horizontal">
+      <div class="flexchild-verticalext">
         <news-player id="player" live-now="{{liveNow}}"></news-player>
       </div>
-      <div class="flexchild-vertical3">
-        <search-results id="results4" mini="true" search="[[liveNow]] news" >
+      <div class="flexchild-verticalext">
+        <search-results id="results4" mini="true" sideFix="true" search="[[liveNow]] news">
           loading...
-      </search-results>
+        </search-results>
       </div>
     </nav>
     <div class="container flex-horizontal">
@@ -408,7 +521,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
             <my-news name="news"></my-news>
             <my-sports name="sports"></my-sports>
-            <my-movies name="movies" ></my-movies>
+            <my-movies name="movies"></my-movies>
             <my-radio name="radio"></my-radio>
             <my-view404 name="view404"></my-view404>
           </iron-pages>
@@ -472,9 +585,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
     <nav id="pageVideo" class="navbar navbar-dark bottomfixed flex-vertical" video$="[[video]]">
       <div class="closeButton" on-click="closeVideo">
-        <button>x</button>
+        x
       </div>
-      <div class="flexchild-vertical">
+      <div class="video flexchild-vertical">
         <my-video id="video" route="route" sideways="true">
         </my-video>
       </div>
@@ -540,9 +653,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           setTimeout(() => {
             window.history.pushState({}, null, this.page)
           }, 100)
-          console.log(this.subroute, "type video")
         } else {
-          console.log(page, "type news")
           this.video = this.video === true ? !this.video : this.video
           this.page = page || 'news';
         }
@@ -555,11 +666,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       scrollDown() {
         this.$.drawerList.scrollTo({}, (this.$.drawerList.scrollTop + 10))
-        if (this.$.drawerList.scrollTop >= 140)
-          this.$.drawerList.scrollTop = 140
+        if (this.$.drawerList.scrollTop >= 200)
+          this.$.drawerList.scrollTop = 200
       }
       openScroll() {
-        this.open = !this.open       
+        this.open = !this.open
       }
       closeVideo() {
         window.dispatchEvent(new CustomEvent('location-changed'));

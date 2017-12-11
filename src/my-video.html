@@ -139,9 +139,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .navbar {
         /* background: linear-gradient(to right, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
-        top: 0px;
-        padding-top: 32px;
-        padding-left: 19px;
+        top: 10px;
+        
       }
 
       .navbar[wide] {
@@ -156,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       youtube-lite.player[default] {
         width: 100% !important;
-        height: 43vh !important;
+        height: 640px !important;
       }
 
       .mie[default] {
@@ -343,7 +342,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           videoId: {
             type: String,
             notify: true,
-            observer: 'log'
+           // observer: 'log'
           },
           transformedTime: {
             type: String,
@@ -381,7 +380,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           time: {
             type: String,
             notify: true,
-            observer: 'log'
+           // observer: 'log'
           },
           fulTime: {
             type: String,
