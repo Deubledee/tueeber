@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-movies.html">
 <link rel="lazy-import" href="my-radio.html">
 <link rel="lazy-import" href="../public/components/search-results.html">
+<link rel="lazy-import" href="../public/stylesheets/shared-styles-navbar.html">
 <link rel="lazy-import" href="my-view404.html">
 <!-- shared styles-->
 
@@ -48,8 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 67px;
         position: relative;
         margin-top: 2px;
-        /* background: var(--app-primary-color); */
-        transition: all 0.5s ease-in-out;
+        transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
         overflow-y: auto;
         overflow-x: hidden;
       }
@@ -60,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         left: 0px;
         height: 1022px;
         width: 100%;
-        background: rgba(25, 26, 27, 0.781);        
+        background: rgba(25, 26, 27, 0.781);
       }
 
       iron-selector.drawer-list a {
@@ -82,7 +82,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-button {
-        /* border-bottom: 1px solid #185a63;*/
         margin-left: 11px;
         margin-right: 11px;
       }
@@ -97,29 +96,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 43px;
         background: transparent;
         border-bottom-right-radius: 15px;
-        -webkit-transition: all 0.5s ease-in-out 0.5s;
-        -moz-transition: all 0.5s ease-in-out 0.5s;
-        transition: all 0.5s ease-in-out 0.5s;
+        -webkit-transition: background 0.5s ease-in-out 0.5s;
+        -moz-transition: background 0.5s ease-in-out 0.5s;
+        transition: background 0.5s ease-in-out 0.5s;
       }
 
       .togglePage[open] {
         position: relative;
         left: 46.5%;
-        color: var(--app-fourth-color);        
+        color: var(--app-fourth-color);
       }
 
-      .upButton {        
-        height: 14.5px;
-        width: 15px;
-        background: transparent;        
-        float: left;
-      }
-
-      .downButton {        
+      .upButton {
         height: 14.5px;
         width: 15px;
         background: transparent;
-        float: left;        
+        float: left;
+      }
+
+      .downButton {
+        height: 14.5px;
+        width: 15px;
+        background: transparent;
+        float: left;
       }
 
       .hidden {
@@ -133,22 +132,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 31px;
         width: 25px;
         background: transparent;
-        /* border-bottom-right-radius: 10px;
-        border-top-right-radius: 10px;*/
         float: left;
         -webkit-transition: all 0.5s ease-in-out 0.5s;
         -moz-transition: all 0.5s ease-in-out 0.5s;
         transition: all 0.5s ease-in-out 0.5s
       }
-
-      /*
-      .dropButton[open] {
-        margin-top: 11px;
-        border-top: 2px solid var(--app-fourth-color);
-        border-bottom: 2px solid var(--app-fourth-color);
-        border-right: 2px solid var(--app-fourth-color);
-      }
-*/
 
       .container {
         position: relative;
@@ -174,7 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .container5 {
-        padding-left: 70px;
+        padding-left: 75px;
         padding-right: 60px;
       }
 
@@ -200,10 +188,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .flexchild-verticalext {
-        @apply --layout-flex;
-        width: 640px !important;
+        /*  @apply --layout-flex;*/
+        width: 787px !important;
       }
 
+      .flexchild-verticalext2 {
+        /* @apply --layout-flex;*/
+        width: 182px !important;
+      }
 
       .flexchild-vertical2 {
         @apply --layout-flex-2;
@@ -276,7 +268,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
 
-      .zaline {         
+      .zaline {
         width: 25%;
         font-size: var(--app-font-size-2);
         letter-spacing: 12px;
@@ -285,11 +277,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-shadow: 1px 1px 1px var(--app-shadow-color);
       }
 
-      .zalinePage { 
-        padding-top: 5px; 
-        padding-left: 4%;       
+      .zalinePage {
+        padding-top: 5px;
+        padding-left: 4%;
         text-align: center;
-        height: 61px;       
+        height: 61px;
         font-variant: all-petite-caps;
         letter-spacing: 15px;
         color: var(--app-third-color);
@@ -354,22 +346,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         top: 21px;
       }
 
+      .navbar-right {
+        margin-top: 10%;
+        float: right;
+        width: 300px;
+        height: 2490px;
+      }
+
+      .navbar-right h3 {
+        background: yellow
+      }
+
       @media (min-width: 576px) {
         .container5 {
           max-width: 540px;
         }
         .container {
           max-width: 540px;
+          margin-left: 5%;
 
         }
       }
 
       @media (min-width: 768px) {
         .container5 {
-          max-width: 720px;
+          max-width: 420px;
+          margin-left: 0%;
         }
         .container {
-          max-width: 540px;
+          max-width: 440px;
+          margin-left: 5%;
         }
       }
 
@@ -378,33 +384,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           max-width: 960px;
         }
         .container {
-          max-width: 540px;
+          max-width: 840px;
+          margin-left: 5%;
+        }
+      }
+
+      @media (min-width: 1097px) {
+        .flexchild-verticalext2 {
+          /* @apply --layout-flex;*/
+          width: 150px !important;
         }
       }
 
       @media (min-width: 1200px) {
         .container5 {
-          max-width: 1140px;
-          margin-left: 9%;
-          margin-right: 0%
+          max-width: 980px;
         }
         .container {
           max-width: 1140px;
-          margin-left: 2%;
+          margin-left: 5%;
           margin-right: 5%
+        }
+      }
+
+      @media (min-width: 1280px) {
+        .flexchild-verticalext2 {
+          /* @apply --layout-flex;*/
+          width: 280px !important;
         }
       }
 
       @media (min-width: 1300px) {
         .container5 {
-          max-width: 1140px;
-          margin-left: 15%;
-          margin-right: 15%
+          width: 100%;
+          margin-left: 13%;
         }
         .container {
-          max-width: 1140px;
-          margin-left: 10%;
-          margin-right: 5%
+          max-width: 1245px;
+          margin-left: 12%;
+
+        }
+      }
+
+      @media (min-width: 1536px) {
+
+        .flexchild-verticalext2 {
+          /* @apply --layout-flex;*/
+          width: 380px !important;
+        }
+      }
+
+      @media (min-width: 1745px) {
+
+        .flexchild-verticalext2 {
+          /* @apply --layout-flex;*/
+          width: 448px !important;
+        }
+        .flexchild-verticalext {
+          /* @apply --layout-flex;*/
+          width: 800px !important;
         }
       }
 
@@ -430,7 +468,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           Tueeber
         </div>
         <div class="zaline">
-          <div class="someColor"> 
+          <div class="someColor">
             <div class="redCircle"></div>
             live now
           </div>
@@ -506,14 +544,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-toolbar>
     </nav>
     <nav class="navbar container5 bottomer flex-horizontal">
-      <div class="flexchild-verticalext">
-        <news-player id="player" live-now="{{liveNow}}"></news-player>
-      </div>
-      <div class="flexchild-verticalext">
-        <search-results id="results4" mini="true" sideFix="true" search="[[liveNow]] news">
+      <div class="flexchild-verticalext2">
+        <search-results id="results4" side-fix="true" search="[[liveNow]] news">
           loading...
         </search-results>
       </div>
+      <div class="flexchild-verticalext">
+        <news-player id="player" live-now="{{liveNow}}"></news-player>
+      </div>
+    </nav>
+    <nav class="navbar navbar-right">
+      <label for="results7">
+        <h3>ebay</h3>
+      </label>
+      <search-results id="results7" bottom="true" search="ebay">
+        loading...
+      </search-results>
+      <label for="results8">
+        <h3>amazon</h3>
+      </label>
+      <search-results id="results8" bottom="true" search="amazon">
+        loading...
+      </search-results>
+      <label for="results9">
+        <h3>publicity</h3>
+      </label>
+      <search-results id="results9" bottom="true" search="publicity">
+        loading...
+      </search-results>
     </nav>
     <div class="container flex-horizontal">
       <div class="row col-xs-12">
@@ -595,8 +653,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    // Gesture events like tap and track generated from touch will not be
-    // preventable, allowing for better scrolling performance.
     Polymer.setPassiveTouchGestures(true);
 
     class MyApp extends Polymer.Element {
@@ -627,8 +683,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true
           },
           subroute: String,
-          // This shouldn't be neccessary, but the Analyzer isn't picking up
-          // Polymer.Element#rootPath
           rootPath: String,
           liveNow: {
             type: String,
@@ -644,8 +698,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _routePageChanged(page) {
-        // If no page was found in the route data, page will be an empty string.
-        // Default to 'view1' in that case.
         if (page === 'video') {
           this.$.player.pause = true
           this.video = !this.video
@@ -667,6 +719,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       scrollDown() {
         this.$.drawerList.scrollTo({}, (this.$.drawerList.scrollTop + 10))
         if (this.$.drawerList.scrollTop >= 200)
+          //debugger
           this.$.drawerList.scrollTop = 200
       }
       openScroll() {
@@ -679,7 +732,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.player.pause = false
       }
       _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
         const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
         Polymer.importHref(
           resolvedPageUrl,

@@ -51,13 +51,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .content[mobile] {
-                height: 150PX;
+                height: 150px;
+            }
+
+            .content[sideFix] {
+                height: 389px;
+                padding: 0px 0px 0px;
+                overflow-x: hidden
             }
 
             .content[sideWays] {
                 margin-top: -78px !important;
-                height: 129px !important;
-                padding-left: 7px !important;
+                height: 125px !important;
+                padding-left: 9px !important;
             }
 
             .content[mini] {
@@ -72,9 +78,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 transition: height 0.5s ease-in-out;
             }
 
-            #content::-webkit-scrollbar {
+           #content::-webkit-scrollbar {
                 width: 8px;
                 z-index: 2;
+            }
+
+            #content[sideFix]::-webkit-scrollbar {
+                width: 5px;
+                z-index: 2;
+                float: left
             }
 
             #content::-webkit-scrollbar-thumb {
@@ -84,10 +96,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-right: 2px;
             }
 
+            #content[sideFix]::-webkit-scrollbar-thumb {
+                width: 5px;
+                margin-top: -12px;
+                background: var(--app-fourth-color);
+                margin-right: 2px;
+            }
+
             #content::-webkit-scrollbar-thumb:hover {
                 width: 8px;
                 background: linear-gradient(to right, var(--app-fourth-color) 0%, var(--app-fourth-color) 5%,
-                rgba(221, 221, 111, 0.829) 50%, var(--app-fourth-color) 95%, var(--app-fourth-color) 100%);
+                rgba(111, 140, 221, 0.829) 50%, var(--app-fourth-color) 95%, var(--app-fourth-color) 100%);
             }
 
             #content::-webkit-scrollbar-track {
@@ -95,13 +114,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background-color: rgba(44, 49, 44, 0);
                 margin-right: 2px;
             }
+            
+            #content[sideFix]::-webkit-scrollbar-track  {
+                width: 5px;
+                background-color: rgba(0, 0, 0, 0);
+                margin-right: 2px;
+            }
 
             .background {
-                width: 100%;               
+                width: 100%;
             }
-            .background[sideFix] {
-                width: 420px;               
-            }
+
             .nav {
                 width: 101%;
                 box-shadow: var(--app-shadow-value);
@@ -130,12 +153,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 100%;
                 font-weight: bold;
                 text-overflow: ellipsis;
-                margin-bottom: 10px;               
+                margin-bottom: 10px;
             }
 
             .card-content[mini] {
                 height: 97px;
-                font-size: large;                
+                font-size: large;
                 width: 47%;
                 float: left;
                 padding-left: 3px;
@@ -244,9 +267,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-route>
         <youtube-search api="[[Details]]" search="[[search]]" class="search" hide="true" video-data="{{videoData}}">
         </youtube-search>
-        <div class="background" sideFix$="sideFix" id="background">
-            <div id="content" class="content" mini$="[[mini]]" sideWays$="[[sideWays]]" mobile$="[[mobile]]"
-                bottom$="[[bottom]]" open$="[[open]]">
+        <div class="background" sideFix$="[[sideFix]]" id="background">
+            <div id="content" class="content" mini$="[[mini]]" sideFix$="[[sideFix]]" sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]"
+                open$="[[open]]">
                 <iron-selector selected="[[routeTail.prefix]]" attr-for-selected="name" class="drawer-list" role="navigation">
                     <template class="flexchild-vertical" is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
                         <div class="float" mini$="[[mini]]">
@@ -313,7 +336,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: false,
                         notify: true,
                         reflectToAttribute: true
-                    }, 
+                    },
                     sideFix: {
                         type: Boolean,
                         value: false,
