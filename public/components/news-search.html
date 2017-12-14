@@ -1,0 +1,189 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<dom-module id="news-search">
+    <template>     
+  
+        <app-route route="{{route}}" pattern="/:page" data="{{searchData}}" tail="{{searchTail}}" query-params="{{searchQuery}}">
+        </app-route>
+      
+        <iron-ajax auto id="newsSearch" url="[[url]]" params="[[params]]" last-response="{{videoData}}">
+        </iron-ajax>
+
+    </template>
+
+    <script>
+        class newsSearch extends Polymer.Element {
+
+            static get is() {
+                return 'news-search';
+            }
+
+            constructor() {
+                super();
+            }
+
+            static get properties() {
+                return {
+                    route: {
+                        type: Object,
+                        notify: true
+                    },
+                    data: {
+                        type: Object
+                    },
+                    page: {
+                        type: String,
+                        reflectToAttribute: true,
+                        observer: '_pageChanged',
+                        notify: true
+                    },
+                    url: {
+                        type: String,
+                        notify: true
+                    },
+                    category: {
+                        type: String,
+                        notify: true
+                    },
+                    label: {
+                        type: String,
+                        notify: true
+                    },
+                    hidden: String,
+                    hide: {
+                        type: String,
+                        observer: '_hide'
+                    },
+                    searchQuery: {
+                        type: String,
+                        //observer: 'query',
+                    },
+                    search: {
+                        type: Boolean,
+                        value: false,                        
+                        observer: 'queryon',
+                    },
+                    api: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                method: "",
+                                api: ""
+                            }
+                        }
+                    },
+                    searchData: {
+                        type: Object,
+                        //observer:'query(data.searchQuery)'
+                    },
+                    params: {
+                        type: String,
+                        notify: true
+                    },
+                    videoData: {
+                        type: Object,
+                        notify: true,
+                        observer: 'seeThisShit'
+                    }
+                }
+            }
+            observers() {
+                return ['_pathChanged(route.path)']
+            }
+            _pathChanged(data) {
+                this.async(function () {
+                    if (!this.route.path) {
+                        this.set('route.path', '/youtube/');
+                    }
+                });
+            }
+            _hide(state) {
+                if (state === "false") {
+                    this.set("hidden", "")
+                } else {
+                    this.set("hidden", "hidden")
+                }
+            }
+            seeThisShit(data) {
+                // console.log(data)
+            }
+            queryon(data) {
+                if (data === true) {
+                    console.log("queryon", data, this.api)
+                   let method, query;
+                    method = "_" + this.api.method
+                    query = this.api
+                    this.set("url", `https://newsapi.org/v2/${this.api.api}`)
+                    this.params = this[method](query)
+                    // console.log("this.params", this.params)
+                    this.search = false
+                }
+            }
+
+            query(data) {
+                let method, query;
+                if (this.route) {
+                    if (!data.api)// && this.route.prefix === "/youtube/search") {
+                        data = { api: "search" }
+                    method = "_" + "list"
+                    query = ""
+                } else /*if (this.route.prefix === "/youtube/search")*/ {
+                    method = "_" + this.searchData.page
+                    query = data.q
+                }
+                //  if (this.route.prefix === "/youtube/search") {
+                this.set("url", `https://newsapi.org/v2/${this.api.api}`)
+                this.params = this[method](query)
+                //}
+
+            }
+            _sources(data) {
+                console.log(data)
+                return {
+                    category: data.cat,
+                    language: data.lang,
+                    country: data.country,
+                    apiKey: data.key//,
+                }
+            }
+
+            _everything(data) {
+                console.log('_everything',data)                
+                return {
+                    sources: data.sources,
+                    domains: data.domains,
+                    q: data.q,
+                    from: data.from,
+                    to: data.to,
+                    language: data.lang,
+                    sortBy: data.sortBy,
+                    page: data.page,
+                    apiKey: data.apiKey
+                }
+            }
+
+            _topHeadlines(data) {
+              //  console.log('_topHeadlines',data)
+                return {
+                    sources: data.sources,
+                    q: data.q,
+                    category: data.cat,
+                    language: data.lang,
+                    apiKey: data.apiKey,
+                    country: data.country
+                }
+            }
+        }
+        window.customElements.define(newsSearch.is, newsSearch);
+    </script>
+</dom-module>

@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../public/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../public/bower_components/iron-flex-layout/iron-flex-layout.html">
 <!--link rel="import" href="page-video.html"-->
-<link rel="import" href="../public/components/search-results.html">
+<link rel="import" href="../public/components/news-results.html">
 <dom-module id="my-news">
     <template>
         <style>
@@ -98,73 +98,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
         </style>
-        <app-route route="{{route}}" pattern="/:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
         </app-route>
         <div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
             <div class="flexchild-vertical2">
-                <paper-card heading="donald trump" alt="donald trump" image="../public/images/donald-trump-headding.jpg">
+                <paper-card heading="top Headlines">
                 </paper-card>
-                <search-results id="results1"  bottom="[[bottom]]" search="donald trump" mini="[[mini]]" ><!--background="../public/images/donald-trump.jpg"-->
+                <news-results route="[[route]]" id="results1" bottom="true" api="[[topHeadlines]]" on-click="routeChanged">
                     loading...
-                </search-results>
+                </news-results>
             </div>
             <div class="flexchild-vertical2">
-                <paper-card heading="fox news" alt="fox news" image="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg">
+                <paper-card heading="everything">
                 </paper-card>
-                <search-results id="results2" bottom="[[bottom]]" search="fox news" ><!--background="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg"-->
+                <news-results route="[[route]]" id="results1" bottom="true" on-click="routeChanged" api="[[everything]]">
                     loading...
-                </search-results>
+                </news-results>
             </div>
-            <div class="flexchild-vertical2">
-                <paper-card heading="Barack Obama" alt="barack obama" image="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
+            <!--div class="flexchild-vertical2">
+                <paper-card heading="everything">
                 </paper-card>
-                <search-results id="results3" bottom="[[bottom]]" search="barack obama" ><!--background="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg"-->
+                <news-results route="[[route]]" id="results1" bottom="true" on-click="routeChanged" api="[[everything]]">
                     loading...
-                </search-results>
-            </div>
-            <div class="flexchild-vertical2">
-                <paper-card placeholderImage="NBA Sports" heading="NBA" alt="NBA logo" image="https://i0.wp.com/www.kickassfacts.com/wp-content/uploads/2013/09/NBA.jpeg?fit=420%2C330">
-                </paper-card>
-                <search-results id="results4" bottom="[[bottom]]" search="sports nba" ><!--background="http://redacao.mackenzie.br/wp-content/uploads/2017/10/nba-logo.jpg"-->
-                    loading...
-                </search-results>
-            </div>
+                </news-results>
+            </div-->
         </div>
         <div class="container flex-vertical flex-horizontal pubArea" mobilePub$="[[mobilePub]]">
             <div class="flexchild-vertical2">
                 content here
             </div>
         </div>
-        <div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
+        <!--div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
             <div class="flexchild-vertical2">
                 <paper-card heading="CNN news" alt="CNN news" image="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg">
                 </paper-card>
-                <search-results id="results4" bottom="[[bottom]]" search="CNN news"> <!-- background="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg"-->
+                <news-results id="results4" bottom="[[bottom]]" search="CNN news">
                     loading...
-                </search-results>
+                </news-results>
             </div>
             <div class="flexchild-vertical2">
                 <paper-card heading=" middle east news" alt="middle east news" image="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg">
                 </paper-card>
-                <search-results id="results5" bottom="[[bottom]]" search="middle east news" ><!--background="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg"-->
+                <news-results id="results5" bottom="[[bottom]]" search="middle east news">
+                    <!background="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg">
                     loading...
-                </search-results>
+                </news-results>
             </div>
             <div class="flexchild-vertical2">
                 <paper-card heading="Barack Obama" alt="barack obama" image="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
                 </paper-card>
-                <search-results id="results6" bottom="[[bottom]]" search="barack obama"><!-- background="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg"-->
+                <news-results id="results6" bottom="[[bottom]]" search="barack obama">
+                    <! background="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
                     loading...
-                </search-results>
+                </news-results>
             </div>
-            <div class="flexchild-vertical2">
-                <paper-card placeholderImage="NBA Sports" heading="NBA" alt="NBA logo" image="https://i0.wp.com/www.kickassfacts.com/wp-content/uploads/2013/09/NBA.jpeg?fit=420%2C330">
-                </paper-card>
-                <search-results id="results7" bottom="[[bottom]]" search="sports nba" ><!--background="http://redacao.mackenzie.br/wp-content/uploads/2017/10/nba-logo.jpg"-->
-                    loading...
-                </search-results>
-            </div>
-        </div>
+        </div-->
     </template>
     <script>
         class myNews extends Polymer.Element {
@@ -182,6 +171,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     route: {
                         type: Object,
                         notify: true
+                    },
+                    rootPath: {
+                        type: String
                     },
                     mini: {
                         type: Boolean,
@@ -212,15 +204,60 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: false,
                         notify: true,
                         reflectToAttribute: true
+                    },
+
+                    topHeadlines: {
+                        type: Object,
+                        notify: true,
+                        value: function () {
+                            return {
+                                method: "topHeadlines",
+                                api: "top-headlines",
+                                sources: '',
+                                q: 'trump',
+                                cat: '',
+                                lang: 'en',
+                                country: '',
+                                apiKey: '16bb1647c69145dc8a5c8f18373cd2cf'
+                            }
+                        }
+                    },
+                    everything: {
+                        type: Object,
+                        value: function () {
+                            let d = new Date()
+                            let year = d.toLocaleDateString().split('/')
+                            let fultime = year.pop()
+                            fultime = fultime + '/' + year.join('/')
+                            return {
+                                method: "everything",
+                                api: "everything",
+                                sources: 'fox-news',
+                                domains: '',
+                                q: '',
+                                from: '',
+                                to: '',
+                                lang: 'en',
+                                sortBy: 'publishedAt',
+                                page: '20',
+                                apiKey: '16bb1647c69145dc8a5c8f18373cd2cf'
+                            }
+                        }
                     }
                 }
             }
 
             fuckedYouUp(data) {
-                console.log('realy did..!!', data)
+                console.log('really did..!!', data)
             }
             _seethisshit() {
                 window.scrollTo({}, 0)
+            }
+            routeChanged(data) {
+                setTimeout(() => {
+                    window.open(this.query.url, "_blank", "toolbar=yes,top=50,left=100,width=800,height=800")
+                    history.pushState({}, null, '/news/')
+                }, 100)
             }
         }
         window.customElements.define(myNews.is, myNews);

@@ -354,7 +354,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .navbar-right h3 {
-        background: yellow
+        color: white;
+        background: rgba(10, 10, 10, 0.562)
       }
 
       @media (min-width: 576px) {
@@ -577,7 +578,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="row col-xs-12">
         <div class="flexchild-vertical12">
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-            <my-news name="news"></my-news>
+            <my-news name="news" mobile="true"></my-news>
             <my-sports name="sports"></my-sports>
             <my-movies name="movies"></my-movies>
             <my-radio name="radio"></my-radio>

@@ -215,6 +215,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: false,
                         notify: true,
                         reflectToAttribute: true
+                    },
+                    sources: {
+                        type: Object,
+                        notify: true,
+                        value: function () {
+                            return {
+                                method: "sources",
+                                api: "sources",
+                                cat: '',
+                                lang: '',
+                                country: '',
+                            }
+                        }
+                    },
+                    everything: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                method: "everything",
+                                api: "everything",
+                            }
+                        }
                     }
                 }
             }

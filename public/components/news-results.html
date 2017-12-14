@@ -1,0 +1,491 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="news-search.html">
+<link rel="import" href="search-results.html">
+<dom-module id="news-results">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                --app-primary-color: var(--google-blue-100);
+                --app-secondary-color: rgba(18, 18, 19, 0.74);
+                --app-third-color: var(--google-blue-300);
+                --app-fourth-color: var(--google-blue-300);
+                --app-font-color: rgb(28, 30, 31);
+                --app-shadow-color: rgba(194, 189, 189, 0.657);
+                --app-shadow-value: 4px 4px 8px var(--app-shadow-color);
+                --paper-card-header-color: rgb(196, 196, 231);
+                --paper-card-background-color: rgba(0, 0, 0, 0.582);
+                --paper-card-header-text: {
+                    background-color: var( --paper-card-background-color);
+                    color: var(--paper-card-header-color);
+                };
+               
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+
+            iron-icon {
+                color: var(--app-font-color)
+            }
+
+            .content {
+                height: 500px;
+                position: relative;
+                top: 0px;
+                overflow-y: auto;
+                padding: 30px 5px 59px;
+                background: transparent;
+                /*var(--app-secondary-color);*/
+                color: var(--app-font-color);
+                background-size: contain;
+                /* margin-top: 36px; */
+                margin-left: -4px;
+            }
+
+            .content[open] {
+                margin-top: 35px;
+            }
+
+            .content[mobile] {
+                height: 150px;
+            }
+
+            .content[sideFix] {
+                height: 389px;
+                padding: 0px 0px 0px;
+                overflow-x: hidden
+            }
+
+            .content[sideWays] {
+                margin-top: -78px !important;
+                height: 125px !important;
+                padding-left: 9px !important;
+            }
+
+            .content[mini] {
+                /* background: linear-gradient(to left, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
+                top: 0px;
+                width: 100%;
+                height: -webkit-fill-available;
+                padding: 30px 5px 59px;
+                color: var(--app-font-color);
+                overflow-x: hidden;
+                margin-top: -12px;
+                transition: height 0.5s ease-in-out;
+            }
+
+
+            .flex-vertical[mobile] {
+                @apply --layout-vertical;
+            }
+
+            .flex-horizontal {
+                @apply --layout-horizontal;
+            }
+
+            .flexchild-vertical {
+                @apply --layout-flex;
+            }
+
+            #content::-webkit-scrollbar {
+                width: 8px;
+                z-index: 2;
+            }
+
+            #content[sideFix]::-webkit-scrollbar {
+                width: 5px;
+                z-index: 2;
+                float: left
+            }
+
+            #content::-webkit-scrollbar-thumb {
+                width: 8px;
+                margin-top: -12px;
+                background: var(--app-fourth-color);
+                margin-right: 2px;
+            }
+
+            #content[sideFix]::-webkit-scrollbar-thumb {
+                width: 5px;
+                margin-top: -12px;
+                background: var(--app-fourth-color);
+                margin-right: 2px;
+            }
+
+            #content::-webkit-scrollbar-thumb:hover {
+                width: 8px;
+                background: linear-gradient(to right, var(--app-fourth-color) 0%, var(--app-fourth-color) 5%,
+                rgba(111, 140, 221, 0.829) 50%, var(--app-fourth-color) 95%, var(--app-fourth-color) 100%);
+            }
+
+            #content::-webkit-scrollbar-track {
+                width: 8px;
+                background-color: rgba(44, 49, 44, 0);
+                margin-right: 2px;
+            }
+
+            #content[sideFix]::-webkit-scrollbar-track {
+                width: 5px;
+                background-color: rgba(0, 0, 0, 0);
+                margin-right: 2px;
+            }
+
+            .background {
+                width: 100%;
+                height: 420px;
+                overflow-y: auto;
+                overflow-x: hidden
+            }
+
+            .nav {
+                width: 101%;
+                box-shadow: var(--app-shadow-value);
+            }
+
+            .nav[mini] {
+                float: left;
+                width: 49%;
+                margin-bottom: 13px;
+            }
+
+            .nav[bottom] {
+                float: left;
+                width: 51%;
+                margin-bottom: 13px;
+            }
+
+            .nav[sideWays] {
+                float: left;
+                margin-bottom: 20px;
+            }
+
+            .card-content {
+                width: 100%;
+                font-weight: bold;
+                text-overflow: ellipsis;
+                margin-bottom: 10px;
+            }
+
+            .card-content[mini] {
+                height: 97px;
+                font-size: large;
+                width: 47%;
+                float: left;           
+            }
+
+            .card-content[bottom] {
+                width: 91%;
+                margin-left: 7px;
+                margin-bottom: 16px;
+                float: left;
+                margin-top: -12px;
+            }
+
+            .card-content[sideWays] {
+                top: 0px;
+                position: relative;
+            }
+
+            .contentView {
+                z-index: 1;
+                flex-grow: 7;
+                font-size: 14px;
+            }
+
+            .contentView[mini] {
+                position: relative;
+                top: 5px;
+                font-size: 0.6em;
+                transition: font-size 0.5s ease-in-out;
+            }
+
+            .contentView[sideWays] {
+                font-size: 0.9em;
+            }
+
+            .contentView[bottom] {
+                font-size: 18px;
+            }
+
+            .channelView {
+                z-index: 1;
+                font-style: italic;
+                flex-grow: 7;
+                font-size: 14px;
+                color: var(--app-font-color);
+            }
+
+            .channelView[mini] {
+                position: relative;
+                top: 8px;
+                overflow-x: hidden;
+                z-index: 1;
+                font-style: italic;
+                flex-grow: 7;
+                font-size: 0.5em;
+                color: var(--app-font-color);
+                font-weight: bolder;
+                padding-left: 5px;
+                margin-bottom: auto;
+                transition: font-size 0.5s ease-in-out;
+            }
+
+            .channelView[bottom] {
+                font-size: 0.6em;
+            }
+
+            .channelView span {
+                color: #3a93db;
+            }
+
+            .channelView label {
+                color: #3a58db;
+            }
+
+            .channelView h4 {
+                color: #db903a;
+            }
+
+            .float[mini] {
+                margin-top: -25px;
+                /* margin-left: 101px; */
+            }
+
+            @media (max-width: 640px) {
+                .content {
+                    margin: 36px -1px 0px -3px;
+                    margin-top: 36px;
+
+                }
+                .content[open] {
+                    margin-top: 35px;
+
+                }
+                .content[mini] {
+                    width: 99%;
+                    transition: width 0.5s ease-in-out;
+                }
+
+                .content[sideWays] {
+                    width: 99%;
+
+                }
+
+                #content::-webkit-scrollbar {
+                    display: none
+                }
+                paper-fab {
+                    top: 290px;
+                    right: 16px;
+                }
+                .nav {}
+            }
+        </style>
+        <app-route route="{{route}}" pattern="/:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
+        </app-route>
+        <news-search api="[[api]]" class="search" search="true" hide="true" video-data="{{videoData}}">
+        </news-search>
+        <div id="content" class="background" sideFix$="[[sideFix]]" id="background">
+            <iron-selector class="content" mini$="[[mini]]" sideFix$="[[sideFix]]" sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]"
+                open$="[[open]]" selected="[[routeTail.prefix]]" attr-for-selected="name" class="content" role="navigation">
+                <template class="flexchild-vertical" is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
+                    <a name="/view1/video/" id="anav" href="[[_seethisshit(video.url)]]" taret="blank">
+                        <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" heading="[[video.title]]" title="{{video.title}}"
+                            alt="image" image="{{video.thumbnail}}">
+                        </paper-card>
+                    </a>
+                    <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
+                        <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]"> [[video.description]] </div>
+                        <div class="channelView" mini$="[[mini]]" bottom$="[[bottom]]">
+                            <h4>
+                                <label> src: </label>
+                                [[video.source]]
+                                <label> author: </label>
+                                [[video.author]]
+                            </h4>
+                            <span> [[video.publishedAt]] </span>
+                        </div>
+                    </div>
+                </template>
+            </iron-selector>
+        </div>
+    </template>
+    <script>
+        class newsResults extends Polymer.Element {
+            static get is() {
+                return 'news-results';
+            }
+            constructor() {
+                super();
+            }
+            ready() {
+                super.ready()
+
+            }
+
+            static get properties() {
+                return {
+                    route: {
+                        type: Object,
+                        notify: true,
+                    },
+                    data: {
+                        type: Object,
+                        notify: true,
+                    },
+                    page: {
+                        type: Object,
+                        notify: true
+                    },
+                    items: {
+                        type: Array,
+                        notify: true,
+                        observer: 'fuckedYouUp'
+                    },
+                    change: {
+                        type: Boolean,
+                        value: false,
+                        //S observer: 'itemsChanged'
+                    },
+                    background: {
+                        type: String,
+                        notify: true,
+                        //observer: '_background'
+                    },
+                    mini: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    sideFix: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    bottom: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    open: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    mobile: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    vert: {
+                        type: Boolean,
+                        value: true,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    horz: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    sideWays: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    videoData: {
+                        type: Object,
+                        observer: '_videoDataChanged',
+                    },
+                    incomingItems: {
+                        type: Array,
+                        observer: 'itemsChanged',
+                    },
+                    search: {
+                        type: String,
+                        notify: true
+                    },
+                    api: {
+                        type: Object,
+                        notify: true,
+                        observer: 'log'
+                    }
+                }
+            }
+
+            log(data) {
+                console.log(data)
+            }
+
+            _videoDataChanged(data) {
+                var allVideos = [];
+                // console.log("videos", data)
+                if (data !== undefined && data !== null && data.articles !== null && data.articles !== undefined) {
+                    //  console.log("videos", data.articles)
+                    let temp = data.articles
+                    //  console.log("videos", temp)
+                    if (temp[0]) {
+                        for (let i = 0; i < temp.length; i++) {
+                            // console.log(temp[i].snippet)
+                            let videoItem = temp[i]
+                            allVideos.push(videoItem)
+                        }
+                    }
+                    setTimeout(() => {
+                        this.incomingItems = allVideos
+                    }, 100)
+                }
+            }
+            itemsChanged(data) {
+                let allVideos = []
+                // console.log('videoItem')
+                data.map(function (videoItem) {
+                    // console.log(videoItem)
+                    //  console.log(videoItem.id.videoId, videoItem.snippet.channelTitle.toLocaleLowerCase())
+                    var youtubeVideo = {
+                        author: videoItem.author,
+                        title: videoItem.title,
+                        description: videoItem.description,
+                        publishedAt: videoItem.publishedAt,
+                        thumbnail: videoItem.urlToImage,
+                        source: videoItem.source.name,
+                        url: videoItem.url
+                    };
+                    allVideos.push(youtubeVideo)
+                })
+                //  console.log(allVideos)
+                this.set('items', allVideos);
+            }
+
+            fuckedYouUp(data) {
+                // console.log('realy did..!!', data)
+            }
+            _seethisshit(data) {
+                return '/news?url=' + data
+                //window.scrollTo({}, 0)
+            }
+        }
+        window.customElements.define(newsResults.is, newsResults);
+
+        //UCqYSAPse9A0BRqoKdGdqxtA
+    </script>
+</dom-module>
