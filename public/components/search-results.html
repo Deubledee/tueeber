@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .content[sideFix] {
-                color: aquamarine;
+                color: rgb(182, 199, 193);
                 height: 389px;
                 padding: 0px 0px 0px;
                 overflow-x: hidden
@@ -73,7 +73,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 100%;
                 height: -webkit-fill-available;
                 padding: 30px 5px 59px;
-                color: var(--app-font-color);
                 overflow-x: hidden;
                 margin-top: -12px;
                 transition: height 0.5s ease-in-out;
@@ -198,6 +197,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .contentView[bottom] {
                 font-size: 18px;
             }
+           
+            .contentView[sideFix] {
+                margin-left: 10px;
+            }
 
             .channelView {
                 z-index: 1;
@@ -212,12 +215,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 top: 8px;
                 overflow-x: hidden;
                 z-index: 1;
-                font-style: italic;
-                flex-grow: 7;
-                font-size: 0.5em;
-                color: var(--app-font-color);
+                font-size: 0.7em;
                 font-weight: bolder;
-                padding-left: 5px;
+                padding-left: 2px;
                 margin-bottom: auto;
                 transition: font-size 0.5s ease-in-out;
             }
@@ -227,7 +227,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .channelView[sideFix] {
-                color: rgb(127, 255, 255);
+                color: rgb(127, 255, 255) !important;
                 font-size: 0.6em;
             }
 
@@ -285,7 +285,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 </paper-card>
                             </a>
                             <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
-                                <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]"> {{video.shortTitle}} </div>
+                                <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideFix$="[[sideFix]]" sideWays$="[[sideWays]]">
+                                    {{video.shortTitle}}
+                                </div>
                                 <div class="channelView" sideFix$="[[sideFix]]" mini$="[[mini]]" bottom$="[[bottom]]">
                                     <paper-button on-click="_seethisshit">
                                         src: {{video.channelTitle}}
