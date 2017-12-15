@@ -50,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .flexchild-vertical2 {
                 @apply --layout-flex-2;
+                max-width: 350px
             }
 
             .flexchild-vertical3 {
@@ -78,25 +79,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 5em
             }
 
-            .bottomer {
-                margin-bottom: 150px;
-                height: 400px;
-            }
+            @media (min-width: 576px) {}
 
-            .player {
-                height: 400px;
-            }
+            @media (min-width: 768px) {}
 
-            search-results {
-                box-shadow: 1px, 1px, 1px grey;
-            }
+            @media (min-width: 992px) {}
 
-            paper-card {
-                --paper-card-header-color: rgb(231, 37, 79);
-                --paper-card-header-image: {
-                    height: 90px;
+            @media (min-width: 1097px) {}
+
+            @media (min-width: 1200px) {}
+
+            @media (min-width: 1280px) {
+                .flexchild-vertical2 {
+                    max-width: 350px
                 }
             }
+
+            @media (min-width: 1300px) {
+                .flexchild-vertical2 {
+                    max-width: 550px
+                }
+            }
+
+            @media (min-width: 1536px) {
+                .flexchild-vertical2 {
+                    max-width: 850px
+                }
+            }
+
+            @media (min-width: 1745px) {}
         </style>
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
@@ -105,14 +116,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="flexchild-vertical2">
                 <paper-card heading="top Headlines">
                 </paper-card>
-                <news-results route="[[route]]" id="results1" bottom="true" api="[[topHeadlines]]" on-click="routeChanged">
+                <news-results route="[[route]]" id="results1" side-fix api="[[topHeadlines]]" on-click="routeChanged">
                     loading...
                 </news-results>
             </div>
             <div class="flexchild-vertical2">
                 <paper-card heading="everything">
                 </paper-card>
-                <news-results route="[[route]]" id="results1" bottom="true" on-click="routeChanged" api="[[everything]]">
+                <news-results route="[[route]]" id="results1" side-fix on-click="routeChanged" bottom api="[[everything]]">
                     loading...
                 </news-results>
             </div>

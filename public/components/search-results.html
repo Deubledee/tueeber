@@ -55,6 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .content[sideFix] {
+                color: aquamarine;
                 height: 389px;
                 padding: 0px 0px 0px;
                 overflow-x: hidden
@@ -78,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 transition: height 0.5s ease-in-out;
             }
 
-           #content::-webkit-scrollbar {
+            #content::-webkit-scrollbar {
                 width: 8px;
                 z-index: 2;
             }
@@ -114,8 +115,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background-color: rgba(44, 49, 44, 0);
                 margin-right: 2px;
             }
-            
-            #content[sideFix]::-webkit-scrollbar-track  {
+
+            #content[sideFix]::-webkit-scrollbar-track {
                 width: 5px;
                 background-color: rgba(0, 0, 0, 0);
                 margin-right: 2px;
@@ -225,6 +226,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 0.6em;
             }
 
+            .channelView[sideFix] {
+                color: rgb(127, 255, 255);
+                font-size: 0.6em;
+            }
+
             .channelView a {
                 color: #f1e8e8;
             }
@@ -280,7 +286,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </a>
                             <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
                                 <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]"> {{video.shortTitle}} </div>
-                                <div class="channelView" mini$="[[mini]]" bottom$="[[bottom]]">
+                                <div class="channelView" sideFix$="[[sideFix]]" mini$="[[mini]]" bottom$="[[bottom]]">
                                     <paper-button on-click="_seethisshit">
                                         src: {{video.channelTitle}}
                                     </paper-button>
