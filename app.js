@@ -5,7 +5,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const index = require('./routes/index');
-
+const youtube = require('./routes/youtube');
+const newsapi = require('./routes/newsapi');
 const app = express();
 
 // view engine setup
@@ -38,6 +39,14 @@ app.use('/finance', index);
 app.use('/leran', index);
 app.use('/teach', index);
 app.use('/comedy', index);
+//app.use('/newsapi', newsapi);
+//app.use('/youtube', youtube);
+app.get('/youtube/*', function(req, res){    
+    youtube(req, res)
+})
+app.get('/newsapi/*', function(req, res){    
+    newsapi(req, res)
+})
 //
 
 // catch 404 and forward to error handler

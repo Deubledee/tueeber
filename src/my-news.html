@@ -20,6 +20,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 --app-primary-color: rgb(207, 29, 23);
                 --app-secondary-color: black;
                 --app-third-color: rgb(66, 133, 244);
+                --news-results-background: {
+                    box-shadow: 5px 5px 10px rgb(158, 158, 161);
+                }
+                ;
             }
 
             .container {
@@ -51,6 +55,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .flexchild-vertical2 {
                 @apply --layout-flex-2;
                 max-width: 350px
+            }
+
+            .flexchild-vertical2[mobile] {
+                max-width: 100%
             }
 
             .flexchild-vertical3 {
@@ -91,19 +99,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             @media (min-width: 1280px) {
                 .flexchild-vertical2 {
-                    max-width: 350px
+                    max-width: 150px
                 }
             }
 
             @media (min-width: 1300px) {
                 .flexchild-vertical2 {
-                    max-width: 550px
+                    max-width: 350px
                 }
             }
 
             @media (min-width: 1536px) {
                 .flexchild-vertical2 {
-                    max-width: 850px
+                    max-width: 550px
                 }
             }
 
@@ -113,17 +121,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
         </app-route>
         <div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
-            <div class="flexchild-vertical2">
-                <paper-card heading="top Headlines">
-                </paper-card>
-                <news-results route="[[route]]" id="results1" side-fix api="[[topHeadlines]]" on-click="routeChanged">
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+                <h2>Top Headlines</h2>
+
+                <news-results route="[[route]]" id="results1" mini normal api="[[topHeadlines]]" on-click="routeChanged">
                     loading...
                 </news-results>
             </div>
-            <div class="flexchild-vertical2">
-                <paper-card heading="everything">
-                </paper-card>
-                <news-results route="[[route]]" id="results1" side-fix on-click="routeChanged" bottom api="[[everything]]">
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+                <h2>Everything</h2>
+                <news-results route="[[route]]" id="results1" bottom normal api="[[everything]]" on-click="routeChanged">
                     loading...
                 </news-results>
             </div>
@@ -229,7 +236,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 cat: '',
                                 lang: 'en',
                                 country: '',
-                                apiKey: '16bb1647c69145dc8a5c8f18373cd2cf'
                             }
                         }
                     },
@@ -243,15 +249,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             return {
                                 method: "everything",
                                 api: "everything",
-                                sources: 'techcrunch',
+                                sources: '',
                                 domains: '',
-                                q: '',
+                                q: 'amazon',
                                 from: '',
                                 to: '',
                                 lang: 'en',
                                 sortBy: 'publishedAt',
-                                page: '20',
-                                apiKey: '16bb1647c69145dc8a5c8f18373cd2cf'
+                                page: '20'                                
                             }
                         }
                     }
@@ -266,8 +271,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             routeChanged(data) {
                 setTimeout(() => {
-                    window.open(this.query.url, "_blank", "toolbar=yes,top=50,left=100,width=800,height=800")
-                    history.pushState({}, null, '/news/')
+                    if (this.query.url.length > 0) {
+                        window.open(this.query.url, "_blank", "toolbar=yes,top=50,left=100,width=800,height=800")
+                        history.pushState({}, null, '/news/')
+                    }
                 }, 100)
             }
         }

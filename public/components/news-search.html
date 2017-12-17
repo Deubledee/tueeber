@@ -123,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                    let method, query;
                     method = "_" + this.api.method
                     query = this.api
-                    this.set("url", `https://newsapi.org/v2/${this.api.api}`)
+                    this.set("url", `../../newsapi/${this.api.api}`)//`https://newsapi.org/v2/${this.api.api}`)
                     this.params = this[method](query)
                     // console.log("this.params", this.params)
                     this.search = false
@@ -153,13 +153,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     category: data.cat,
                     language: data.lang,
                     country: data.country,
-                    apiKey: data.key//,
                 }
             }
 
             _everything(data) {
                 console.log('_everything',data)                
                 return {
+                 //   api: 'this.api.api',
                     sources: data.sources,
                     domains: data.domains,
                     q: data.q,
@@ -167,19 +167,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     to: data.to,
                     language: data.lang,
                     sortBy: data.sortBy,
-                    page: data.page,
-                    apiKey: data.apiKey
+                    page: data.page                   
                 }
             }
 
             _topHeadlines(data) {
               //  console.log('_topHeadlines',data)
                 return {
+                 //   appi: 'this.api.api',
                     sources: data.sources,
                     q: data.q,
                     category: data.cat,
                     language: data.lang,
-                    apiKey: data.apiKey,
                     country: data.country
                 }
             }

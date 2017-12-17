@@ -145,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           let method, query;
           method = "_" + this.api.method
           query = data
-          this.set("url", `https://www.googleapis.com/youtube/v3/${this.api.api}/`)
+          this.set("url", `../../youtube/${this.api.api}`)//`${this.api.api}/`)
           this.params = this[method](query)
          // console.log("this.params", this.params)
         }
@@ -163,36 +163,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             query = data.q
           }
           if (this.route.prefix === "/youtube/search") {
-            this.set("url", `https://www.googleapis.com/youtube/v3/${data.api}/`)
+            this.set("url", `../../youtube/${data.api}`)//`https://www.googleapis.com/youtube/v3/${data.api}/`)
             this.params = this[method](query)
           }
         }
       }
       _channel(data) {
         return {
+        //  api: this.api.api,
           part: 'snippet',
           channelId: data,
           maxResults: 30,
-          key: 'AIzaSyAvZS0WP2y0M9Yczpi8F-4JeagLnFCDMwU', //'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
           type: 'video'
         }
       }
 
       _list(data) {
         return {
+        //  api: this.api.api,
           part: 'snippet',
           maxResults: 30,
           q: data || this.search || "",
-          key: 'AIzaSyAvZS0WP2y0M9Yczpi8F-4JeagLnFCDMwU', //'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
           type: 'video'
         }
       }
 
       _videoDetails(data) {
         return {
+         // api: this.api.api,
           part: 'contentDetails',
-          id: data,
-          key: 'AIzaSyAvZS0WP2y0M9Yczpi8F-4JeagLnFCDMwU', //'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
+          id: data
         }
       }
     }

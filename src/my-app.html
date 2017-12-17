@@ -141,7 +141,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .container {
         position: relative;
         top: 144px;
-        width: 65%
       }
 
       .container2 {
@@ -206,7 +205,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .flexchild-vertical12 {
-        @apply --layout-flex-12;
+        @apply --layout-flex-12;        
       }
 
       .flexchild-vertical-auto {
@@ -363,7 +362,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           max-width: 540px;
         }
         .container {
-          max-width: 540px;
           margin-left: 5%;
 
         }
@@ -371,11 +369,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       @media (min-width: 768px) {
         .container5 {
-          max-width: 420px;
           margin-left: 0%;
         }
         .container {
-          max-width: 440px;
           margin-left: 5%;
         }
       }
@@ -385,8 +381,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           max-width: 960px;
         }
         .container {
-          max-width: 840px;
-          margin-left: 5%;
+          margin-left: 12%;
         }
       }
 
@@ -403,9 +398,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           margin-left: 1%;
           margin-right: 1%;
         }
-        .container {
-          max-width: 1140px;
-          margin-left: 2%;
+        .container { 
+          width: 70%;         
+          margin-left: 5%;
         }
       }
 
@@ -417,14 +412,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       @media (min-width: 1300px) {
-        .container5 {
-          max-width: 1480px;
+        .container5 {          
           margin-left: 12%;
         }
-        .container {
-          max-width: 1445px;
-          margin-left: 2%;
-
+        .container {          
+          margin-left: 5%;
         }
       }
 
@@ -548,7 +540,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="row">
       <nav class="navbar container5 bottomer flex-horizontal">
         <div class="flexchild-verticalext2">
-          <search-results id="results4" side-fix="true" search="[[liveNow]] news">
+          <search-results id="results4" side-fix search="[[liveNow]] news">
             loading...
           </search-results>
         </div>
@@ -559,27 +551,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <search-results id="results4" side-fix bottom search="[[liveNow]] news">
             loading...
           </search-results>
-        </div>
-      </nav>
+        </div>        
+      </nav> 
     </div>
     <!-- area de affiliates e pubblicidade-->
     <nav class="navbar navbar-right">
       <label for="results7">
         <h3>ebay</h3>
       </label>
-      <search-results id="results7" bottom="true" search="ebay">
+      <search-results background="rgba(27, 44, 83, 0.8117647058823529)" side-fix id="results7" bottom="true" search="ebay">
         loading...
       </search-results>
       <label for="results8">
         <h3>amazon</h3>
       </label>
-      <search-results id="results8" bottom="true" search="amazon">
+      <search-results background="rgba(5, 37, 3, 0.78)" side-fix id="results8" bottom="true" search="amazon">
         loading...
       </search-results>
       <label for="results9">
         <h3>publicity</h3>
       </label>
-      <search-results id="results9" bottom="true" search="publicity">
+      <search-results background="rgba(63, 81, 81, 0.63)" side-fix id="results9" bottom="true" search="publicity">
         loading...
       </search-results>
     </nav>
@@ -587,7 +579,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="col-xs-12">
         <div class="flexchild-vertical12">
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-            <my-news name="news"></my-news>
+            <my-news name="news" mobile></my-news>
             <my-sports name="sports"></my-sports>
             <my-movies name="movies"></my-movies>
             <my-radio name="radio"></my-radio>
@@ -710,7 +702,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         if (page === 'video') {
           this.$.player.pause = true
-          this.video = !this.video
+          this.video = true
           this.$.video.videoId = this.subroute.path.slice(1, this.subroute.path.length)
           setTimeout(() => {
             window.history.pushState({}, null, this.page)

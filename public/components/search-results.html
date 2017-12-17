@@ -313,8 +313,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready() {
                 super.ready()
                 setTimeout(() => {
-                    this.$.background.style.background = `url(${this.background})`
-                    this.$.background.style.backgroundSize = 'contain';
+                    this.$.background.style.background = `${this.background}`
+                   // this.$.background.style.backgroundSize = 'contain';
                     this.$.background.style.height = this.$.content.clientHeight + "px"
                     //console.log(this.background)
                 }, 200)
@@ -425,7 +425,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var allVideos = [];
                 var that = this;
                 // console.log("videos", data)
-                if (data !== undefined || data !== null && data.items !== null || data.items !== undefined) {
+                if (data !== undefined && data !== null && data.items !== null && data.items !== undefined) {
                     //  console.log("videos", data)
                     let temp = data.items
                     //  console.log("videos", temp)
