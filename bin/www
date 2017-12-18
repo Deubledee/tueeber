@@ -16,20 +16,20 @@ var path = require('path');
 
 var port = normalizePort(process.env.PORT || '3000');
 //app.set('port', port);
-
+/*
 var port2 = normalizePort(process.env.PORT || '3443');
 
 const httpsOptions = {
   cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
   key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
 }
-
+*/
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
-var server2 = https.createServer(httpsOptions, app);
+//var server2 = https.createServer(httpsOptions, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -38,10 +38,10 @@ var server2 = https.createServer(httpsOptions, app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
+/*
 server2.listen(port2);
 server2.on('error', onError);
-server2.on('listening', onListening);
+server2.on('listening', onListening);*/
 /**
  * Normalize a port into a number, string, or false.
  */

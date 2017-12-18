@@ -456,7 +456,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     api: {
                         type: Object,
                         notify: true,
-                        observer: 'log'
+                       // observer: 'log'
                     }
                 }
             }
@@ -486,8 +486,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             itemsChanged(data) {
                 let allVideos = []
-                // console.log('videoItem')
-                data.map(function (videoItem) {
+                // console.log('newsItem', data)
+               data.map(function (videoItem) {
                     // console.log(videoItem)
                     //  console.log(videoItem.id.videoId, videoItem.snippet.channelTitle.toLocaleLowerCase())
                     var youtubeVideo = {

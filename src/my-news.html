@@ -129,8 +129,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </news-results>
             </div>
             <div class="flexchild-vertical2" mobile$="[[mobile]]">
-                <h2>Everything</h2>
-                <news-results route="[[route]]" id="results1" bottom normal api="[[everything]]" on-click="routeChanged">
+                <h2>CNN</h2>
+                <news-results route="[[route]]" id="results1" bottom normal api="[[cnn]]" on-click="routeChanged">
+                    loading...
+                </news-results>
+            </div>
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+                <h2>Time</h2>
+                <news-results route="[[route]]" id="results1" bottom normal api="[[time]]" on-click="routeChanged">
                     loading...
                 </news-results>
             </div>
@@ -230,16 +236,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: function () {
                             return {
                                 method: "topHeadlines",
-                                api: "top-headlines",
+                                api: "topHeadlines",
                                 sources: '',
-                                q: 'trump',
+                                q: '',
                                 cat: '',
                                 lang: 'en',
                                 country: '',
                             }
                         }
                     },
-                    everything: {
+                    cnn: {
                         type: Object,
                         value: function () {
                             let d = new Date()
@@ -249,14 +255,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             return {
                                 method: "everything",
                                 api: "everything",
-                                sources: '',
+                                sources: 'CNN',
                                 domains: '',
-                                q: 'amazon',
+                                q: '',
                                 from: '',
                                 to: '',
                                 lang: 'en',
                                 sortBy: 'publishedAt',
-                                page: '20'                                
+                                page: '10'                                
+                            }
+                        }
+                    },
+                     time: {
+                        type: Object,
+                        value: function () {
+                            let d = new Date()
+                            let year = d.toLocaleDateString().split('/')
+                            let fultime = year.pop()
+                            fultime = fultime + '/' + year.join('/')
+                            return {
+                                method: "everything",
+                                api: "everything",
+                                sources: 'time',
+                                domains: '',
+                                q: '',
+                                from: '',
+                                to: '',
+                                lang: 'en',
+                                sortBy: 'publishedAt',
+                                page: '10'                                
                             }
                         }
                     }

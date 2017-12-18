@@ -119,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             queryon(data) {
                 if (data === true) {
-                    console.log("queryon", data, this.api)
+                   // console.log("queryon", data, this.api)
                    let method, query;
                     method = "_" + this.api.method
                     query = this.api
@@ -148,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             }
             _sources(data) {
-                console.log(data)
+               // console.log(data)
                 return {
                     category: data.cat,
                     language: data.lang,
@@ -157,7 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             _everything(data) {
-                console.log('_everything',data)                
+                //console.log('_everything',data)                
                 return {
                  //   api: 'this.api.api',
                     sources: data.sources,
