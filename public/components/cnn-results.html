@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="news-search.html">
 <link rel="import" href="search-results.html">
-<dom-module id="news-results">
+<dom-module id="cnn-results">
     <template>
         <style>
             :host {
@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     background-color: var( --paper-card-background-color);
                     color: var(--paper-card-header-color);
                 }
-                @apply --news-results
+                @apply --cnn-results
             }
 
             a {
@@ -49,25 +49,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: var(--app-font-color);
                 background-size: contain;
                 height: -webkit-fill-available;
-                @apply --news-results-content;
             }
 
             .content[open] {
                 margin-top: 35px;
-                @apply --news-results-content;
             }
 
             .content[mobile] {
                 height: 150px;
-                @apply --news-results-content;
             }
 
             .content[sideFix] {
                 color: rgb(216, 231, 226);
                 height: 389px;
                 padding: 0px 0px 0px;
-                overflow-x: hidden;
-                @apply --news-results-content;
+                overflow-x: hidden
             }
 
             .content[sideWays] {
@@ -75,18 +71,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 overflow-y: hidden;
                 display: inline-flex;
                 opacity: 1;
-                @apply --news-results-content;
             }
 
             .content[mini] {
+                /* background: linear-gradient(to left, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
                 top: 0px;
-                /* padding: 29px 3px 59px; */
+                width: 100%;
+                padding: 30px 5px 59px;
                 color: var(--app-font-color);
                 overflow-x: hidden;
                 margin-top: -12px;
-                margin-left: -57px;
                 transition: height 0.5s ease-in-out;
-                @apply --news-results-content;
             }
 
 
@@ -102,21 +97,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 @apply --layout-flex;
             }
 
-            .flexchild-button {
-                @apply --layout-flex;
-            }
-
-            .width {
-                width: 870px;
-                @apply --news-results-width;
-            }
-
             .width[sideWays] {
                 width: 870px !important;
                 z-index: 2;
                 padding: 10px;
-                padding-left: 100px;
-                @apply --news-results-width;
+                padding-left: 100px
             }
 
             .flexchild-vertical2[mobile] {
@@ -192,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 680px;
                 overflow-y: auto;
                 overflow-x: hidden;
-                @apply --news-results-background;
+                @apply --cnn-results-background;
             }
 
             .background[sideWays] {
@@ -201,35 +186,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding: 21px;
                 overflow-y: hidden;
                 overflow-x: auto;
-                @apply --news-results-background;
+                @apply --cnn-results-background;
             }
 
             .nav {
                 width: 101%;
                 box-shadow: var(--app-shadow-value);
-                @apply --news-results-nav;
             }
 
             .nav[mini] {
                 float: left;
                 width: 49%;
                 margin-bottom: 13px;
-                margin-top: 8px;
-                margin-left: -8px;
-                @apply --news-results-nav;
             }
 
             .nav[bottom] {
                 float: left;
                 width: 51%;
                 margin-bottom: 13px;
-                @apply --news-results-nav;
             }
 
             .nav[sideWays] {
                 float: left;
                 margin-bottom: 20px;
-                @apply --news-results-nav;
             }
 
             .card-content {
@@ -237,7 +216,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-weight: 400;
                 text-overflow: ellipsis;
                 margin-bottom: 10px;
-                @apply --news-results-card-content;
             }
 
             .card-content[mini] {
@@ -245,8 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 24px;
                 width: 50%;
                 float: left;
-                margin-bottom: 20%;
-                @apply --news-results-card-content;
+                margin-bottom: 20%
             }
 
             .card-content[bottom] {
@@ -255,20 +232,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 16px;
                 float: left;
                 margin-top: -12px;
-                @apply --news-results-card-content;
             }
 
             .card-content[sideWays] {
                 top: 0px;
                 position: relative;
-                @apply --news-results-card-content;
             }
 
             .contentView {
                 z-index: 1;
                 flex-grow: 7;
                 font-size: 18px;
-                @apply --news-results-contentView;
             }
 
             .contentView[mini] {
@@ -276,19 +250,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 top: 5px;
                 font-size: 14px;
                 transition: font-size 0.5s ease-in-out;
-                margin-left: 8px;
-                @apply --news-results-contentView;
+                margin-left: 8px
             }
 
             .contentView[sideWays] {
                 font-size: 0.9em !important;
                 width: 70%;
-                @apply --news-results-contentView;
             }
 
             .contentView[bottom] {
                 font-size: 18px;
-                @apply --news-results-contentView;
             }
 
             .channelView {
@@ -297,7 +268,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-grow: 7;
                 font-size: 14px;
                 color: var(--app-font-color);
-                @apply --news-results-channelView;
             }
 
             .channelView[mini] {
@@ -314,22 +284,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: auto;
                 margin-left: 8px;
                 transition: font-size 0.5s ease-in-out;
-                @apply --news-results-channelView;
             }
 
             .channelView[bottom] {
                 font-size: 0.9em;
-                @apply --news-results-channelView;
             }
 
             .channelView span {
                 color: #3a93db;
-                @apply --news-results-channelView;
             }
 
             .channelView label {
                 color: #47e6de;
-                @apply --news-results-channelView;
             }
 
             .channelView h4 {
@@ -341,70 +307,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 /* margin-left: 101px; */
             }
 
-            .horizontal {
-                @apply --layout-horizontal;
+            .button-container {
+                position: absolute;
+                top: 77px;
+                z-index: 0;
+                height: 594px;
+                width: 100%;
             }
 
-            .flexchild-button {
-                width: 50px;
+            .button-1[up] {
+                z-index: 3;
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out
+            }
+
+            .button-2[up] {
+                z-index: 3;
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out
             }
 
             .button-1 {
-                visibility: hidden;
-                @apply --news-results-button-1;
+                position: absolute;
+                top: 110px;
+                float: left;
+                background: var(--app-shadow-color);
+                width: 100px;
+                height: 480px;
+                z-index: 0;
+                opacity: 0;
             }
 
             .button-2 {
-                visibility: hidden;
-                @apply --news-results-button-2;
-            }
-
-            .button-1[sideWays] {
-                visibility: visible;
-                background: transparent;
-                cursor: pointer;
-                width: 50px;
+                position: absolute;
+                top: 110px;
+                right: 6px;
+                background: var(--app-shadow-color);
+                width: 100px;
                 height: 480px;
-                z-index: 3;
-                opacity: 1;
-                transition: background 0.5 ease-out;
-                @apply --news-results-button-1;
-            }
-
-            .button-2[sideWays] {
-                visibility: visible;
-                background: transparent;
-                cursor: pointer;
-                width: 50px;
-                height: 480px;
-                z-index: 3;
-                opacity: 1;
-                transition: background 0.5 ease-out;
-                @apply --news-results-button-2;
-            }
-
-            .button-1[sideWays]:hover {
-                background: rgba(0, 0, 0, 0.383);
-                @apply --news-results-button-1;
-            }
-
-
-            .button-2[sideWays]:hover {
-                background: rgba(0, 0, 0, 0.383);
-                @apply --news-results-button-2;
-            }
-
-            .img[sideWays] {
-                margin-top: 200%;
-                width: inherit;
-                @apply --news-results-img;
-            }
-
-            @media (min-width: 1280px) {
-                .flexchild-button {
-                    @apply --layout-flex;
-                }
-
+                z-index: 0;
+                opacity: 0;
             }
 
             @media (max-width: 640px) {
@@ -442,56 +384,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </news-search>
         <!--div id="buttons" class="button-container" up$="[[up]]">
             <div class="buttons" up$="[[up]]"-->
-        <div class="horizontal" sideWays$="[[sideWays]]">
-            <div class="flexchild-vertical">
-                <div class="button-1" sideWays$="[[sideWays]]" on-click="left">
-                    <img sideWays$="[[sideWays]]" class="img" src="public/images/left.png">
-                </div>
-            </div>
-            <div class="flexchild-vertical">
-                <div class="background" id="background" normal$="[[normal]]" sideWays$="[[sideWays]]">
-                    <iron-selector id="content" class="content flex-vertical" normal$="[[normal]] " mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]"
-                        sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]" open$="[[open]]" selected="[[routeTail.prefix]]"
-                        attr-for-selected="name" role="navigation">
-                        <template is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
-                            <div class="width" sideWays$="[[sideWays]]" mini$="[[mini]]" id="news[[iDer]]">
-                                <a name="/view1/video/" id="anav" href="/news?url=[[video.url]]" on-click="changeLink">
-                                    <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" heading="[[video.title]]" title="{{video.title}}"
-                                        image="{{video.thumbnail}}">
-                                    </paper-card>
-                                </a>
-                                <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
-                                    <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]">
-                                        [[video.description]]
-                                    </div>
-                                    <div class="channelView" mini$="[[mini]]" bottom$="[[bottom]]">
-                                        <h4>
-                                            <label> src: </label>
-                                            [[video.source]]
-                                            <label> author: </label>
-                                            [[video.author]]
-                                        </h4>
-                                        <span>
-                                            [[video.publishedAt]]
-                                        </span>
-                                    </div>
-                                </div>
+        <div class="button-1" up$="[[up]]" on-click="left"></div>
+
+        <!--/div>
+        </div-->
+        <div class="background" id="background" normal$="[[normal]]" sideWays$="[[sideWays]]">
+            <iron-selector id="content" class="content flex-vertical" normal$="[[normal]] " mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]"
+                sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]" open$="[[open]]" selected="[[routeTail.prefix]]"
+                attr-for-selected="name" role="navigation">
+                <template is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
+                    <div class="width" sideWays$="[[sideWays]]" id="news[[iDer]]">
+                        <a name="/view1/video/" id="anav" href="/news?url=[[video.url]]" on-click="changeLink">
+                            <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" heading="[[video.title]]" title="{{video.title}}"
+                                image="{{video.thumbnail}}">
+                            </paper-card>
+                        </a>
+                        <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
+                            <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]">
+                                [[video.description]]
                             </div>
-                        </template>
-                    </iron-selector>
-                </div>
-            </div>
-            <div class="flexchild-button">
-                <div class="button-2" sideWays$="[[sideWays]]" on-click="right">
-                    <img sideWays$="[[sideWays]]" class="img" src="public/images/right.png">
-                </div>
-            </div>
+                            <div class="channelView" mini$="[[mini]]" bottom$="[[bottom]]">
+                                <h4>
+                                    <label> src: </label>
+                                    [[video.source]]
+                                    <label> author: </label>
+                                    [[video.author]]
+                                </h4>
+                                <span>
+                                    [[video.publishedAt]]
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </iron-selector>
         </div>
+        <div class="button-2" up$="[[up]]" on-click="right"></div>
     </template>
     <script>
-        class newsResults extends Polymer.Element {
+        class cnnResults extends Polymer.Element {
             static get is() {
-                return 'news-results';
+                return 'cnn-results';
             }
 
             constructor() {
@@ -500,12 +433,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready() {
                 super.ready()
-                /*  this.addEventListener('mouseover', this.hoverButton)
-                  this.addEventListener('pointermove', () => {
-                      setTimeout(() => {
-                          this.hoverButton()
-                      }, 1000)
-                  })*/
+                this.addEventListener('mouseover', this.hover)
+                this.addEventListener('pointermove', () => {
+                    setTimeout(() => {
+                        this.hover()
+                    }, 1000)
+                })
             }
 
             static get properties() {
@@ -544,12 +477,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: 0
                         //observer: '_background'
                     },
-                    /*  up: {
-                          type: Boolean,
-                          value: false,
-                          notify: true,
-                          reflectToAttribute: true
-                      },*/
+                    up: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
                     normal: {
                         type: Boolean,
                         value: false,
@@ -642,7 +575,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.link = false
             }
 
-            hoverButton() {
+            hover() {
                 this.up = true
                 if (this.timeout === false) {
                     let timer = setTimeout((() => {
@@ -750,7 +683,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 //window.scrollTo({}, 0)
             }
         }
-        window.customElements.define(newsResults.is, newsResults);
+        window.customElements.define(cnnResults.is, cnnResults);
 
         //UCqYSAPse9A0BRqoKdGdqxtA
     </script>

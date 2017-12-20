@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../public/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../public/bower_components/iron-flex-layout/iron-flex-layout.html">
 <!--link rel="import" href="page-video.html"-->
-<link rel="import" href="../public/components/news-results.html">
+<link rel="lazy-import" href="../public/components/news-results.html">
 <dom-module id="my-news">
     <template>
         <style>
@@ -21,7 +21,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 --app-secondary-color: black;
                 --app-third-color: rgb(66, 133, 244);
                 --news-results-background: {
+                    /* background: rgba(0, 0, 0, 0.548);*/
                     box-shadow: 5px 5px 10px rgb(158, 158, 161);
+                }
+                ;
+            }
+
+            .noShadow {
+                --news-results-background: {
+                    /* background: rgba(0, 0, 0, 0.548);*/
+                    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
                 }
                 ;
             }
@@ -101,11 +110,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 .flexchild-vertical2 {
                     max-width: 150px
                 }
+                .container2 {
+                    padding-left: 2%;
+                    /* background: red;*/
+                }
             }
 
             @media (min-width: 1300px) {
                 .flexchild-vertical2 {
                     max-width: 350px
+                }
+                .container2 {
+                    padding-left: 2%;
+                    /* background: green;*/
                 }
             }
 
@@ -113,71 +130,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 .flexchild-vertical2 {
                     max-width: 550px
                 }
+                .container2 {
+                    padding-left: 5%;
+                    /* background: blue;*/
+                }
             }
 
-            @media (min-width: 1745px) {}
+            @media (min-width: 1745px) {
+                .container2 {
+                    padding-left: 15%;
+                    /* background: yellow;*/
+                }
+            }
+
+            .flexchild-vertical2 h2 {
+                margin-left: 20%
+            }
         </style>
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
         </app-route>
-        <div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
+        <div class="container2 flex-vertical flex-horizontal">
             <div class="flexchild-vertical2" mobile$="[[mobile]]">
                 <h2>Top Headlines</h2>
-
-                <news-results route="[[route]]" id="results1" mini normal api="[[topHeadlines]]" on-click="routeChanged">
+                <news-results id="topHeadLines" route="[[route]]" class="noShadow" normal mini side-ways api="[[topHeadlines]]" link="{{link}}">
                     loading...
                 </news-results>
             </div>
+        </div>
+        <div class="container2 flex-vertical flex-horizontal" mobile$="[[mobile]]">
             <div class="flexchild-vertical2" mobile$="[[mobile]]">
                 <h2>CNN</h2>
-                <news-results route="[[route]]" id="results1" bottom normal api="[[cnn]]" on-click="routeChanged">
+                <news-results id="cnn" route="[[route]]" class="noShadow" normal bottom side-ways api="[[cnn]]" link="[[link]]">
                     loading...
                 </news-results>
             </div>
             <div class="flexchild-vertical2" mobile$="[[mobile]]">
-                <h2>Time</h2>
-                <news-results route="[[route]]" id="results1" bottom normal api="[[time]]" on-click="routeChanged">
+                <h2>business</h2>
+                <news-results id="time" route="[[route]]" class="noShadow" normal bottom side-ways api="[[business]]" link="[[link]]">
                     loading...
                 </news-results>
             </div>
-            <!--div class="flexchild-vertical2">
-                <paper-card heading="everything">
-                </paper-card>
-                <news-results route="[[route]]" id="results1" bottom="true" on-click="routeChanged" api="[[everything]]">
+            <div class="flexchild-vertical2" mobile$="[[mobile]]" id="insert3">
+                <h2>
+                    bbc News
+                </h2>
+                <news-results id="evr" route="[[route]]" class="noShadow" normal mini api="[[bbcNews]]" link="[[link]]">
                     loading...
-                </news-results>
-            </div-->
+                </news-results>`
+            </div>
         </div>
         <div class="container flex-vertical flex-horizontal pubArea" mobilePub$="[[mobilePub]]">
             <div class="flexchild-vertical2">
                 content here
             </div>
         </div>
-        <!--div class="container flex-vertical flex-horizontal" mobile$="[[mobile]]">
-            <div class="flexchild-vertical2">
-                <paper-card heading="CNN news" alt="CNN news" image="https://c1.staticflickr.com/1/589/22319224443_af97a58951_b.jpg">
-                </paper-card>
-                <news-results id="results4" bottom="[[bottom]]" search="CNN news">
-                    loading...
-                </news-results>
-            </div>
-            <div class="flexchild-vertical2">
-                <paper-card heading=" middle east news" alt="middle east news" image="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg">
-                </paper-card>
-                <news-results id="results5" bottom="[[bottom]]" search="middle east news">
-                    <!background="https://socioecohistory.files.wordpress.com/2012/09/merkava_4_main_battle_tank_israel_army_idf.jpg">
-                    loading...
-                </news-results>
-            </div>
-            <div class="flexchild-vertical2">
-                <paper-card heading="Barack Obama" alt="barack obama" image="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
-                </paper-card>
-                <news-results id="results6" bottom="[[bottom]]" search="barack obama">
-                    <! background="https://obamawhitehouse.archives.gov/sites/default/files/image/image_file/p0101215ps-0253.jpg">
-                    loading...
-                </news-results>
-            </div>
-        </div-->
     </template>
     <script>
         class myNews extends Polymer.Element {
@@ -189,6 +196,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             ready() {
                 super.ready()
+              //  setTimeout(()=>{this.$.insert3.innerHtml = arr}, 1000)
+                
             }
             static get properties() {
                 return {
@@ -210,6 +219,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: true,
                         notify: true,
                         reflectToAttribute: true
+                    },
+                    link: {
+                        type: Boolean,
+                        value: false,
+                        // observer: 'routeChanged'
                     },
                     open: {
                         type: Boolean,
@@ -245,6 +259,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             }
                         }
                     },
+                    business: {
+                        type: Object,
+                        notify: true,
+                        value: function () {
+                            return {
+                                method: "topHeadlines",
+                                api: "topHeadlines",
+                                sources: '',
+                                q: '',
+                                cat: 'business',
+                                lang: 'en',
+                                country: '',
+                            }
+                        }
+                    },
                     cnn: {
                         type: Object,
                         value: function () {
@@ -262,11 +291,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 to: '',
                                 lang: 'en',
                                 sortBy: 'publishedAt',
-                                page: '10'                                
+                                page: '10'
                             }
                         }
                     },
-                     time: {
+                    time: {
                         type: Object,
                         value: function () {
                             let d = new Date()
@@ -283,7 +312,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 to: '',
                                 lang: 'en',
                                 sortBy: 'publishedAt',
-                                page: '10'                                
+                                page: '10'
+                            }
+                        }
+                    },
+                    bbcNews: {
+                        type: Object,
+                        value: function () {
+                            let d = new Date()
+                            let year = d.toLocaleDateString().split('/')
+                            let fultime = year.pop()
+                            fultime = fultime + '/' + year.join('/')
+                            return {
+                                method: "everything",
+                                api: "everything",
+                                sources: 'bbc-news',
+                                domains: '',
+                                q: '',
+                                from: '',
+                                to: '',
+                                lang: 'en',
+                                sortBy: 'publishedAt',
+                                page: '10'
                             }
                         }
                     }
@@ -295,14 +345,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             _seethisshit() {
                 window.scrollTo({}, 0)
-            }
-            routeChanged(data) {
-                setTimeout(() => {
-                    if (this.query.url.length > 0) {
-                        window.open(this.query.url, "_blank", "toolbar=yes,top=50,left=100,width=800,height=800")
-                        history.pushState({}, null, '/news/')
-                    }
-                }, 100)
             }
         }
         window.customElements.define(myNews.is, myNews);

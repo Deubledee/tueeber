@@ -49,44 +49,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: var(--app-font-color);
                 background-size: contain;
                 height: -webkit-fill-available;
-                @apply --news-results-content;
+                margin-left: -4px;
             }
 
             .content[open] {
                 margin-top: 35px;
-                @apply --news-results-content;
             }
 
             .content[mobile] {
                 height: 150px;
-                @apply --news-results-content;
             }
 
             .content[sideFix] {
                 color: rgb(216, 231, 226);
                 height: 389px;
                 padding: 0px 0px 0px;
-                overflow-x: hidden;
-                @apply --news-results-content;
+                overflow-x: hidden
             }
 
             .content[sideWays] {
                 height: 550px !important;
+                padding-left: 107px !important;
                 overflow-y: hidden;
                 display: inline-flex;
-                opacity: 1;
-                @apply --news-results-content;
+                i
             }
 
             .content[mini] {
+                /* background: linear-gradient(to left, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
                 top: 0px;
-                /* padding: 29px 3px 59px; */
+                width: 100%;
+                padding: 30px 5px 59px;
                 color: var(--app-font-color);
                 overflow-x: hidden;
                 margin-top: -12px;
-                margin-left: -57px;
                 transition: height 0.5s ease-in-out;
-                @apply --news-results-content;
             }
 
 
@@ -102,21 +99,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 @apply --layout-flex;
             }
 
-            .flexchild-button {
-                @apply --layout-flex;
-            }
-
-            .width {
-                width: 870px;
-                @apply --news-results-width;
-            }
-
             .width[sideWays] {
-                width: 870px !important;
-                z-index: 2;
-                padding: 10px;
-                padding-left: 100px;
-                @apply --news-results-width;
+                width: 857px !important;
+                z-index: 0;
             }
 
             .flexchild-vertical2[mobile] {
@@ -196,8 +181,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .background[sideWays] {
-                width: 822px;
-                height: auto;
+                width: 840px;
+                height: 552px;
                 padding: 21px;
                 overflow-y: hidden;
                 overflow-x: auto;
@@ -207,29 +192,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .nav {
                 width: 101%;
                 box-shadow: var(--app-shadow-value);
-                @apply --news-results-nav;
             }
 
             .nav[mini] {
                 float: left;
                 width: 49%;
                 margin-bottom: 13px;
-                margin-top: 8px;
-                margin-left: -8px;
-                @apply --news-results-nav;
             }
 
             .nav[bottom] {
                 float: left;
                 width: 51%;
                 margin-bottom: 13px;
-                @apply --news-results-nav;
             }
 
             .nav[sideWays] {
                 float: left;
                 margin-bottom: 20px;
-                @apply --news-results-nav;
             }
 
             .card-content {
@@ -237,7 +216,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-weight: 400;
                 text-overflow: ellipsis;
                 margin-bottom: 10px;
-                @apply --news-results-card-content;
             }
 
             .card-content[mini] {
@@ -245,8 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 24px;
                 width: 50%;
                 float: left;
-                margin-bottom: 20%;
-                @apply --news-results-card-content;
+                margin-bottom: 20%
             }
 
             .card-content[bottom] {
@@ -255,20 +232,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: 16px;
                 float: left;
                 margin-top: -12px;
-                @apply --news-results-card-content;
             }
 
             .card-content[sideWays] {
                 top: 0px;
                 position: relative;
-                @apply --news-results-card-content;
             }
 
             .contentView {
                 z-index: 1;
                 flex-grow: 7;
                 font-size: 18px;
-                @apply --news-results-contentView;
             }
 
             .contentView[mini] {
@@ -276,19 +250,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 top: 5px;
                 font-size: 14px;
                 transition: font-size 0.5s ease-in-out;
-                margin-left: 8px;
-                @apply --news-results-contentView;
+                margin-left: 8px
             }
 
             .contentView[sideWays] {
                 font-size: 0.9em !important;
-                width: 70%;
-                @apply --news-results-contentView;
+                width: 82%;
             }
 
             .contentView[bottom] {
                 font-size: 18px;
-                @apply --news-results-contentView;
             }
 
             .channelView {
@@ -297,7 +268,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-grow: 7;
                 font-size: 14px;
                 color: var(--app-font-color);
-                @apply --news-results-channelView;
             }
 
             .channelView[mini] {
@@ -314,22 +284,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin-bottom: auto;
                 margin-left: 8px;
                 transition: font-size 0.5s ease-in-out;
-                @apply --news-results-channelView;
             }
 
             .channelView[bottom] {
                 font-size: 0.9em;
-                @apply --news-results-channelView;
             }
 
             .channelView span {
                 color: #3a93db;
-                @apply --news-results-channelView;
             }
 
             .channelView label {
                 color: #47e6de;
-                @apply --news-results-channelView;
             }
 
             .channelView h4 {
@@ -341,70 +307,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 /* margin-left: 101px; */
             }
 
-            .horizontal {
-                @apply --layout-horizontal;
+            .button-container {
+                position: absolute;
+                top: 77px;
+                z-index: 0;
+                height: 594px;
+                width: 100%;
+            }
+            .buttons[up] {
+                z-index: 8;
+            }
+            .button-1[up] {
+                float: left;
+                z-index: 12;
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out
             }
 
-            .flexchild-button {
-                width: 50px;
+            .button-2[up] {
+                float: right;
+                z-index: 12;
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out
             }
 
             .button-1 {
-                visibility: hidden;
-                @apply --news-results-button-1;
+                background: var(--app-shadow-color);
+                width: 125px;
+                height: 594px;
+                z-index: 0;
+                opacity: 0;
             }
 
             .button-2 {
-                visibility: hidden;
-                @apply --news-results-button-2;
-            }
-
-            .button-1[sideWays] {
-                visibility: visible;
-                background: transparent;
-                cursor: pointer;
-                width: 50px;
-                height: 480px;
-                z-index: 3;
-                opacity: 1;
-                transition: background 0.5 ease-out;
-                @apply --news-results-button-1;
-            }
-
-            .button-2[sideWays] {
-                visibility: visible;
-                background: transparent;
-                cursor: pointer;
-                width: 50px;
-                height: 480px;
-                z-index: 3;
-                opacity: 1;
-                transition: background 0.5 ease-out;
-                @apply --news-results-button-2;
-            }
-
-            .button-1[sideWays]:hover {
-                background: rgba(0, 0, 0, 0.383);
-                @apply --news-results-button-1;
-            }
-
-
-            .button-2[sideWays]:hover {
-                background: rgba(0, 0, 0, 0.383);
-                @apply --news-results-button-2;
-            }
-
-            .img[sideWays] {
-                margin-top: 200%;
-                width: inherit;
-                @apply --news-results-img;
-            }
-
-            @media (min-width: 1280px) {
-                .flexchild-button {
-                    @apply --layout-flex;
-                }
-
+                background: var(--app-shadow-color);
+                width: 125px;
+                height: 594px;
+                z-index: 0;
+                opacity: 0;
             }
 
             @media (max-width: 640px) {
@@ -440,51 +380,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-route>
         <news-search api="[[api]]" class="search" search="true" hide="true" video-data="{{videoData}}">
         </news-search>
-        <!--div id="buttons" class="button-container" up$="[[up]]">
-            <div class="buttons" up$="[[up]]"-->
-        <div class="horizontal" sideWays$="[[sideWays]]">
-            <div class="flexchild-vertical">
-                <div class="button-1" sideWays$="[[sideWays]]" on-click="left">
-                    <img sideWays$="[[sideWays]]" class="img" src="public/images/left.png">
-                </div>
-            </div>
-            <div class="flexchild-vertical">
-                <div class="background" id="background" normal$="[[normal]]" sideWays$="[[sideWays]]">
-                    <iron-selector id="content" class="content flex-vertical" normal$="[[normal]] " mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]"
-                        sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]" open$="[[open]]" selected="[[routeTail.prefix]]"
-                        attr-for-selected="name" role="navigation">
-                        <template is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
-                            <div class="width" sideWays$="[[sideWays]]" mini$="[[mini]]" id="news[[iDer]]">
-                                <a name="/view1/video/" id="anav" href="/news?url=[[video.url]]" on-click="changeLink">
-                                    <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" heading="[[video.title]]" title="{{video.title}}"
-                                        image="{{video.thumbnail}}">
-                                    </paper-card>
-                                </a>
-                                <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
-                                    <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]">
-                                        [[video.description]]
-                                    </div>
-                                    <div class="channelView" mini$="[[mini]]" bottom$="[[bottom]]">
-                                        <h4>
-                                            <label> src: </label>
-                                            [[video.source]]
-                                            <label> author: </label>
-                                            [[video.author]]
-                                        </h4>
-                                        <span>
-                                            [[video.publishedAt]]
-                                        </span>
-                                    </div>
-                                </div>
+        <div class="background" id="background" normal$="[[normal]]" sideWays$="[[sideWays]]">
+            <iron-selector id="content" normal$="[[normal]] " mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]" sideWays$="[[sideWays]]"
+                mobile$="[[mobile]]" bottom$="[[bottom]]" open$="[[open]]" class="content flex-vertical" selected="[[routeTail.prefix]]"
+                attr-for-selected="name" role="navigation">
+                <template is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
+                    <div class="width" sideWays$="[[sideWays]]">
+                        <a name="/view1/video/" id="anav" href="[[_seethisshit(video.url)]]" target="blank" >
+                            <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" heading="[[video.title]]" title="{{video.title}}"
+                                image="{{video.thumbnail}}">
+                            </paper-card>
+                        </a>
+                        <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
+                            <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]">
+                                [[video.description]]
                             </div>
-                        </template>
-                    </iron-selector>
-                </div>
-            </div>
-            <div class="flexchild-button">
-                <div class="button-2" sideWays$="[[sideWays]]" on-click="right">
-                    <img sideWays$="[[sideWays]]" class="img" src="public/images/right.png">
-                </div>
+                            <div class="channelView" mini$="[[mini]]" bottom$="[[bottom]]">
+                                <h4>
+                                    <label> src: </label>
+                                    [[video.source]]
+                                    <label> author: </label>
+                                    [[video.author]]
+                                </h4>
+                                <span>
+                                    [[video.publishedAt]]
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </iron-selector>
+        </div>
+        <div id="buttons" class="button-container">
+            <div class="buttons" up$="[[up]]" >
+                <div class="button-1" up$="[[up]]" on-click="[[left]]"></div>
+                <div class="button-2" up$="[[up]]"on-click="[[right]] "></div>
             </div>
         </div>
     </template>
@@ -500,12 +430,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready() {
                 super.ready()
-                /*  this.addEventListener('mouseover', this.hoverButton)
-                  this.addEventListener('pointermove', () => {
-                      setTimeout(() => {
-                          this.hoverButton()
-                      }, 1000)
-                  })*/
+                this.addEventListener('mouseover', this.hoverButton)
+                this.addEventListener('pointermove', this.hoverButton)
+            }
+
+            hoverButton() {
+                this.up = true
+                setTimeout((() => {                    
+                    this.up = false
+                }).bind(this), 3000)
+            }
+
+            left(){
+                this.$.background.scrollBy(-850, 0)
+                console.log(this.$.background.scrollBy)
+            }
+
+            right(){
+                this.$.background.scrollBy(850, 0)
+                console.log(this.$.background.scrollBy)
             }
 
             static get properties() {
@@ -522,12 +465,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: Object,
                         notify: true
                     },
-
-                    link: {
-                        type: Boolean,
-                        value: false,
-                        notify: true
-                    },
                     items: {
                         type: Array,
                         notify: true,
@@ -538,18 +475,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: false,
                         //S observer: 'itemsChanged'
                     },
-                    num: {
-                        type: Number,
-                        notify: true,
-                        value: 0
-                        //observer: '_background'
-                    },
-                    /*  up: {
-                          type: Boolean,
-                          value: false,
+                    /*  background: {
+                          type: String,
                           notify: true,
-                          reflectToAttribute: true
+                          //observer: '_background'
                       },*/
+                    up: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
                     normal: {
                         type: Boolean,
                         value: false,
@@ -626,66 +562,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: Object,
                         notify: true,
                         // observer: 'log'
-                    },
-                    timeout: {
-                        type: Boolean,
-                        value: false
                     }
                 }
             }
 
             log(data) {
                 console.log(data)
-            }
-            changeLink() {
-                this.link = true
-                this.link = false
-            }
-
-            hoverButton() {
-                this.up = true
-                if (this.timeout === false) {
-                    let timer = setTimeout((() => {
-                        if (this.timeout === true) {
-                            this.timeout = false
-                            clearTimeout(timer)
-                        } else {
-                            this.up = false
-                        }
-                    }).bind(this), 2000)
-                }
-            }
-
-            left() {
-                let scroll = 980
-                this.timeout = true
-                this.up = false
-                let timer = setInterval(() => {
-                    if (scroll === 0) {
-                        this.up = true
-                        this.timeout = false
-                        clearInterval(timer)
-                    } else {
-                        scroll = scroll - 20
-                        this.$.background.scrollBy(-20, 0)
-                    }
-                }, 1000 / 120)
-            }
-
-            right() {
-                let scroll = 0
-                this.timeout = true
-                this.up = false
-                let timer = setInterval(() => {
-                    if (scroll === 980) {
-                        this.up = true
-                        this.timeout = false
-                        clearInterval(timer)
-                    } else {
-                        scroll = scroll + 20
-                        this.$.background.scrollBy(20, 0)
-                    }
-                }, 1000 / 60)
             }
 
             _videoDataChanged(data) {
@@ -706,6 +588,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         this.incomingItems = allVideos
                     }, 100)
                 }
+            }
+            changeLink(){
+                this.link = true
+                this.link = false
             }
             itemsChanged(data) {
                 let allVideos = []
@@ -746,7 +632,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 // console.log('realy did..!!', data)
             }
             _seethisshit(data) {
-                return this.changeLink(data)
+                return '/news?url=' + data
                 //window.scrollTo({}, 0)
             }
         }
