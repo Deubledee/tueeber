@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../public/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../public/bower_components/iron-flex-layout/iron-flex-layout.html">
 <!--link rel="import" href="page-video.html"-->
-<link rel="import" href="../public/components/search-results.html">
+<link rel="import" href="../public/components/news-results-alpha-v0.0.2.html">
 <dom-module id="my-sports">
     <template>
         <style>
@@ -96,11 +96,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="flexchild-vertical2">
                     <paper-card heading="rugby" alt="rugby" image="">
                     </paper-card>
-                    <search-results id="results1" background="" bottom="[[bottom]]" search="rugby" mini="[[mini]]">
+                    <news-results2 id="results1" mini api="[[topHeadlines]]">
                         loading...
-                    </search-results>
+                    </news-results2>
                 </div>
-                <div class="flexchild-vertical2">
+                <!--div class="flexchild-vertical2">
                     <paper-card heading="Soccer" alt="sports Soccer" image="">
                     </paper-card>
                     <search-results id="results2" bottom="[[bottom]]" search="Soccer" background="">
@@ -166,7 +166,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         loading...
                     </search-results>
                 </div>
-            </div>
+            </div-->
         </div>
     </template>
     <script>
@@ -215,26 +215,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: false,
                         notify: true,
                         reflectToAttribute: true
-                    },
-                    sources: {
+                    },                    
+                    topHeadlines: {
                         type: Object,
                         notify: true,
                         value: function () {
                             return {
-                                method: "sources",
-                                api: "sources",
+                                method: "topHeadlines",
+                                api: "topHeadlines",
+                                sources: '',
+                                q: '',
                                 cat: '',
-                                lang: '',
+                                lang: 'en',
                                 country: '',
-                            }
-                        }
-                    },
-                    everything: {
-                        type: Object,
-                        value: function () {
-                            return {
-                                method: "everything",
-                                api: "everything",
                             }
                         }
                     }

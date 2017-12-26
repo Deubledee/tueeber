@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="news-search.html">
-<link rel="import" href="search-results.html">
+<link rel="import" href="optimize-img.html">
 <dom-module id="news-results">
     <template>
         <style>
@@ -205,7 +205,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .nav {
-                width: 101%;
+                margin-top: 3px;
+                width: 98%;
                 box-shadow: var(--app-shadow-value);
                 @apply --news-results-nav;
             }
@@ -241,7 +242,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .card-content[mini] {
-                height: 97px;
                 font-size: 24px;
                 width: 50%;
                 float: left;
@@ -440,8 +440,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-route>
         <news-search api="[[api]]" class="search" search="true" hide="true" video-data="{{videoData}}">
         </news-search>
-        <!--div id="buttons" class="button-container" up$="[[up]]">
-            <div class="buttons" up$="[[up]]"-->
         <div class="horizontal" sideWays$="[[sideWays]]">
             <div class="flexchild-vertical">
                 <div class="button-1" sideWays$="[[sideWays]]" on-click="left">
@@ -453,11 +451,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <iron-selector id="content" class="content flex-vertical" normal$="[[normal]] " mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]"
                         sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]" open$="[[open]]" selected="[[routeTail.prefix]]"
                         attr-for-selected="name" role="navigation">
-                        <template is="dom-repeat" items="{{items}}" as="video" mutable-data="true" initialCount="2">
+                        <template is="dom-repeat" id="[[ide]]" items="{{items}}" as="video" initialCount="2" targetFramerate="50">
                             <div class="width" sideWays$="[[sideWays]]" mini$="[[mini]]" id="news[[iDer]]">
                                 <a name="/view1/video/" id="anav" href="/news?url=[[video.url]]" on-click="changeLink">
                                     <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" heading="[[video.title]]" title="{{video.title}}"
-                                        image="{{video.thumbnail}}">
+                                        image="public/images/noimg.png">
                                     </paper-card>
                                 </a>
                                 <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
@@ -522,7 +520,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: Object,
                         notify: true
                     },
-
+                    id: {
+                        type: String,
+                        reflectToAttribute: true
+                    },
+                    ide: {
+                        type: String,
+                        notify: true
+                    },
                     link: {
                         type: Boolean,
                         value: false,
@@ -531,12 +536,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     items: {
                         type: Array,
                         notify: true,
-                       // observer: 'fuckedYouUp'
-                    },
-                    cache: {
-                        type: Array,
-                        notify: true,
-                        observer: '_pushItems'
+                        observer: 'fuckedYouUp'
                     },
                     change: {
                         type: Boolean,
@@ -635,6 +635,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     timeout: {
                         type: Boolean,
                         value: false
+                    },
+                    count: Number,
+                    counter: {
+                        type: Number,
+                        value: 0
                     }
                 }
             }
@@ -681,14 +686,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 let scroll = 0
                 this.timeout = true
                 this.up = false
+                this.count = this.$.content.childElementCount - 2
+                this.counter = this.counter + 1
                 let timer = setInterval(() => {
                     if (scroll === 980) {
                         this.up = true
                         this.timeout = false
                         clearInterval(timer)
                     } else {
-                        scroll = scroll + 20
-                        this.$.background.scrollBy(20, 0)
+                        if (this.counter <= this.count) {
+                            scroll = scroll + 20
+                            this.$.background.scrollBy(20, 0)
+                            console.log('this.count', this.count, this.counter)
+                        } else if(this.counter > this.count) {
+                            this.counter = 0                            
+                            this.$.background.scrollBy(-(this.$.background.scrollWidth), 0)
+                            console.log(this.counter, -this.$.background.scrollWidth)
+                            clearInterval(timer)
+                        }
                     }
                 }, 1000 / 60)
             }
@@ -714,8 +729,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             itemsChanged(data) {
                 let allVideos = []
-                // console.log('newsItem', data)
-                data.map(function (videoItem) {
+              //  console.log('newsItem', data)
+                data.map((function (videoItem) {
                     // console.log(videoItem)
                     //  console.log(videoItem.id.videoId, videoItem.snippet.channelTitle.toLocaleLowerCase())
                     var youtubeVideo = {
@@ -733,7 +748,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
 
                     if (youtubeVideo.thumbnail) {
-                        // console.log(youtubeVideo.thumbnail)                    
                         if (youtubeVideo.thumbnail.indexOf('?v=1') > 0) {
                             youtubeVideo.thumbnail = '../public/images/noimg.png'
                         }
@@ -741,13 +755,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         youtubeVideo.thumbnail = '../public/images/noimg.png'
                     }
 
-                    allVideos.push(youtubeVideo)//.splice(0,2))
-
-                })
+                    allVideos.push(youtubeVideo)
+                }).bind(this))
                 //  console.log(allVideos)
+                //this.$.optimizer.optimize(allVideos) //data.thumbnail)
                 this.set('items', allVideos);
-               // this.cache = allVideos
             }
+
 
             fuckedYouUp(data) {
                 // console.log('realy did..!!', data)

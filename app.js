@@ -8,15 +8,45 @@ const index = require('./routes/index');
 const youtube = require('./routes/youtube');
 const newsapi = require('./routes/newsapi');
 const app = express();
+var responseTime = require('response-time')
+var commands = require('redis-commands');
+const redis = require('redis');
 
+const RedisServer = require('redis-server');
+const server = new RedisServer({
+    port: 6379,
+    conf:'redis.conf'
+  });
+  server.open((err) => {
+    if (err === null) {
+      // You may now connect a client to the Redis
+      // server bound to `server.port` (e.g. 6379).
+      console.log('server open')
+    }
+  });
+
+const client = redis.createClient();
+client.on('connect', function (item) {
+  console.log('redis conected port: 6379')
+})
+
+client.on('error', function (item) {
+  console.log('an eror ocurred', item)
+})
+client.on('message', function (item) {
+  console.log('message', item)
+})
 // view engine setup
-
+/*commands.list.forEach(function (command) {
+    console.log(command);
+  });*/
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(responseTime());
 /*app.use('/publicbower', express.static(path.join(__dirname, 'build/modern/public/bower_components/webcomponentsjs')));
 app.use('/public', express.static(path.join(__dirname, 'build/modern/public')));
 app.use('/src', express.static(path.join(__dirname, 'build/modern/src')));*/
@@ -45,8 +75,11 @@ app.get('/youtube/*', function(req, res){
     youtube(req, res)
 })
 app.get('/newsapi/*', function(req, res){    
-    newsapi(req, res)
+    newsapi(req, client, function(result){
+        res.send(result)
+    })
 })
+
 //
 
 // catch 404 and forward to error handler

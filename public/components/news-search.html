@@ -11,11 +11,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <dom-module id="news-search">
-    <template>     
-  
+    <template>
+
         <app-route route="{{route}}" pattern="/:page" data="{{searchData}}" tail="{{searchTail}}" query-params="{{searchQuery}}">
         </app-route>
-      
+
         <iron-ajax auto id="newsSearch" url="[[url]]" params="[[params]]" last-response="{{videoData}}">
         </iron-ajax>
 
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     },
                     search: {
                         type: Boolean,
-                        value: false,                        
+                        value: false,
                         observer: 'queryon',
                     },
                     api: {
@@ -119,11 +119,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             queryon(data) {
                 if (data === true) {
-                   // console.log("queryon", data, this.api)
-                   let method, query;
+                    // console.log("queryon", data, this.api)
+                    let method, query;
                     method = "_" + this.api.method
                     query = this.api
-                    this.set("url", `../../newsapi/${this.api.api}`)//`https://newsapi.org/v2/${this.api.api}`)
+                    this.set("url", `../../newsapi/${this.api.api}`)
                     this.params = this[method](query)
                     // console.log("this.params", this.params)
                     this.search = false
@@ -148,38 +148,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             }
             _sources(data) {
-               // console.log(data)
+                // console.log(data)
                 return {
-                    category: data.cat,
-                    language: data.lang,
-                    country: data.country,
+                    category: data.category || '',
+                    language: data.language || 'en',
+                    country: data.country || '',
                 }
             }
 
             _everything(data) {
                 //console.log('_everything',data)                
                 return {
-                 //   api: 'this.api.api',
-                    sources: data.sources,
-                    domains: data.domains,
-                    q: data.q,
-                    from: data.from,
-                    to: data.to,
-                    language: data.lang,
-                    sortBy: data.sortBy,
-                    page: data.page                   
+                    //   api: 'this.api.api',
+                    sources: data.sources || '',
+                    domains: data.domains || '',
+                    q: data.q || '',
+                    from: data.from || '',
+                    to: data.to || '',
+                    language: data.language || 'en',
+                    sortBy: data.sortBy || '',
+                    page: data.page || ''
                 }
             }
 
             _topHeadlines(data) {
-              //  console.log('_topHeadlines',data)
+                //  console.log('_topHeadlines',data)
                 return {
-                 //   appi: 'this.api.api',
-                    sources: data.sources,
-                    q: data.q,
-                    category: data.cat,
-                    language: data.lang,
-                    country: data.country
+                    //   appi: 'this.api.api',
+                    sources: data.sources || '',
+                    q: data.q || '',
+                    category: data.category || '',
+                    language: data.language || 'en',
+                    country: data.country || ''
                 }
             }
         }

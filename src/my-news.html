@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../public/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../public/bower_components/iron-flex-layout/iron-flex-layout.html">
 <!--link rel="import" href="page-video.html"-->
-<link rel="lazy-import" href="../public/components/news-results.html">
+<link rel="import" href="../public/components/news-results-alpha-v0.0.2.html">
 <dom-module id="my-news">
     <template>
         <style>
@@ -25,6 +25,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     box-shadow: 5px 5px 10px rgb(158, 158, 161);
                 }
                 ;
+                --news-results-card-content: {
+                    height: 170px;
+                }
             }
 
             .noShadow {
@@ -32,7 +35,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     /* background: rgba(0, 0, 0, 0.548);*/
                     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
                 }
-                ;
             }
 
             .container {
@@ -96,6 +98,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 5em
             }
 
+            .smaller{
+                --news-results-width: {
+                    width: 360px;
+                } 
+            }
+
             @media (min-width: 576px) {}
 
             @media (min-width: 768px) {}
@@ -150,35 +158,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
         </app-route>
-        <div class="container2 flex-vertical flex-horizontal">
+        <div class="container2 flex-vertical flex-horizontal" mobile$="[[mobile]]">
             <div class="flexchild-vertical2" mobile$="[[mobile]]">
-                <h2>Top Headlines</h2>
-                <news-results id="topHeadLines" route="[[route]]" class="noShadow" normal mini side-ways api="[[topHeadlines]]" link="{{link}}">
+                <h1>Top Headlines </h1>
+            </div>
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+                <h2>abc news </h2>
+                <news-results ide="topHeadLines" route="[[route]]" class="noShadow" normal mini side-ways api="[[topHeadlines]]" link="{{link}}">
                     loading...
                 </news-results>
             </div>
         </div>
-        <div class="container2 flex-vertical flex-horizontal" mobile$="[[mobile]]">
-            <div class="flexchild-vertical2" mobile$="[[mobile]]">
-                <h2>CNN</h2>
-                <news-results id="cnn" route="[[route]]" class="noShadow" normal bottom side-ways api="[[cnn]]" link="[[link]]">
-                    loading...
-                </news-results>
-            </div>
+        <div class="container2 flex-vertical flex-horizontal" >
             <div class="flexchild-vertical2" mobile$="[[mobile]]">
                 <h2>business</h2>
-                <news-results id="time" route="[[route]]" class="noShadow" normal bottom side-ways api="[[business]]" link="[[link]]">
+                <news-results ide="time" class="smaller" route="[[route]]" class="noShadow" normal api="[[business]]" link="[[link]]">
                     loading...
                 </news-results>
             </div>
-            <div class="flexchild-vertical2" mobile$="[[mobile]]" id="insert3">
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+                <h2>CNN</h2>
+                <news-results ide="cnn" class="smaller" route="[[route]]" class="noShadow" normal  api="[[cnn]]" link="[[link]]">
+                    loading...
+                </news-results>
+            </div>
+            <!--div class="flexchild-vertical2" mobile$="[[mobile]]" id="insert3">
                 <h2>
                     bbc News
                 </h2>
-                <news-results id="evr" route="[[route]]" class="noShadow" normal mini api="[[bbcNews]]" link="[[link]]">
+                <news-results ide="bbc" route="[[route]]" class="noShadow" normal mini api="[[bbcNews]]" link="[[link]]">
                     loading...
                 </news-results>`
             </div>
+        </div-->
         </div>
         <div class="container flex-vertical flex-horizontal pubArea" mobilePub$="[[mobilePub]]">
             <div class="flexchild-vertical2">
@@ -196,8 +208,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             ready() {
                 super.ready()
-              //  setTimeout(()=>{this.$.insert3.innerHtml = arr}, 1000)
-                
+                //  setTimeout(()=>{this.$.insert3.innerHtml = arr}, 1000)
+
             }
             static get properties() {
                 return {
@@ -220,11 +232,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         notify: true,
                         reflectToAttribute: true
                     },
-                    link: {
-                        type: Boolean,
-                        value: false,
-                        // observer: 'routeChanged'
-                    },
+                    /*  link: {
+                          type: Boolean,
+                          value: false,
+                          // observer: 'routeChanged'
+                      },*/
                     open: {
                         type: Boolean,
                         value: false,
@@ -252,10 +264,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 method: "topHeadlines",
                                 api: "topHeadlines",
                                 sources: '',
-                                q: '',
-                                cat: '',
-                                lang: 'en',
-                                country: '',
+                                q: 'today',
+                                category: 'general',
+                                language: 'en',
+                                country: ''
                             }
                         }
                     },
@@ -268,8 +280,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 api: "topHeadlines",
                                 sources: '',
                                 q: '',
-                                cat: 'business',
-                                lang: 'en',
+                                category: 'business',
+                                language: 'en',
                                 country: '',
                             }
                         }
@@ -289,7 +301,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 q: '',
                                 from: '',
                                 to: '',
-                                lang: 'en',
+                                language: 'en',
                                 sortBy: 'publishedAt',
                                 page: '10'
                             }
@@ -310,7 +322,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 q: '',
                                 from: '',
                                 to: '',
-                                lang: 'en',
+                                language: 'en',
                                 sortBy: 'publishedAt',
                                 page: '10'
                             }
@@ -331,7 +343,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 q: '',
                                 from: '',
                                 to: '',
-                                lang: 'en',
+                                language: 'en',
                                 sortBy: 'publishedAt',
                                 page: '10'
                             }

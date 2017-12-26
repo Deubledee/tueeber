@@ -1,0 +1,74 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="optimize-img">
+    <template>
+        <style>
+            :host {
+                z-index: -3;
+                position: fixed;
+                left: -2000px;
+            }
+        </style>
+        <iron-ajax auto url='/optimize' params="[[reqToAjax]]" handle-as="json" last-response="{{res}}"> </iron-ajax>
+    </template>
+    <script>
+        class optimizeImg extends Polymer.Element {
+            static get is() {
+                return 'optimize-img';
+            }
+
+            constructor() {
+                super();
+            }
+
+            ready() {
+                super.ready()
+            }
+
+            static get properties() {
+                return {
+                    req: {
+                        type: Object,
+                        notify: true,
+                        observer: 'optimize'
+                    },
+                    reqToAjax: {
+                        type: Object,
+                        notify: true
+                    },
+                    res: {
+                        type: Object,
+                        notify: true,
+                      //  observer: 'log'
+                    },
+                    index: {
+                        type: String,
+                        notify: true,
+                        // observer: 'log'
+                    },
+                    ide:{
+                        type: String
+                    }
+                }
+            }
+
+            optimize(data) {
+                if (data !== '../public/images/noimg.png') {
+                    this.set("reqToAjax", {
+                        "url": data,
+                        "index": this.index,
+                        'id': this.ide
+                    })
+                } /*else {
+                    this.log(data)
+                }*/
+            }
+
+            log(data) {
+                console.log('log', data)
+            }
+        }
+
+        window.customElements.define(optimizeImg.is, optimizeImg);
+    </script>
+</dom-module>
