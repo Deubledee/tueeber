@@ -3,9 +3,9 @@ const router = express.Router();
 const prpl = require('prpl-server');
 /* GET home page. */
   router.get('/public', prpl.makeHandler('.', {
-    httpsRedirect: true,
+    httpsRedirect: false,
     entrypoint: 'views/index.html',
-    unregisterMissingServiceWorkers: false,
+    unregisterMissingServiceWorkers: true,
    /* builds: [
      // {name: 'build/modern', browserCapabilities: ['es2015', 'push']},
       {name: 'build/fallback'}

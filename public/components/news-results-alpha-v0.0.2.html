@@ -99,10 +99,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .flexchild-vertical {
-                @apply --layout-flex;
+                @apply --layout-flex;  
+                
             }
-
-            .flexchild-button {
+            .small{
+                @apply --news-results-small;
+            }
+            .flexchild-button[sideWays]  {
                 @apply --layout-flex;
             }
 
@@ -150,22 +153,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             #background[normal]::-webkit-scrollbar {
                 width: 10px;
-                z-index: 2;
-                margin-top: 18px;
+                z-index: 2;               
             }
 
             #background[normal]::-webkit-scrollbar-thumb {
                 width: 10px;
                 margin-top: 18px;
                 background: var(--app-fourth-color);
-                margin-right: 20px;
             }
 
             #background[normal]::-webkit-scrollbar-track {
                 width: 10px;
-                margin-top: 18px;
                 background-color: rgba(45, 194, 45, 0);
-                margin-right: 20px;
             }
 
             #background[sideFix]::-webkit-scrollbar {
@@ -341,21 +340,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 /* margin-left: 101px; */
             }
 
-            .horizontal {
+            .horizontal[sideways] {
+                @apply --layout-horizontal;
+            } 
+                      
+
+            .vertical[normal] {
                 @apply --layout-horizontal;
             }
 
-            .flexchild-button {
+            .flexchild-button  {
+                width: 0px;
+            }
+
+            .flexchild-button[sideWays]  {
                 width: 50px;
             }
 
             .button-1 {
                 visibility: hidden;
+                width: 0px;
                 @apply --news-results-button-1;
             }
 
             .button-2 {
                 visibility: hidden;
+                width: 0px;
                 @apply --news-results-button-2;
             }
 
@@ -401,7 +411,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             @media (min-width: 1280px) {
-                .flexchild-button {
+                .flexchild-button[sideWays]  {
                     @apply --layout-flex;
                 }
 
@@ -440,15 +450,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-route>
         <news-search api="[[api]]" class="search" search="true" hide="true" video-data="{{videoData}}">
         </news-search>
-        <div class="horizontal" sideWays$="[[sideWays]]">
-            <div class="flexchild-vertical">
+        <div class="horizontal vertical" sideWays$="[[sideWays]]" normal$="[[normal]]">
+            <div class="flexchild-button" sideWays$="[[sideWays]]">
                 <div class="button-1" sideWays$="[[sideWays]]" on-click="left">
                     <img sideWays$="[[sideWays]]" class="img" src="public/images/left.png">
                 </div>
             </div>
-            <div class="flexchild-vertical">
+            <div class="flexchild-vertical small">
                 <div class="background" id="background" normal$="[[normal]]" sideWays$="[[sideWays]]">
-                    <iron-selector id="content" class="content flex-vertical" normal$="[[normal]] " mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]"
+                    <iron-selector id="content" class="content flex-vertical" normal$="[[normal]]" mini$="[[mini]]" sideFix$="[[sideFix]]" vertical$="[[vertical]]"
                         sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]" open$="[[open]]" selected="[[routeTail.prefix]]"
                         attr-for-selected="name" role="navigation">
                         <template is="dom-repeat" id="[[ide]]" items="{{items}}" as="video" initialCount="2" targetFramerate="50">

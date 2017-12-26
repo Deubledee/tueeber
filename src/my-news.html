@@ -86,6 +86,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding-right: 5px;
             }
 
+            .flexchild-spaced {
+                @apply --layout-flex-12;
+            }
+
             .flexchild-vertical-auto {
                 @apply --layout-flex-auto;
             }
@@ -98,10 +102,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 5em
             }
 
-            .smaller{
+            .smaller {
+                --news-results-background: {
+                    width: 300px;
+                }
+                ;
+                --news-results-small: {
+                    width: 300px;
+                }
+                ;
                 --news-results-width: {
-                    width: 360px;
-                } 
+                    width: 300px;
+                }
             }
 
             @media (min-width: 576px) {}
@@ -169,32 +181,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </news-results>
             </div>
         </div>
-        <div class="container2 flex-vertical flex-horizontal" >
-            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+        <div class="container2 flex-vertical flex-horizontal">
+            <div class="flexchild-spaced" mobile$="[[mobile]]">
                 <h2>business</h2>
                 <news-results ide="time" class="smaller" route="[[route]]" class="noShadow" normal api="[[business]]" link="[[link]]">
                     loading...
                 </news-results>
             </div>
-            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+            <div class="flexchild-spaced" mobile$="[[mobile]]">
                 <h2>CNN</h2>
-                <news-results ide="cnn" class="smaller" route="[[route]]" class="noShadow" normal  api="[[cnn]]" link="[[link]]">
+                <news-results ide="cnn" class="smaller" route="[[route]]" class="noShadow" normal api="[[cnn]]" link="[[link]]">
                     loading...
                 </news-results>
             </div>
-            <!--div class="flexchild-vertical2" mobile$="[[mobile]]" id="insert3">
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
                 <h2>
                     bbc News
                 </h2>
-                <news-results ide="bbc" route="[[route]]" class="noShadow" normal mini api="[[bbcNews]]" link="[[link]]">
+                <news-results ide="bbc" route="[[route]]" class="smaller" normal api="[[bbcNews]]" link="[[link]]">
                     loading...
                 </news-results>`
             </div>
-        </div-->
         </div>
-        <div class="container flex-vertical flex-horizontal pubArea" mobilePub$="[[mobilePub]]">
-            <div class="flexchild-vertical2">
-                content here
+        <div class="container2 flex-vertical flex-horizontal">
+            <div class="flexchild-spaced" mobile$="[[mobile]]">
+                <h2>business</h2>
+                <news-results ide="time" class="smaller" route="[[route]]" class="noShadow" normal api="[[business]]" link="[[link]]">
+                    loading...
+                </news-results>
+            </div>
+            <div class="flexchild-spaced" mobile$="[[mobile]]">
+                <h2>CNN</h2>
+                <news-results ide="cnn" class="smaller" route="[[route]]" class="noShadow" normal api="[[cnn]]" link="[[link]]">
+                    loading...
+                </news-results>
+            </div>
+            <div class="flexchild-vertical2" mobile$="[[mobile]]">
+                <h2>
+                    bbc News
+                </h2>
+                <news-results ide="bbc" route="[[route]]" class="smaller" normal api="[[bbcNews]]" link="[[link]]">
+                    loading...
+                </news-results>`
             </div>
         </div>
     </template>
