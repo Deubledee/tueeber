@@ -156,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </news-list-featured-item>
 
         <ul class="app-grid article-grid fade-in" fadeIn$="[[fadeIn]]">
-          <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item">
+          <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item" mutableData>
             <li>
               <news-list-item item="[[item]]"></news-list-item>
             </li>
@@ -165,13 +165,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <h3>Opinions</h3>
         <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
-          <dom-repeat items="[[opinions]]">
-            <template>
+          <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item" mutableData>
               <li>
                 <news-list-item horizontal item="[[item]]"></news-list-item>
               </li>
-            </template>
-          </dom-repeat>
+            </template>      
         </ul>
       </div>
 
@@ -179,10 +177,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="ad-container">
           <news-gpt-ad id="ad_slot_1" ad-unit-path="/6355419/Travel/Europe/France/Paris" ad-width="300" ad-height="250"></news-gpt-ad>
         </div>
-        <news-side-list class="" item="[[mostRead]]">
+        <news-side-list class="" items="[[mostRead]]">
           Most Read
         </news-side-list>
-        <news-side-list class="" featured item="[[moreTopStories]]">
+        <news-side-list class="" featured items="[[moreTopStories]]">
           More Top Stories
           </news-side-list-->
       </aside>

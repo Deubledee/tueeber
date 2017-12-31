@@ -196,12 +196,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-left: 10%;
         z-index: 1;
       }
-      .zaliner[goleft]  {
+
+      .zaliner[goleft] {
         width: 30%;
         height: 15px;
         padding-left: 10%;
         z-index: 11;
       }
+
       .redCircle {
         width: 10px;
         height: 10px;
@@ -221,8 +223,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: var(--app-font-size-1);
         letter-spacing: 1px;
       }
-      
-      .someColor span{
+
+      .someColor span {
         margin-left: 4px;
       }
 
@@ -365,7 +367,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="zaline2">
           <div class="someColor">
             <div class="redCircle"></div>
-           <span>live now</span> 
+            <span>live now</span>
           </div>
           <div id="circle" class="zalinePage">
             [[liveNow]]</div>
@@ -539,7 +541,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }, 100)
 
-        Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+        //Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
         // Close the drawer - in case the *route* change came from a link in the drawer.
         this.$.nav.closeDrawer();
       }
@@ -553,7 +555,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (this.$.nav.threshold === '') {
           this.$.nav.threshold = 1
           this.goleft = true
-          Polymer.AppLayout.scroll({ top: 2, behavior: 'silent' });
+          Polymer.AppLayout.scroll({ top: 4, behavior: 'silent' });
+          window.addEventListener('scroll', (function (evt) {          
+          if (window.scrollY >= 50) {
+            this.goleft = false
+            this.$.nav.threshold = ''
+          }
+        }).bind(this))
         } else {
           this.$.nav.threshold = ''
           this.goleft = false
