@@ -10,13 +10,14 @@ Install [polymer-cli](https://github.com/Polymer/polymer-cli):
 
 ### Setup
 
-    git clone https://github.com/polymer/news.git
-    cd news
+    git clone https://github.com/Deubledee/tueeber.git
+    cd tueeber
     bower install
-
+    npm install
+    
 ## Start the development server
 
-    polymer serve
+   npm run startNode
 
 ## Build
 
