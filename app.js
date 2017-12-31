@@ -42,7 +42,7 @@ client.on('message', function (item) {
   });*/
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -56,8 +56,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/src', express.static(path.join(__dirname, 'src')));
 
 app.use('/', index);
-app.use('/video/', index);
-app.use('/news', index);
+app.use('/news/*', index);
+app.use('/articles/*', index);
 app.use('/sports', index);
 app.use('/movies', index);
 app.use('/radio', index);

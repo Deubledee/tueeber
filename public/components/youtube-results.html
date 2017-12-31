@@ -1,0 +1,475 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="youtube-search.html">
+<dom-module id="youtube-results">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                --app-primary-color: var(--google-blue-100);
+                --app-secondary-color: rgba(18, 18, 19, 0.74);
+                --app-third-color: var(--google-blue-300);
+                --app-fourth-color: var(--google-blue-300);
+                --app-font-color: rgb(28, 30, 31);
+                --app-shadow-color: rgba(194, 189, 189, 0.657);
+                --app-shadow-value: 4px 4px 8px var(--app-shadow-color)
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+
+            iron-icon {
+                color: var(--app-font-color)
+            }
+
+            .content {
+                height: 500px;
+                position: relative;
+                top: 0px;
+                overflow-y: auto;
+                padding: 30px 5px 59px;
+                background: transparent;
+                /*var(--app-secondary-color);*/
+                color: var(--app-font-color);
+                background-size: contain;
+                /* margin-top: 36px; */
+                margin-left: -4px;
+            }
+
+            .content[open] {
+                margin-top: 35px;
+            }
+
+            .content[mobile] {
+                height: 150px;
+            }
+
+            .content[sideFix] {
+                color: rgb(182, 199, 193);
+                height: 389px;
+                padding: 0px 0px 0px;
+                overflow-x: hidden
+            }
+
+            .content[sideWays] {
+                margin-top: -78px !important;
+                height: 125px !important;
+                padding-left: 9px !important;
+            }
+
+            .content[mini] {
+                /* background: linear-gradient(to left, #464446 0%, #070401 5%, #464446 50%, #040500 95%, #464446 100%);*/
+                top: 0px;
+                width: 100%;
+                height: -webkit-fill-available;
+                padding: 30px 5px 59px;
+                overflow-x: hidden;
+                margin-top: -12px;
+                transition: height 0.5s ease-in-out;
+            }
+
+            #content::-webkit-scrollbar {
+                width: 8px;
+                z-index: 2;
+            }
+
+            #content[sideFix]::-webkit-scrollbar {
+                width: 5px;
+                z-index: 2;
+                float: left
+            }
+
+            #content::-webkit-scrollbar-thumb {
+                width: 8px;
+                margin-top: -12px;
+                background: var(--app-fourth-color);
+                margin-right: 2px;
+            }
+
+            #content[sideFix]::-webkit-scrollbar-thumb {
+                width: 5px;
+                margin-top: -12px;
+                background: var(--app-fourth-color);
+                margin-right: 2px;
+            }
+
+            #content::-webkit-scrollbar-thumb:hover {
+                width: 8px;
+                background: linear-gradient(to right, var(--app-fourth-color) 0%, var(--app-fourth-color) 5%,
+                rgba(111, 140, 221, 0.829) 50%, var(--app-fourth-color) 95%, var(--app-fourth-color) 100%);
+            }
+
+            #content::-webkit-scrollbar-track {
+                width: 8px;
+                background-color: rgba(44, 49, 44, 0);
+                margin-right: 2px;
+            }
+
+            #content[sideFix]::-webkit-scrollbar-track {
+                width: 5px;
+                background-color: rgba(0, 0, 0, 0);
+                margin-right: 2px;
+            }
+
+            .background {
+                width: 100%;
+            }
+
+            .nav {
+                width: 95%;
+                box-shadow: var(--app-shadow-value);  
+                margin-left: 2%            
+            }
+
+            .nav[mini] {
+                float: left;
+                width: 49%;
+                margin-bottom: 13px;
+                margin-left: 10px;
+            }
+
+            .nav[bottom] {
+                float: left;
+                width: 51%;
+                margin-bottom: 13px;
+                margin-left: 10px;
+            }
+
+            .nav[sideWays] {
+                float: left;
+                margin-bottom: 20px;
+                margin-left: 4%;
+            }
+
+            .card-content {
+                width: 100%;
+                font-weight: bold;
+                text-overflow: ellipsis;
+                margin-bottom: 10px;
+            }
+
+            .card-content[mini] {
+                height: 97px;
+                font-size: large;
+                width: 47%;
+                float: left;
+                padding-left: 3px;
+            }
+
+            .card-content[bottom] {
+                width: 91%;
+                margin-left: 0px;
+                margin-bottom: 23px;
+                float: left;
+                margin-top: -10px;
+            }
+
+            .card-content[sideWays] {
+                top: 0px;
+                position: relative;
+            }
+
+            .contentView {
+                z-index: 1;
+                flex-grow: 7;
+                font-size: 14px;
+            }
+
+            .contentView[mini] {
+                position: relative;
+                top: 5px;
+                font-size: 0.6em;
+                transition: font-size 0.5s ease-in-out;
+            }
+
+            .contentView[sideWays] {
+                font-size: 0.9em;
+            }
+
+            .contentView[bottom] {
+                font-size: 14px;
+            }
+           
+            .contentView[sideFix] {
+                margin-left: 10px;
+            }
+
+            .channelView {
+                z-index: 1;
+                font-style: italic;
+                flex-grow: 7;
+                font-size: 14px;
+                color: var(--app-font-color);
+            }
+
+            .channelView[mini] {
+                position: relative;
+                top: 8px;
+                overflow-x: hidden;
+                z-index: 1;
+                font-size: 0.7em;
+                font-weight: bolder;
+                padding-left: 2px;
+                margin-bottom: auto;
+                transition: font-size 0.5s ease-in-out;
+            }
+
+            .channelView[bottom] {
+                font-size: 0.6em;
+            }
+
+            .channelView[sideFix] {
+                color: rgb(127, 255, 255) !important;
+                font-size: 0.6em;
+            }
+
+            .channelView a {
+                color: #f1e8e8;
+            }
+
+            .float[mini] {
+                margin-top: -25px;
+                /* margin-left: 101px; */
+            }
+
+            @media (max-width: 640px) {
+                .content {
+                    margin: 36px -1px 0px -3px;
+                    margin-top: 36px;
+
+                }
+                .content[open] {
+                    margin-top: 35px;
+
+                }
+                .content[mini] {
+                    width: 99%;
+                    transition: width 0.5s ease-in-out;
+                }
+
+                .content[sideWays] {
+                    width: 99%;
+
+                }
+
+                #content::-webkit-scrollbar {
+                    display: none
+                }
+                paper-fab {
+                    top: 290px;
+                    right: 16px;
+                }
+            }
+        </style>
+        <app-route route="{{route}}" pattern="/:page" data="{{data}}" tail="{{routeTail}}" query-params="{{query}}">
+        </app-route>
+        <youtube-search api="[[Details]]" search="[[search]]" class="search" hide="true" video-data="{{videoData}}">
+        </youtube-search>
+        <div class="background" sideFix$="[[sideFix]]" id="background">
+            <div id="content" class="content" mini$="[[mini]]" sideFix$="[[sideFix]]" sideWays$="[[sideWays]]" mobile$="[[mobile]]" bottom$="[[bottom]]"
+                open$="[[open]]">
+                <iron-selector selected="[[routeTail.prefix]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                    <template class="flexchild-vertical" is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
+                        <div class="float" mini$="[[mini]]">
+                            <a name="/view1/video/" id="anav" href="/video/{{video.id}}" on-click="_seethisshit">
+                                <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" title="{{video.title}}" alt="{{video.thumbnail}}"
+                                    image="{{video.thumbnail}}">
+                                </paper-card>
+                            </a>
+                            <div class="card-content" mini$="[[mini]]" bottom$="[[bottom]]" title="{{video.title}}" alt="{{video.thumbnail}}" sideWays$="[[sideWays]]">
+                                <div class="contentView" mini$="[[mini]]" bottom$="[[bottom]]" sideFix$="[[sideFix]]" sideWays$="[[sideWays]]">
+                                    {{video.shortTitle}}
+                                </div>
+                                <div class="channelView" sideFix$="[[sideFix]]" mini$="[[mini]]" bottom$="[[bottom]]">
+                                    <paper-button on-click="_seethisshit">
+                                        src: {{video.channelTitle}}
+                                    </paper-button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </iron-selector>
+            </div>
+        </div>
+    </template>
+    <script>
+        class youtubeResults extends Polymer.Element {
+            static get is() {
+                return 'youtube-results';
+            }
+            constructor() {
+                super();
+            }
+            ready() {
+                super.ready()
+                setTimeout(() => {
+                    this.$.background.style.background = `${this.background}`
+                   // this.$.background.style.backgroundSize = 'contain';
+                    this.$.background.style.height = this.$.content.clientHeight + "px"
+                    //console.log(this.background)
+                }, 200)
+
+            }
+            static get properties() {
+                return {
+                    route: {
+                        type: Object,
+                        notify: true
+                    },
+                    items: {
+                        type: Array,
+                        notify: true,
+                        observer: 'fuckedYouUp'
+                    },
+                    change: {
+                        type: Boolean,
+                        value: false,
+                        //S observer: 'itemsChanged'
+                    },
+                    background: {
+                        type: String,
+                        notify: true,
+                        //observer: '_background'
+                    },
+                    mini: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    sideFix: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    bottom: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    open: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    mobile: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    vert: {
+                        type: Boolean,
+                        value: true,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    horz: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    sideWays: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true
+                    },
+                    videoData: {
+                        type: Object,
+                        observer: '_videoDataChanged',
+                    },
+                    incomingItems: {
+                        type: Array,
+                        observer: 'itemsChanged',
+                    },
+                    search: {
+                        type: String,
+                        notify: true
+                    },
+                    Details: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                method: "list",
+                                api: "search",
+                            }
+                        }
+                    },
+                    Channell: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                method: "channel",
+                                api: "search",
+                            }
+                        }
+                    }
+                }
+            }
+            _videoDataChanged(data) {
+                var allVideos = [];
+                var that = this;
+                // console.log("videos", data)
+                if (data !== undefined && data !== null && data.items !== null && data.items !== undefined) {
+                    //  console.log("videos", data)
+                    let temp = data.items
+                    //  console.log("videos", temp)
+                    if (temp[0]) {
+                        for (let i = 0; i < temp.length; i++) {
+                            // console.log(temp[i].snippet)
+                            let videoItem = temp[i]
+                            allVideos.push(videoItem)
+                        }
+                    }
+                    setTimeout(() => {
+                        this.incomingItems = allVideos
+                    }, 100)
+                }
+            }
+            itemsChanged(data) {
+                let allVideos = []
+               // console.log('YTItem', data)
+                data.map(function (videoItem) {
+                    //  console.log(videoItem.id.videoId, videoItem.snippet.channelTitle.toLocaleLowerCase())
+                    var youtubeVideo = {
+                        id: videoItem.id.videoId,
+                        title: videoItem.snippet.title,
+                        shortTitle: videoItem.snippet.title, //that.removeBadCharacters(<-..., .toLocaleLowerCase()) + " ...!!",
+                        thumbnail: videoItem.snippet.thumbnails.medium.url,
+                        channelTitle: videoItem.snippet.channelTitle.toLocaleLowerCase(),
+                        channelId: videoItem.snippet.channelId,
+                        videoItem: videoItem
+                    };
+                    allVideos.push(youtubeVideo)
+                })
+                //  console.log(allVideos)
+                this.set('items', allVideos);
+            }
+
+            fuckedYouUp(data) {
+                // console.log('realy did..!!', data)
+            }
+            _seethisshit() {
+                //window.scrollTo({}, 0)
+            }
+        }
+        window.customElements.define(youtubeResults.is, youtubeResults);
+
+        //UCqYSAPse9A0BRqoKdGdqxtA
+    </script>
+</dom-module>

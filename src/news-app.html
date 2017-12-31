@@ -1,0 +1,631 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../public/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../public/bower_components/app-layout/helpers/helpers.html">
+<link rel="import" href="../public/bower_components/app-route/app-location.html">
+<link rel="import" href="../public/bower_components/app-route/app-route.html">
+<link rel="import" href="../public/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../public/components/news-search.html">
+<link rel="import" href="../public/components/news-data.html">
+<link rel="import" href="../public/components/news-nav.html">
+<link rel="import" href="../public/components/news-player.html">
+<link rel="import" href="../public/bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../public/components/youtube-results.html">
+<link rel="import" href="../public/components/my-video.html">
+<dom-module id="news-app">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        min-height: 100vh;
+        padding-bottom: 64px;
+
+        --app-border-style: 1px solid #CCC;
+        --app-transparent-border-style: 1px solid rgba(255, 255, 255, 0.5);
+        --app-button-border-style: 2px solid #222;
+        --app-cover-text-color: #FFF;
+        --app-nav-background-color: #222;
+        --app-nav-text-color: #FFF;
+        --app-nav-deselected-text-color: #CCC;
+        --app-nav-selected-background-color: #555;
+        --app-primary-color: rgba(11, 12, 12, 0.835);
+        --app-secondary-color: var(--paper-green-900);
+        --app-third-color: #adc6b7;
+        --app-fourth-color: #00bcd4;
+        --app-shadow-color: rgb(114, 138, 150);
+        --app-shadow-color2: #0b399e;
+        --app-shadow-color3: #0c2864;
+        --app-font-size-1: 0.6em;
+        --app-font-size-2: 1em;
+        --app-sub-section-headline: {
+          border-top: var(--app-border-style);
+          border-bottom: var(--app-border-style);
+          font-size: 13px;
+          padding: 8px;
+          text-align: center;
+        }
+        ;
+
+        /* use this value for the viewport height instead of "vh" unit */
+        --viewport-height: 600px;
+      }
+
+      iron-pages {
+        max-width: 1440px;
+        margin: 0 auto;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        padding-bottom: 24px;
+        text-align: center;
+      }
+
+      footer a {
+        text-decoration: none;
+        font-size: 13px;
+        color: #757575;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+
+      .flex-vertical {
+        @apply --layout-vertical;
+      }
+
+      .flex-horizontal {
+        @apply --layout-horizontal;
+      }
+
+      .flexchild-vertical {
+        @apply --layout-flex;
+      }
+
+      .flexchild-verticalext {
+        /*  @apply --layout-flex;*/
+        width: 787px !important;
+      }
+
+      .flexchild-verticalext2 {
+        /* @apply --layout-flex;*/
+        width: 286px !important;
+        margin-top: 15px;
+      }
+
+      .flexchild-vertical2 {
+        @apply --layout-flex-2;
+      }
+
+      .flexchild-vertical3 {
+        @apply --layout-flex-3;
+        padding: 10px;
+      }
+
+      .flexchild-vertical4 {
+        @apply --layout-flex-4;
+      }
+
+      .flexchild-vertical12 {
+        @apply --layout-flex-12;
+      }
+
+      .flexchild-vertical-auto {
+        @apply --layout-flex-auto;
+      }
+
+      .bottomer {
+        position: relative;
+        top: 84px;
+        margin-bottom: 150px;
+        height: 400px;
+      }
+
+      .row {
+        background: var(--app-primary-color);
+        height: 650px;
+        margin-bottom: 25px
+      }
+
+      .logo a {
+        color: #739cde;
+        font-size: 23px;
+        padding-top: 16px;
+        text-decoration: none
+      }
+
+      .logo-toolbar {
+        height: 45px;
+        background: linear-gradient(rgb(61, 65, 77) 1%, rgb(61, 65, 77) 50%, rgb(61, 65, 77) 66%, rgb(50, 51, 51) 100%)
+      }
+
+      .mobile-toggle-drawer-btn {
+        display: none;
+      }
+
+      .mobile-toggle-drawer-btn2 {
+        display: block;
+        color: white;
+        float: right;
+        left: 0px;
+      }
+
+      .mobile-toggle-drawer-btn2[goleft] {
+        display: block;
+        color: white;
+        float: right;
+        left: -71px;
+      }
+
+      /* desktop */
+
+      .container5 {
+        top: 0px;
+      }
+
+      .zaline {
+        width: 30%;
+        font-size: var(--app-font-size-2);
+        letter-spacing: 12px;
+        font-style: italic;
+        text-shadow: 1px 1px 1px var(--app-shadow-color);
+      }
+
+      .zaline2 {
+        width: 30%;
+        padding-left: 10%
+      }
+
+      .zaliner {
+        width: 30%;
+        padding-left: 10%;
+        z-index: 1;
+      }
+      .zaliner[goleft]  {
+        width: 30%;
+        height: 15px;
+        padding-left: 10%;
+        z-index: 11;
+      }
+      .redCircle {
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background: red;
+        float: left;
+      }
+
+      .someColor {
+        width: 65px;
+        position: relative;
+        top: 7px;
+        height: 14px;
+        float: left;
+        color: var(--paper-cyan-500);
+        text-shadow: 1px 0px 1px var(--app-shadow-color2);
+        font-size: var(--app-font-size-1);
+        letter-spacing: 1px;
+      }
+      
+      .someColor span{
+        margin-left: 4px;
+      }
+
+      .zalinePage {
+        text-align: left;
+        height: 28px;
+        font-variant: all-petite-caps;
+        letter-spacing: 15px;
+        color: var(--app-third-color);
+        font-style: italic;
+        text-shadow: 1px 1px 1px var(--app-shadow-color2);
+        overflow-x: hidden;
+        padding-left: 9px;
+      }
+
+      .bottomfixed[video] {
+        position: fixed;
+        bottom: 0px;
+        height: -webkit-fill-available;
+        width: 100%;
+        z-index: 11;
+        opacity: 1;
+        box-shadow: 0px 3px 5px #44ab72;
+        background: #000000c9;
+        transition: all 0.7s ease-in;
+      }
+
+      .bottomfixed {
+        position: fixed;
+        bottom: 0px;
+        height: 0px;
+        width: 100%;
+        z-index: 0;
+        opacity: 0;
+        -webkit-transition: all 0.5s ease-in;
+        -moz-transition: all 0.5s ease-in;
+        transition: all 0.7s ease-in;
+      }
+
+      .closeButton {
+        position: relative;
+        left: 94%;
+        cursor: pointer;
+        color: rgba(7, 7, 7, 0.712);
+        text-shadow: 1px 1px 0px rgba(158, 142, 142, 0.767);
+        font-size: -webkit-xxx-large;
+        font-weight: 100;
+        height: 30px!important;
+        width: 30px!important;
+        background: black;
+        padding-left: 16px!important;
+        padding-right: 0px!important;
+        margin: 0px!important;
+        margin-bottom: 0px!important;
+      }
+
+      .video {
+        margin-left: 15% !important;
+        margin-top: 5% !important;
+        width: 70% !important;
+      }
+
+      @media (min-width: 576px) {
+        .container5 {
+          max-width: 540px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container5 {
+          margin-left: 0%;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .container5 {
+          max-width: 960px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .container5 {
+          max-width: 1280px;
+          margin-left: 1%;
+          margin-right: 1%;
+        }
+      }
+
+      @media (min-width: 1300px) {
+        .container5 {
+          margin-left: 10%;
+        }
+      }
+
+      @media (min-width: 1536px) {
+
+        .container5 {
+          margin-left: 17%;
+        }
+      }
+
+      @media (min-width: 1745px) {
+
+        .container5 {
+          margin-left: 20%;
+        }
+      }
+
+      @media (min-width: 768px) {
+        /*    :host {
+          margin: 0 40px;
+        }*/
+        .container {
+          margin: 0 40px;
+        }
+      }
+    </style>
+
+    <news-analytics key="UA-39334307-18"></news-analytics>
+
+    <!--
+      app-location and app-route elements provide the state of the URL for the app.
+    -->
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}" query-params="{{query}}"></app-route>
+    <news-search id="category" api="[[api]]" search="{{search}}" hide="true" video-data="{{response}}">
+    </news-search>
+    <!--
+      news-data provides the list of categories and the articles for the category.
+    -->
+    <news-data id="data" api="{{api}}" search="{{search}}" categories="{{categories}}" category-name="[[categoryName]]" response="{{response}}"
+      category="{{category}}" article-id="[[articleId]]" article="{{article}}" loading="{{loading}}" offline="[[offline]]"
+      failure="{{failure}}">
+    </news-data>
+    <div class="row">
+      <app-toolbar class="logo-toolbar">
+        <div class="zaline logo">
+          <a href="/" aria-label$="[[appTitle]]">[[appTitle]]</a>
+        </div>
+        <div class="zaline2">
+          <div class="someColor">
+            <div class="redCircle"></div>
+           <span>live now</span> 
+          </div>
+          <div id="circle" class="zalinePage">
+            [[liveNow]]</div>
+        </div>
+        <div class="zaliner" goleft$="[[goleft]]">
+          <paper-icon-button class="mobile-toggle-drawer-btn2" goleft$="[[goleft]]" icon="menu" on-click="_toggleDrawer" aria-label="navigation"></paper-icon-button>
+        </div>
+      </app-toolbar>
+      </nav>
+
+      <nav class="container5 bottomer flex-horizontal">
+        <div class="flexchild-verticalext2">
+          <youtube-results id="results4" side-fix search="[[liveNow]] news">
+            loading...
+          </youtube-results>
+        </div>
+        <div class="flexchild-verticalext">
+          <news-player id="player" live-now="{{liveNow}}"></news-player>
+        </div>
+    </div>
+    <news-nav id="nav" app-title="[[appTitle]]" page="[[page]]" categories="[[categories]]" category="[[category]]" load-complete="[[loadComplete]]">
+      [[articleHeadline]]
+    </news-nav>
+
+    <div class="container">
+      <iron-pages role="main" selected="[[page]]" attr-for-selected="name" fallback-selection="path-warning">
+        <!-- list view of articles in a category -->
+        <news-list id="list" name="news" route="[[subroute]]" category-name="{{categoryName}}" category="[[category]]" loading="[[loading]]"
+          offline="[[offline]]" failure="[[failure]]"></news-list>
+        <!-- invalid top level paths -->
+        <news-path-warning name="path-warning"></news-path-warning>
+
+      </iron-pages>
+    </div>
+    <footer>
+      <a href="https://www.polymer-project.org/1.0/toolbox/">Made by Polymer</a>
+    </footer>
+    <nav id="pageVideo" class="bottomfixed flex-vertical" video$="[[video]]">
+      <div class="closeButton" on-click="closeVideo">
+        x
+      </div>
+      <div class="video flexchild-vertical">
+        <my-video id="video" route="route" sideways="true">
+        </my-video>
+      </div>
+    </nav>
+    </div>
+  </template>
+
+  <script>
+
+    class NewsApp extends Polymer.Element {
+
+      static get is() { return 'news-app'; }
+
+      static get properties() {
+        return {
+
+          appTitle: String,
+
+          page: {
+            type: String,
+            observer: '_pageChanged'
+          },
+          routeData: Object,
+          categories: {
+            type: Array,
+            notify: true
+          },
+          categoryName: {
+            type: String,
+            notify: true
+          },
+          category: {
+            type: Object,
+            notify: true,
+            // observer: '_log'
+          },
+          offline: {
+            type: Boolean,
+            value: false,
+            readOnly: true
+          },
+          liveNow: {
+            type: String,
+            notify: true
+          },
+          video: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          goleft: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          failure: Boolean,
+          loadComplete: Boolean
+        }
+      }
+
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page, isAttached)'
+        ]
+      }
+
+      ready() {
+        super.ready();
+        // Custom elements polyfill safe way to indicate an element has been upgraded.
+        this.removeAttribute('unresolved');
+
+        // Chrome on iOS recomputes "vh" unit when URL bar goes off screen. Since we use "vh" unit
+        // to size the cover image and the title, those items will resize in response to the URL
+        // bar being shown or hidden. FWIW, this is not an issue in Chrome 56 on Android or iOS
+        // Safari. To workaround this on Chrome on iOS, we will use a
+        // fixed viewport height in places where normally relying on "vh" unit and replace them with
+        // custom property "--viewport-height".
+        let ua = navigator.userAgent;
+        let cMatch = navigator.userAgent.match(/Android.*Chrome[\/\s](\d+\.\d+)/);
+        if (ua.match('CriOS') || (cMatch && cMatch[0] && cMatch[1] < 56)) {
+          document.body.classList.add('fixed-viewport-height');
+        }
+
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          window.addEventListener('online', (e) => this._notifyNetworkStatus(e));
+          window.addEventListener('offline', (e) => this._notifyNetworkStatus(e));
+          this.addEventListener('refresh-data', (e) => this._refreshData(e));
+        });
+      }
+
+      _log(data) {
+        console.log('app log', data)
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.isAttached = true;
+      }
+
+      _routePageChanged(page, isAttached) {
+        if (!isAttached) {
+          return;
+        }
+        if (!page) {
+          // set default route if route path is empty
+          this.set('route.path', 'news/topHeadlines');
+          return;
+        }
+        console.log('subroute', page)
+        if (page === 'video') {
+          this.$.player.pause = true
+          this.video = true
+          this.$.video.videoId = this.subroute.path.slice(1, this.subroute.path.length)
+          setTimeout(() => {
+            window.history.pushState({}, null, this.page + '/' + this.category.name)
+          }, 100)
+        } else {
+          this.video = this.video === true ? !this.video : this.video
+          this.page = page || 'news';
+          this.categoryName = this.subroute.path.split('/').join('')
+        }
+
+        setTimeout(() => {
+          if (this.query.url && this.query.url.length > 0) {
+            window.open(this.query.url, "_blank", "toolbar=yes,top=50,left=100,width=800,height=800")
+            history.pushState({}, null, this.page + '/' + this.category.name)
+          }
+        }, 100)
+
+        Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+        // Close the drawer - in case the *route* change came from a link in the drawer.
+        this.$.nav.closeDrawer();
+      }
+      closeVideo() {
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        this.video = false;
+        this.$.video.playing = false
+        this.$.player.pause = false
+      }
+      _toggleDrawer() {
+        if (this.$.nav.threshold === '') {
+          this.$.nav.threshold = 1
+          this.goleft = true
+          Polymer.AppLayout.scroll({ top: 2, behavior: 'silent' });
+        } else {
+          this.$.nav.threshold = ''
+          this.goleft = false
+          Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+        }
+      }
+      _pageChanged(page, oldPage) {
+        let href;
+        switch (page) {
+          case 'news':
+            href = 'news-list.html';
+            break;
+          case 'article':
+            href = 'news-article.html';
+            break;
+          default:
+            href = 'news-path-warning.html';
+            break;
+        }
+        let cb = this._pageLoaded.bind(this, Boolean(oldPage));
+        Polymer.importHref(
+          this.resolveUrl(href),
+          cb,
+          cb,
+          true);
+      }
+
+      _pageLoaded(shouldResetLayout) {
+        this._ensureLazyLoaded();
+      }
+
+      _ensureLazyLoaded() {
+        // load lazy resources after render and set `loadComplete` when done.
+        if (!this.loadComplete) {
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            Polymer.importHref(this.resolveUrl('lazy-resources.html'), () => {
+              this._notifyNetworkStatus();
+              this.loadComplete = true;
+
+              // Load pre-caching Service Worker
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('service-worker.js', { scope: '/' });
+              }
+            });
+          });
+        }
+      }
+
+      _notifyNetworkStatus() {
+        let oldOffline = this.offline;
+        this._setOffline(!window.navigator.onLine);
+        // Show the snackbar if the user is offline when starting a new session
+        // or if the network status changed.
+        if (this.offline || (!this.offline && oldOffline === true)) {
+          if (!this._networkSnackbar) {
+            this._networkSnackbar = document.createElement('news-snackbar');
+            this.root.appendChild(this._networkSnackbar);
+          }
+          this._networkSnackbar.textContent = this.offline ?
+            'You are offline' : 'You are online';
+          this._networkSnackbar.open();
+        }
+      }
+
+      _refreshData() {
+        this.$.data.refresh();
+      }
+
+    }
+
+    customElements.define(NewsApp.is, NewsApp);
+
+  </script>
+
+</dom-module>

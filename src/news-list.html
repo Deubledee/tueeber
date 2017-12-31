@@ -1,0 +1,319 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../public/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../public/bower_components/app-route/app-route.html">
+<link rel="import" href="../public/bower_components/app-layout/app-grid/app-grid-style.html">
+
+<link rel="import" href="../public/components/news-list-featured-item.html">
+<link rel="import" href="../public/components/news-list-item.html">
+<link rel="import" href="../public/components/news-side-list.html">
+
+<dom-module id="news-list">
+
+  <template>
+
+    <style include="app-grid-style">
+      :host {
+        display: block;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .container .fade-in {
+        opacity: 0;
+      }
+
+      .container[fadeIn] {
+        opacity: 1;
+        transition: opacity 500ms;
+      }
+
+      .fade-in[fadeIn] {
+        opacity: 1;
+        transition: opacity 500ms;
+      }
+
+      .content {
+        @apply --layout-flex;
+      }
+
+      .article-grid,
+      .opinions-grid {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .article-grid {
+        margin-top: 32px;
+      }
+
+      li {
+        display: block;
+      }
+
+      h3 {
+        @apply --app-sub-section-headline;
+        margin: 24px 0;
+      }
+
+      news-side-list {
+        margin-bottom: 32px;
+      }
+
+      news-gpt-ad {
+        display: block;
+        width: 300px;
+        height: 250px;
+      }
+
+      .ad-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+
+      /* mobile */
+
+      @media (max-width: 767px) {
+        aside {
+          display: none;
+        }
+
+        .article-grid li,
+        .opinions-grid li {
+          border-bottom: var(--app-border-style);
+          margin: 0px 24px 24px 24px;
+          padding-bottom: 24px;
+        }
+
+        .article-grid li:last-of-type,
+        .opinions-grid li:last-of-type {
+          border-bottom: none;
+        }
+      }
+
+      /* desktop */
+
+      @media (min-width: 768px) {
+        :host {
+          --app-grid-columns: 4;
+          --app-grid-gutter: 32px;
+        }
+
+        .opinions-grid {
+          @apply --layout-horizontal;
+          @apply --layout-wrap;
+        }
+
+        .opinions-grid li {
+          width: calc(50% - 32px);
+          margin-right: 32px;
+        }
+
+        .article-grid,
+        .opinions-grid {
+          margin-right: -32px;
+        }
+      }
+
+      /* desktop large */
+
+      @media (min-width: 1310px) {
+        .container {
+          @apply --layout-horizontal;
+        }
+
+        .content {
+          margin-right: 24px;
+        }
+
+        aside {
+          width: 300px;
+          min-width: 300px;
+        }
+      }
+    </style>
+
+    <!--
+      app-route provides the name of the category.
+    -->
+    <app-route route="[[route]]" pattern="/:category" data="{{routeData}}"></app-route>
+
+    <div class="container" fadeIn$="[[fadeIn]]" hidden$="[[failure]]">
+      <div class="content">
+        <news-list-featured-item items="[[featured]]">
+        </news-list-featured-item>
+
+        <ul class="app-grid article-grid fade-in" fadeIn$="[[fadeIn]]">
+          <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item">
+            <li>
+              <news-list-item item="[[item]]"></news-list-item>
+            </li>
+          </template>
+        </ul>
+
+        <h3>Opinions</h3>
+        <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
+          <dom-repeat items="[[opinions]]">
+            <template>
+              <li>
+                <news-list-item horizontal item="[[item]]"></news-list-item>
+              </li>
+            </template>
+          </dom-repeat>
+        </ul>
+      </div>
+
+      <aside>
+        <div class="ad-container">
+          <news-gpt-ad id="ad_slot_1" ad-unit-path="/6355419/Travel/Europe/France/Paris" ad-width="300" ad-height="250"></news-gpt-ad>
+        </div>
+        <news-side-list class="" item="[[mostRead]]">
+          Most Read
+        </news-side-list>
+        <news-side-list class="" featured item="[[moreTopStories]]">
+          More Top Stories
+          </news-side-list-->
+      </aside>
+    </div>
+
+    <news-network-warning hidden$="[[!failure]]" offline="[[offline]]" on-try-reconnect="_tryReconnect"></news-network-warning>
+
+  </template>
+
+  <script>
+
+    class NewsList extends Polymer.Element {
+
+      static get is() { return 'news-list'; }
+
+      static get properties() {
+        return {
+          featured: {
+            type: Array,
+            notify: true
+          },
+          topStories: {
+            type: Array,
+            notify: true,
+            value: []
+          },
+          fadeIn: {
+            type: String,
+            value: false,
+            reflectToAttribute: true
+          },
+          moreTopStories: {
+            type: Array,
+            notify: true
+          },
+          mostRead: {
+            type: Array,
+            notify: true
+          },
+          opinions: {
+            type: Array,
+            notify: true
+          },
+          route: Object,
+
+          category: {
+            type: Object,
+            observer: '_slice'
+          },
+
+          offline: Boolean,
+
+          failure: Boolean,
+
+          categoryName: {
+            type: Boolean,
+            //computed: '_return(routeData.category)',
+            notify: true
+          },
+
+          routeData: Object,
+
+          loading: Boolean
+
+        }
+      }
+      ready() {
+        super.ready();
+      }
+      _log(data) {
+        console.log('list log', data)
+      }
+      connectedCallback() {
+        super.connectedCallback();
+        this._boundResizeHandler = this._resizeHandler.bind(this);
+        window.addEventListener('resize', this._boundResizeHandler);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener('resize', this._boundResizeHandler);
+      }
+
+      _tryReconnect() {
+        this.dispatchEvent(new CustomEvent('refresh-data', { bubbles: true, composed: true }));
+      }
+
+      _resizeHandler() {
+        this._resizeDebouncer = Polymer.Debouncer.debounce(this._resizeDebouncer,
+          Polymer.Async.timeOut.after(50), () => { this.updateStyles(); });
+      }
+
+      _slice(list) {
+        console.log(this.route)
+        if (this.route.prefix !== '/video' && list) {
+          var arr = new Array(list.items[0])
+          var temp = []
+          //console.log('list', temp)
+          if (arr[0]) {
+            //console.log('list 0', temp[0])
+            temp = arr[0].slice(0, 1)
+            this.featured = temp
+            temp = this._createArray(arr[0], 0, 5)
+            this.topStories = temp[0]
+            temp = this._createArray(arr[0], 5, 8)
+            this.opinions = temp[0]
+            temp = this._createArray(arr[0], 3, 5)
+            this.mostRead = temp[0]
+            temp = this._createArray(arr[0], 0, 10)
+            this.moreTopStories = temp[0]
+            this.fadeIn = true
+            //console.log('featured', this.topStories)
+          }
+        }
+      }
+
+      _createArray(data, begin, end) {
+        let temp = [data.slice(begin, end)]
+        temp = new Array(temp[0])
+        // console.log('data', temp)
+        return temp
+      }
+
+      _return(value) {
+        return value;
+      }
+
+    }
+
+    customElements.define(NewsList.is, NewsList);
+
+  </script>
+
+</dom-module>

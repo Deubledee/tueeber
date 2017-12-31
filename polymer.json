@@ -1,54 +1,33 @@
 {
-  "entrypoint": "views/index.html",
-  "shell": "src/my-app.html",
+  "entrypoint": "index.html",
+  "shell": "src/news-app.html",
   "fragments": [
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html"
+    "src/news-list.html",
+    "src/news-article.html",
+    "src/news-path-warning.html",
+    "src/lazy-resources.html"
   ],
   "sources": [
     "src/**/*",
-    "public/images/**/*"
+    "images/**/*",
+    "data/**/*"
   ],
   "extraDependencies": [
     "manifest.json",
-    "public/bower_components/webcomponentsjs/*.js"
+    "bower_components/webcomponentsjs/*"
   ],
   "lint": {
-    "rules": [
-      "polymer-2"
-    ]
+    "rules": ["polymer-2-hybrid"]
   },
-  "builds": [   
+  "builds": [
     {
-      "name": "build/fallback",
-      "js": {
-        "minify": true
-      },
-      "css": {
-        "minify": true
-      },
-      "html": {
-        "minify": true
-      }
+      "preset": "es5-bundled"
     },
     {
-      "name": "build/modern",
-      "bundle": {        
-        "stripComments": true,
-        "inlineCss": false,
-        "sourcemaps": true
-      },
-      "js": {
-        "minify": true
-      },
-      "css": {
-        "minify": true
-      },
-      "html": {
-        "minify": true
-      }
+      "preset": "es6-unbundled"
+    },
+    {
+      "preset": "es6-bundled"
     }
   ]
 }

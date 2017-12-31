@@ -10,102 +10,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="generator" content="Polymer Starter Kit">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-    <title>Tueeber</title>
-    <meta name="description" content="video content, news, sports, music, technology...">
+  <title>NEWS</title>
 
-    <!--
-      The `<base>` tag below is present to support two advanced deployment options:
-      1) Differential serving. 2) Serving from a non-root path.
+  <link rel="shortcut icon" sizes="32x32" href="public/images/news-icon-32.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@Polymer">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NEWS">
+  <meta name="theme-color" content="#000">
+  <link rel="manifest" href="manifest.json">
 
-      Instead of manually editing the `<base>` tag yourself, you should generally either:
-      a) Add a `basePath` property to the build configuration in your `polymer.json`.
-      b) Use the `--base-path` command-line option for `polymer build`.
+  <style>
 
-      Note: If you intend to serve from a non-root path, see [polymer-root-path] below.
-    -->
-    <base href="/">
+    body {
+      margin: 0;
+      background-color: #FAFAFA;
+      color: #383838;
+      font-family: Georgia;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
 
-    <link rel="icon" href="images/favicon.ico">
+    /* styling for render while resources are loading */
+    news-app[unresolved] {
+      display: block;
+      height: 45px;
+      padding-top: 40px;
+      padding-left: 10px;
+      font-size: 39px;
+      font-weight: 600;
+      letter-spacing: 10px;
+      text-align: center;
+    }
 
-    <!-- See https://goo.gl/OOhYW5 -->
-    <link rel="manifest" href="manifest.json">
-
-    <!-- See https://goo.gl/qRE0vM -->
-    <meta name="theme-color" content="#3f51b5">
-
-    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="My App">
-
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="My App">
-
-    <!-- Homescreen icons -->
-    <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
-
-    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
-    <meta name="msapplication-TileColor" content="#3f51b5">
-    <meta name="msapplication-tap-highlight" content="no">
-
-    <script>
-      /**
-      * [polymer-root-path]
-      *
-      * By default, we set `Polymer.rootPath` to the server root path (`/`).
-      * Leave this line unchanged if you intend to serve your app from the root
-      * path (e.g., with URLs like `my.domain/` and `my.domain/view1`).
-      *
-      * If you intend to serve your app from a non-root path (e.g., with URLs
-      * like `my.domain/my-app/` and `my.domain/my-app/view1`), edit this line
-      * to indicate the path from which you'll be serving, including leading
-      * and trailing slashes (e.g., `/my-app/`).
-      */
-      window.Polymer = {rootPath: '/'};
-
-      // Load and register pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('service-worker.js', {
-            scope: Polymer.rootPath,
-          });
-        });
-      }
-    </script>
-
-    <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
-    <script src="publicbower/webcomponents-loader.js"></script>
-
-    <!-- Load your application shell -->
-    <link rel="import" href="src/my-app.html">
-
-    <!-- Add any global styles for body, document, etc. -->
-    <style>
+    /* mobile */
+    @media (max-width: 767px) {
       body {
-        margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
-        line-height: 1.5;
-        min-height: 100vh;
-        background-color: #ffffff;
+        background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.25) 15%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.7) 48%, rgba(0,0,0,1) 60%);
+        background-repeat: no-repeat;
+        background-size: 100% 100vh;
       }
-    </style>
-  </head>
-  <body>
-    <my-app></my-app>
-    <noscript>
-      Please enable JavaScript to view this website.
-    </noscript>
-    <!-- Built with love using Polymer Starter Kit -->
-  </body>
+
+      body.fixed-viewport-height {
+        background-size: 100% 600px;
+      }
+
+      news-app[unresolved] {
+        height: 22px;
+        padding-top: 21px;
+        font-size: 20px;
+        color: #FFF; /* --app-cover-text-color */
+      }
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <news-app unresolved app-title="Tueeber">Tueeber</news-app>
+
+  <script src="public/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="src/news-app.html">
+
+</body>
 </html>

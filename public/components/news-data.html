@@ -1,0 +1,294 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="news-search.html">
+<dom-module id="news-data">
+  <template>
+    <news-search id="category" api="[[api]]" search="{{search}}" hide="true" video-data="{{videoData}}">
+    </news-search>
+  </template>
+  <script>
+
+    (function () {
+
+      let categoryList = [
+        { name: 'topHeadlines', title: 'Top Headlines', items: [] },
+        { name: 'Sports', title: 'Sports', items: [] },
+        { name: 'chrome', title: 'Chrome', items: [] },
+        { name: 'search', title: 'Search', items: [] },
+        { name: 'shopping_payments', title: 'Shopping & Payments', items: '' },
+        { name: 'nonprofits', title: 'Nonprofits', items: '' }
+      ];
+
+      let textarea = document.createElement('textarea');
+
+      class NewsData extends Polymer.Element {
+
+        static get is() { return 'news-data'; }
+
+        static get properties() {
+          return {
+
+            categories: {
+              type: Array,
+              value: categoryList,
+              readOnly: true,
+              notify: true
+            },
+
+            categoryName: String,
+
+            articleId: String,
+
+            offline: Boolean,
+
+            loading: {
+              type: Boolean,
+              readOnly: true,
+              notify: true
+            },
+
+            videoData: {
+              type: Object,
+              observer: '_videoDataChanged',
+            },
+            search: {
+              type: Boolean,
+              value: false,
+              notify: true
+            },
+            api: {
+              type: Object,
+              notify: true
+            },
+            category: {
+              type: Object,
+              computed: '_computeCategory(categoryName)',
+              // observer: '_log',
+              notify: true
+            },
+            items: {
+              type: Array,
+              observer: '_putItems',
+              notify: true
+            },
+            failure: {
+              type: Boolean,
+              readOnly: true,
+              notify: true
+            },
+            time: {
+              type: Object,
+              notify: true,
+              value: function () {
+                return {
+                  method: "topHeadlines",
+                  api: "topHeadlines",
+                  sources: '',
+                  q: '',
+                  category: '',
+                  language: 'en',
+                  country: ''
+                }
+              }
+            },
+            topheadlines: {
+              type: Object,
+              value: function () {
+                let d = new Date()
+                let year = d.toLocaleDateString().split('/')
+                let fultime = year.pop()
+                fultime = fultime + '/' + year.join('/')
+                return {
+                  method: "everything",
+                  api: "everything",
+                  sources: 'google-news',
+                  domains: '',
+                  q: '',
+                  from: '',
+                  to: '',
+                  language: 'en',
+                  sortBy: 'publishedAt',
+                  page: '10'
+                }
+              }
+            },
+            sports: {
+              type: Object,
+              observedr: '_log',
+              value: function () {
+                let d = new Date()
+                let year = d.toLocaleDateString().split('/')
+                let fultime = year.pop()
+                fultime = fultime + '/' + year.join('/')
+                return {
+                  method: "everything",
+                  api: "everything",
+                  sources: 'time',
+                  domains: '',
+                  q: '',
+                  from: '',
+                  to: '',
+                  language: 'en',
+                  sortBy: 'publishedAt',
+                  page: '10'
+                }
+              }
+            },
+            bbcNews: {
+              type: Object,
+              value: function () {
+                let d = new Date()
+                let year = d.toLocaleDateString().split('/')
+                let fultime = year.pop()
+                fultime = fultime + '/' + year.join('/')
+                return {
+                  method: "everything",
+                  api: "everything",
+                  sources: 'bbc-news',
+                  domains: '',
+                  q: '',
+                  from: '',
+                  to: '',
+                  language: 'en',
+                  sortBy: 'publishedAt',
+                  page: '10'
+                }
+              }
+            }
+
+          }
+        }
+
+        static get observers() {
+          return [
+            '_fetchCategory(category, offline)'
+          ]
+        }
+        _log(data) {
+          console.log('log', data)
+        }
+
+        _computeCategory(categoryName) {
+          // console.log(categoryName, this.categories)
+          for (let i = 0, c; c = this.categories[i]; ++i) {
+            if (c.name === categoryName) {
+              return c;
+            }
+          }
+          return null;
+        }
+
+        _fetchCategory(category, offline, attempts) {
+          // Don't fail if we become offline but already have a cached version, or if there's
+          // nothing to fetch, or if already loading.          
+          if ((offline && category && category.items) || !category || this.loading) {
+            this._setFailure(false);
+            return;
+          }
+          
+          this.api = this[category.name.toLocaleLowerCase()]
+          this.search = true
+          this.search = false
+          /*   this._fetch('../../newsapi/' + category.name ,
+                (response) => { this.set('category.items', this._parseCategoryItems(response)); },
+                attempts || 1 /* attempts /);*/
+        }
+        _videoDataChanged(response) {
+          //  console.log('response', response)
+          // this._parseCategoryItems(response)
+          if (response) {
+            var items = this._parseCategoryItems(response.articles)
+            this._putItems(items)
+           // console.log('response', items)
+          }
+        }
+        _parseCategoryItems(response) {
+          let obj
+         // console.log('res', response.length)
+          return response.map((item) => {
+            // let readTime = (item.title.length + item.description.length + item.author.length)
+            // console.log('item', item, readTime)
+            return obj = {
+              headline: this._unescapeText(item.title),
+              href: this._getItemHref(item),
+              id: item.sources,
+              imageUrl: this._getItemImage(item),
+              placeholder: this._unescapeText(item.title),
+              category: item.category,
+              timeAgo: this._timeAgo(new Date(item.time).getTime()),
+              author: item.author,
+              summary: this._trimRight(item.description, 100),
+              // readTime: Math.max(2, Math.round(readTime / 3000)) + ' min read'
+            }
+          })
+        }
+
+        _putItems(items) {
+         // console.log('_putItems', items)
+          this.push('category.items', items);
+        }
+
+        _unescapeText(text) {
+          textarea.innerHTML = text;
+          return textarea.textContent;
+        }
+
+        _getItemHref(item) {
+          return item.url ? '/article/' + this.categoryName + '/' + encodeURIComponent(item.url) : null;
+        }
+
+        _getItemImage(item) {
+          return item.urlToImage //? 'data/' + item.imgSrc : '';
+        }
+
+        _timeAgo(timestamp) {
+          if (!timestamp)
+            return ''
+
+          let minutes = (Date.now() - timestamp) / 1000 / 60;
+          if (minutes < 2)
+            return '1 min ago';
+          if (minutes < 60)
+            return Math.floor(minutes) + ' mins ago';
+          if (minutes < 120)
+            return '1 hour ago';
+
+          let hours = minutes / 60;
+          if (hours < 24)
+            return Math.floor(hours) + ' hours ago';
+          if (hours < 48)
+            return '1 day ago';
+
+          return Math.floor(hours / 24) + ' days ago';
+        }
+
+        _trimRight(text, maxLength) {
+          let breakIdx = text.indexOf(' ', maxLength);
+          return breakIdx === -1 ? text : text.substr(0, breakIdx) + '...';
+        }
+
+        refresh() {
+          if (this.categoryName) {
+            // Try at most 3 times to get the items.
+            this._fetchCategory(this.category, this.offline, 3);
+          }
+        }
+
+      }
+
+      customElements.define(NewsData.is, NewsData);
+
+    })();
+
+  </script>
+
+</dom-module>

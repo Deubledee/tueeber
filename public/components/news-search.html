@@ -118,16 +118,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 // console.log(data)
             }
             queryon(data) {
-                if (data === true) {
-                    // console.log("queryon", data, this.api)
-                    let method, query;
-                    method = "_" + this.api.method
-                    query = this.api
-                    this.set("url", `../../newsapi/${this.api.api}`)
-                    this.params = this[method](query)
-                    // console.log("this.params", this.params)
-                    this.search = false
+                try {
+                    if (data === true) {
+                        // console.log("queryon", data, this.api)
+                        let method, query;
+                        method = "_" + this.api.method
+                        query = this.api
+                        this.set("url", `../../newsapi/${this.api.api}`)
+                        this.params = this[method](query)
+                        // console.log("this.params", this.params)
+                        this.search = false
+                    }
+                }catch(err){
+                    console.error(err, data)
                 }
+               
             }
 
             query(data) {

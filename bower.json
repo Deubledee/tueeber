@@ -1,9 +1,10 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "news",
+  "version": "2.0.0",
   "authors": [
     "The Polymer Authors"
   ],
-  "license": "https://polymer.github.io/LICENSE.txt",
+  "private": true,
   "dependencies": {
     "iron-icon": "PolymerElements/iron-icon",
     "iron-localstorage": "PolymerElements/iron-localstorage",
@@ -47,11 +48,7 @@
     "paper-dropdown-menu": "^2.0.0",
     "web-animations-js": "^2.3.1"
   },
-  "resolutions": {
-    "polymer": "^2.2.0"
-  },
   "devDependencies": {
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0"
-  },
-  "private": true
+    "web-component-tester": "^6.0.0"
+  }
 }
