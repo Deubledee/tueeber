@@ -11,10 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="news-search.html">
 <dom-module id="news-data">
-  <template>
-    <news-search id="category" api="[[api]]" search="{{search}}" hide="true" video-data="{{videoData}}">
-    </news-search>
-  </template>
   <script>
 
     (function () {
@@ -55,11 +51,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               readOnly: true,
               notify: true
             },
-
-            videoData: {
-              type: Object,
-              observer: '_videoDataChanged',
-            },
             search: {
               type: Boolean,
               value: false,
@@ -73,11 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               type: Object,
               computed: '_computeCategory(categoryName)',
               // observer: '_log',
-              notify: true
-            },
-            items: {
-              type: Array,
-              observer: '_putItems',
               notify: true
             },
             failure: {
@@ -169,8 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         static get observers() {
-          return [
-            '_fetchCategory(category, offline)'
+          return [          
           ]
         }
         _log(data) {
@@ -187,55 +172,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return null;
         }
 
-        _fetchCategory(category, offline, attempts) {
-          // Don't fail if we become offline but already have a cached version, or if there's
-          // nothing to fetch, or if already loading.          
-          if ((offline && category && category.items) || !category || this.loading) {
-            this._setFailure(false);
-            return;
-          }
-          
-          this.api = this[category.name.toLocaleLowerCase()]
-          this.search = true
-          this.search = false
-          /*   this._fetch('../../newsapi/' + category.name ,
-                (response) => { this.set('category.items', this._parseCategoryItems(response)); },
-                attempts || 1 /* attempts /);*/
-        }
-        _videoDataChanged(response) {
-          //  console.log('response', response)
-          // this._parseCategoryItems(response)
-          if (response) {
-            var items = this._parseCategoryItems(response.articles)
-            this._putItems(items)
-           // console.log('response', items)
-          }
-        }
-        _parseCategoryItems(response) {
-          let obj
-         // console.log('res', response.length)
-          return response.map((item) => {
-            // let readTime = (item.title.length + item.description.length + item.author.length)
-            // console.log('item', item, readTime)
-            return obj = {
-              headline: this._unescapeText(item.title),
-              href: this._getItemHref(item),
-              id: item.sources,
-              imageUrl: this._getItemImage(item),
-              placeholder: this._unescapeText(item.title),
-              category: item.category,
-              timeAgo: this._timeAgo(new Date(item.time).getTime()),
-              author: item.author,
-              summary: this._trimRight(item.description, 100),
-              // readTime: Math.max(2, Math.round(readTime / 3000)) + ' min read'
-            }
-          })
-        }
-
-        _putItems(items) {
-         // console.log('_putItems', items)
-          this.push('category.items', items);
-        }
 
         _unescapeText(text) {
           textarea.innerHTML = text;

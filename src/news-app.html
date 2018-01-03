@@ -104,7 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .flexchild-verticalext2 {
         /* @apply --layout-flex;*/
-        width: 286px !important;
+        width: 210px !important;
         margin-top: 15px;
       }
 
@@ -175,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /* desktop */
 
       .container5 {
-        top: 0px;
+        top: 16px;
       }
 
       .zaline {
@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .zaline2 {
-        width: 30%;
+        width: 45%;
         padding-left: 10%
       }
 
@@ -308,7 +308,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @media (min-width: 1200px) {
         .container5 {
           max-width: 1280px;
-          margin-left: 1%;
+          margin-left: 4%;
           margin-right: 1%;
         }
       }
@@ -320,16 +320,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       @media (min-width: 1536px) {
-
         .container5 {
-          margin-left: 17%;
+          margin-left: 11%;
         }
       }
 
       @media (min-width: 1745px) {
-
         .container5 {
-          margin-left: 20%;
+          margin-left: 19%
         }
       }
 
@@ -474,7 +472,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page, isAttached)'
+          '_routePageChanged(routeData.page, isAttached)',
         ]
       }
 
@@ -500,6 +498,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           window.addEventListener('offline', (e) => this._notifyNetworkStatus(e));
           this.addEventListener('refresh-data', (e) => this._refreshData(e));
         });
+
       }
 
       _log(data) {
@@ -528,16 +527,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           setTimeout(() => {
             window.history.pushState({}, null, this.page + '/' + this.category.name)
           }, 100)
-        } else {
+        } else if (page !== this.page && !this.query.url) {
+          //console.log('this.page', this.categoryName)
           this.video = this.video === true ? !this.video : this.video
           this.page = page || 'news';
           this.categoryName = this.subroute.path.split('/').join('')
+
         }
 
         setTimeout(() => {
           if (this.query.url && this.query.url.length > 0) {
-            window.open(this.query.url, "_blank", "toolbar=yes,top=50,left=100,width=800,height=800")
-            history.pushState({}, null, this.page + '/' + this.category.name)
+           window.open(this.query.url, "_blank", "toolbar=yes,top=70,left=100,width=800,height=800")
+           console.log(this.page + '/' + this.category.name)
+             history.pushState({}, null, this.page + '/' + this.category.name + '?url=""')
+              window.dispatchEvent(new CustomEvent('location-changed'));
+              history.pushState({}, null, this.page + '/' + this.category.name)    
           }
         }, 100)
 
@@ -545,6 +549,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Close the drawer - in case the *route* change came from a link in the drawer.
         this.$.nav.closeDrawer();
       }
+
       closeVideo() {
         window.dispatchEvent(new CustomEvent('location-changed'));
         this.video = false;
@@ -552,20 +557,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.player.pause = false
       }
       _toggleDrawer() {
-        if (this.$.nav.threshold === '') {
+        if (this.$.nav.threshold === "") {
           this.$.nav.threshold = 1
           this.goleft = true
           Polymer.AppLayout.scroll({ top: 4, behavior: 'silent' });
-          window.addEventListener('scroll', (function (evt) {          
-          if (window.scrollY >= 50) {
-            this.goleft = false
-            this.$.nav.threshold = ''
-          }
-        }).bind(this))
+          this.$.nav._drawerOpened = true
+          window.addEventListener('scroll', (function (evt) {
+            if (window.scrollY >= 50) {
+              this.goleft = false
+              this.$.nav.threshold = ''
+            }
+          }).bind(this))
         } else {
           this.$.nav.threshold = ''
           this.goleft = false
           Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+          this.$.nav.closeDrawer()
         }
       }
       _pageChanged(page, oldPage) {
@@ -620,7 +627,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this._networkSnackbar = document.createElement('news-snackbar');
             this.root.appendChild(this._networkSnackbar);
           }
-          this._networkSnackbar.textContent = this.offline ?
+          this._networkSnackbar.textContent == this.offline ?
             'You are offline' : 'You are online';
           this._networkSnackbar.open();
         }

@@ -335,7 +335,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           number: {
             type: Number,
             notify: true,
-            observer: 'changeThreshold'
+            //observer: 'changeThreshold'
           },
 
           threshold: {
@@ -368,17 +368,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return monthNames[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
       }
 
-      changeThreshold(data) {
-        console.log(data)
-       // this.threshold = data
-      }
-
       _toggleDrawer() {
         this.drawerOpened = !this.drawerOpened;
       }
 
       _getScrollThreshold(smallScreen, data) { 
-        console.log(smallScreen, data)
+       // console.log(smallScreen, data)
 
         return smallScreen ? window.innerHeight - (data || 64) : (data || 164);
       }

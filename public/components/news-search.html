@@ -162,7 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             _everything(data) {
-                //console.log('_everything',data)                
+               // console.log('_everything',data)                
                 return {
                     //   api: 'this.api.api',
                     sources: data.sources || '',
@@ -170,9 +170,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     q: data.q || '',
                     from: data.from || '',
                     to: data.to || '',
-                    language: data.language || 'en',
+                    language: data.language || '',
                     sortBy: data.sortBy || '',
-                    page: data.page || ''
+                    page: data.page || '1'
                 }
             }
 

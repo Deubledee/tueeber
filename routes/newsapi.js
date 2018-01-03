@@ -11,7 +11,8 @@ const o = Object.create(Object.prototype, {
     writable: false,
     configurable: false,
     value: function (req, client, res) {
-      let string = 'topHeadLines' + req.sources + req.category + req.q
+      let string = 'topHeadLines' + req.sources + '-' + req.category + '-' + req.q
+      var obj = { type: 'topHeadLines' }
       try {
         client.get(string, function (error, result) {
           if (!result) {
@@ -21,11 +22,13 @@ const o = Object.create(Object.prototype, {
               client.set(string, JSON.stringify(response), 'EX', 1500, function (err, data) {
                 console.log(err, data)
               })
-              res(response)
+              obj.arr = response
+              res(JSON.stringify(obj))
             })
           } else {
             console.log("<-result->")
-            res(result)
+            obj.arr = result
+            res(JSON.stringify(obj))
           }
         })
       } catch (err) {
@@ -36,22 +39,25 @@ const o = Object.create(Object.prototype, {
   everything: {
     writable: false,
     configurable: false,
-    value: function (req, client, res) {  
-      let string = 'everything' + req.sources + req.q   
+    value: function (req, client, res) {
+      let string = 'everything' + '-' + req.sources + '-' + req.q + '-' + req.from + '-' + req.to
+      var obj = { type: 'everything' }
       try {
         client.get(string, function (error, result) {
           if (!result) {
-            console.log("<-response everything->")
+            console.log("server msg: <-response everything->")
             Newsapi.v2.topHeadlines(req).then((response) => {
               //image optimizer
               client.set(string, JSON.stringify(response), 'EX', 3600, function (err, data) {
                 console.log(err, data)
               })
-              res(response)
+              obj.arr = response
+              res(JSON.stringify(obj))
             })
           } else {
-            console.log("<-result everything->")
-            res(result)
+            console.log("server msg: <-result everything->")
+            obj.arr = result
+            res(JSON.stringify(obj))
           }
         })
       } catch (err) {

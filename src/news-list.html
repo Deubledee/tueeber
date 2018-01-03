@@ -36,6 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .container[fadeIn] {
         opacity: 1;
         transition: opacity 500ms;
+        @apply --layout-flex-horizontal;
       }
 
       .fade-in[fadeIn] {
@@ -45,6 +46,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .content {
         @apply --layout-flex;
+      }
+
+      .content1 {
+        width: 100%;
+        height: 50px;
+        text-align: center;
       }
 
       .article-grid,
@@ -149,12 +156,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-route provides the name of the category.
     -->
     <app-route route="[[route]]" pattern="/:category" data="{{routeData}}"></app-route>
-
+    <news-search id="category" api="{{api}}" search="{{search}}" hide="true" video-data="{{videoData}}">
+    </news-search>
+    <div class="content1">
+      <h1> Today's News</h1>
+    </div>
     <div class="container" fadeIn$="[[fadeIn]]" hidden$="[[failure]]">
       <div class="content">
+        <h2> Latest </h2>
         <news-list-featured-item items="[[featured]]">
-        </news-list-featured-item>
-
+        </news-list-featured-item>       
         <ul class="app-grid article-grid fade-in" fadeIn$="[[fadeIn]]">
           <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item" mutableData>
             <li>
@@ -163,13 +174,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </template>
         </ul>
 
-        <h3>Opinions</h3>
+        <div class="content1">
+          <h1> Previous News</h1>
+        </div>
         <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
-          <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item" mutableData>
-              <li>
-                <news-list-item horizontal item="[[item]]"></news-list-item>
-              </li>
-            </template>      
+          <template is="dom-repeat" items="{{opinions}}" as="item" mutableData>
+            <li>
+              <news-list-item horizontal item="[[item]]"></news-list-item>
+            </li>
+          </template>
         </ul>
       </div>
 
@@ -185,8 +198,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </news-side-list-->
       </aside>
     </div>
-
-    <news-network-warning hidden$="[[!failure]]" offline="[[offline]]" on-try-reconnect="_tryReconnect"></news-network-warning>
 
   </template>
 
@@ -240,16 +251,110 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             //computed: '_return(routeData.category)',
             notify: true
           },
+          query: {
+            type: String,
+            value: ''
+          },
+          sources: {
+            type: String,
+            value: 'google-news, fox-news, cbs-news, nbc-news, reuters, politico, the-washington-post',
+          },
+          cat: {
+            type: String,
+            value: '',
+          },
+          lang: {
+            type: Number,
+            value: 'en'
+          },
+          from: {
+            type: String,
+            value: function () {
+              let d = new Date()
+              let month = (d.getMonth() + 1)
+              let day = (d.getDay())
+              let year = d.getFullYear()
+              if (month % 2 === 0) {
+                if (day === 1) {
+                  if (month === 3) {
+                   // day = febuaryDAy()
+                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`): (month - 1)
+                  } else {
+                    day = 29
+                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`): (month - 1)
+                  }
+                } else {
+                  day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`): (day - 2)
+                }
 
+              } else {
+                if (month === 1 && day === 1) {
+                  year = year - 1
+                  day = 30
+                  month = 12
+                } else {
+                  if (day === 1) {
+                    day = 31
+                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`): (month - 1)
+                  } else {
+                    day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`): (day - 2)
+                  }
+                }
+              }
+              let yesdtaerday = `${year}-${month}-${day}`
+              return yesdtaerday
+            }
+          },
+          to: {
+            type: String,
+            value: function () {
+              let d = new Date()
+              var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDay()
+              return today
+            }
+          },
+          search: {
+            type: Boolean,
+            value: false,
+          //  observer: '_log',
+          },
+          api: {
+            type: Object,
+            notify: true,
+            observer: '_log',
+          },
+          videoData: {
+            type: Object,
+            notify: true,
+            observer: 'videoDataChanged'
+          },
           routeData: Object,
-
           loading: Boolean
-
         }
       }
+
       ready() {
         super.ready();
+        setTimeout(() => {
+          this.computeTopHeadLines()
+          console.log('computeTopHeadLines log')
+          this.search = true
+          this.search = false
+          setTimeout(() => {
+            this.computeEverything()
+            console.log('computeEverything log')
+            this.search = true
+            this.search = false
+          }, 500)
+        }, 500)
       }
+
+      static get observers() {
+        return [
+          'categoryChanged(routeData.category)'
+        ]
+      }
+
       _log(data) {
         console.log('list log', data)
       }
@@ -263,7 +368,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.disconnectedCallback();
         window.removeEventListener('resize', this._boundResizeHandler);
       }
+      categoryChanged(data) {
+        //console.log(data)
+      }
 
+      videoDataChanged(data) {
+        if (data !== null && data !== undefined) {
+          //   console.log('featured', data)      
+          this[data.type](data)
+          this.search = false
+          this.fadeIn = true
+        }
+      }
+
+      topHeadLines(data) {
+        let parsed = JSON.parse(data.arr)
+       // console.log('topHeadLines', parsed.articles)
+        this.featured = parsed.articles.slice(0, 1)
+        this.topStories = parsed.articles.slice(1, 10)
+      }
+
+      everything(data) {
+         console.log('everything', data)
+        let parsed = JSON.parse(data.arr)
+        this.opinions = parsed.articles
+      }
+
+      computeTopHeadLines() {
+        this.api = {
+          method: "topHeadlines",
+          api: "topHeadlines",
+          sources: this.sources,
+          q: this.query,
+          category: this.cat,
+          language: this.lang,
+          country: ''
+        }
+      }
+      computeEverything() {
+        this.api = {
+          method: "everything",
+          api: "everything",
+          sources: this.sources,
+          domains: '',
+          q: this.query,
+          from: this.from,
+          to: this.to,
+          language: this.lang,
+          sortBy: 'publishedAt',
+          page: '10'
+        }
+      }
       _tryReconnect() {
         this.dispatchEvent(new CustomEvent('refresh-data', { bubbles: true, composed: true }));
       }
@@ -274,28 +429,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _slice(list) {
-        console.log(this.route)
+        // console.log(this.route)
         if (this.route.prefix !== '/video' && list) {
-          var arr = new Array(list.items[0])
-          var temp = []
-          //console.log('list', temp)
-          if (arr[0]) {
-            //console.log('list 0', temp[0])
-            temp = arr[0].slice(0, 1)
-            this.featured = temp
-            temp = this._createArray(arr[0], 0, 5)
-            this.topStories = temp[0]
-            temp = this._createArray(arr[0], 5, 8)
-            this.opinions = temp[0]
-            temp = this._createArray(arr[0], 3, 5)
-            this.mostRead = temp[0]
-            temp = this._createArray(arr[0], 0, 10)
-            this.moreTopStories = temp[0]
-            this.fadeIn = true
-            //console.log('featured', this.topStories)
-          }
+          console.log(this.route)
         }
       }
+
 
       _createArray(data, begin, end) {
         let temp = [data.slice(begin, end)]
