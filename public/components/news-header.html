@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <dom-module id="news-header">
 
   <template>
@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 40px;
       }
 
-      header,
+      app-header,
       .sticky-nav {
         z-index: 10;
       }
@@ -86,6 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pointer-events: none;
         transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
         transform: translate3d(0, -100%, 0);
+        box-shadow: 0px 0px 6px 2px #787948;
       }
 
       .sticky-nav[threshold-triggered] {
@@ -127,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /* mobile */
 
       @media (max-width: 767px) {
-        header {
+        app-header {
           position: absolute;
           top: 0;
           left: 0;
@@ -135,18 +136,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           color: var(--app-cover-text-color);
         }
 
-        header .logo {
+        app-header .logo {
           margin-right: 40px;
         }
 
-        header .date-line {
+        app-header .date-line {
           padding: 6px 0;
           border-top: var(--app-transparent-border-style);
           border-bottom: var(--app-transparent-border-style);
         }
 
-        :host([page=article]) header .logo,
-        :host([page=article]) header .date-line {
+        :host([page=article]) app-header .logo,
+        :host([page=article]) app-header .date-line {
           visibility: hidden;
         }
 
@@ -230,7 +231,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           will-change: transform;
           z-index: -1;
           padding-top: 20px;
-          padding-bottom: 40px;
+          padding-bottom: 40px;         
         }
 
         .grid-container {
@@ -247,9 +248,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <!--
-      Header at the scroll top of the page.
-    -->
-    <header>
+      app-header at the scroll top of the page.
+ 
+    <app-header effects="waterfall">
       <app-toolbar class="logo-toolbar">
         <paper-icon-button class="mobile-toggle-drawer-btn" icon="menu" on-click="_toggleDrawer" aria-label="Main navigation"></paper-icon-button>
         <div class="logo" main-title>
@@ -262,7 +263,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
       <dom-if if="[[!smallScreen]]">
         <template>
-          <iron-selector role="navigation" class="menu-list" selected="[[category.name]]" attr-for-selected="name">
+          <iron-selector role="navigation" class="menu-list" selected="[[category.name]]" attr-for-selected="name"> 
             <dom-repeat items="[[categories]]" as="category" initial-count="9">
               <template>
                 <a name="[[category.name]]" href="/news/[[category.name]]">[[category.title]]</a>
@@ -271,29 +272,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </iron-selector>
         </template>
       </dom-if>
-    </header>
-
+    </app-header>
+   -->
     <!--
       Sticky nav reveals when scrolled down on the page.
     -->
-    <app-box role="banner" class="sticky-nav" threshold="[[threshold]]">
-      <app-toolbar class="sticky-nav-toolbar">
-        <paper-icon-button arial-label="Main navigation" icon="[[_menuIcon(drawerOpened)]]" on-click="_toggleDrawer"></paper-icon-button>
-        <div class="sticky-nav-center">
-          <div class="logo">
-            <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
+    <app-box role="banner" class="sticky-nav" threshold="[[threshold]]">   
+        <app-toolbar class="sticky-nav-toolbar">
+          <paper-icon-button arial-label="Main navigation" icon="[[_menuIcon(drawerOpened)]]" on-click="_toggleDrawer"></paper-icon-button>
+          <div class="sticky-nav-center">
+            <div class="logo">
+              <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
+            </div>
+            <div class="date-line" role="heading">
+              [[category.title]]
+              <span aria-hidden="true">&nbsp; &middot; &nbsp;</span> [[_currentTime()]]
+            </div>
+            <div class="article-headline">
+              <slot></slot>
+            </div>
           </div>
-          <div class="date-line" role="heading">
-            [[category.title]]
-            <span aria-hidden="true">&nbsp; &middot; &nbsp;</span> [[_currentTime()]]
-          </div>
-          <div class="article-headline">
-            <slot></slot>
-          </div>
-        </div>
-        <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
-        <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
-      </app-toolbar>
+          <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
+          <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
+        </app-toolbar>  
+     
       <div class="sticky-nav-menu" shown$="[[drawerOpened]]">
         <iron-selector class="grid-container" role="navigation" selected="[[category.name]]" attr-for-selected="name">
           <dom-repeat items="[[categories]]" as="category" initial-count="9">
@@ -329,7 +331,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           smallScreen: {
             type: Boolean,
-            notify: true            
+            notify: true
           },
 
           number: {
@@ -372,8 +374,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.drawerOpened = !this.drawerOpened;
       }
 
-      _getScrollThreshold(smallScreen, data) { 
-       // console.log(smallScreen, data)
+      _getScrollThreshold(smallScreen, data) {
+        // console.log(smallScreen, data)
 
         return smallScreen ? window.innerHeight - (data || 64) : (data || 164);
       }

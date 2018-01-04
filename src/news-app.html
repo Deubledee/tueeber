@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-transparent-border-style: 1px solid rgba(255, 255, 255, 0.5);
         --app-button-border-style: 2px solid #222;
         --app-cover-text-color: #FFF;
-        --app-nav-background-color: #222;
+        --app-nav-background-color: #3b3f4a;
         --app-nav-text-color: #FFF;
         --app-nav-deselected-text-color: #CCC;
         --app-nav-selected-background-color: #555;
@@ -43,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-secondary-color: var(--paper-green-900);
         --app-third-color: #adc6b7;
         --app-fourth-color: #00bcd4;
-        --app-shadow-color: rgb(114, 138, 150);
+        --app-shadow-color: rgb(114, 150, 129);
         --app-shadow-color2: #0b399e;
         --app-shadow-color3: #0c2864;
         --app-font-size-1: 0.6em;
@@ -566,6 +566,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (window.scrollY >= 50) {
               this.goleft = false
               this.$.nav.threshold = ''
+              this.$.nav.closeDrawer()
             }
           }).bind(this))
         } else {

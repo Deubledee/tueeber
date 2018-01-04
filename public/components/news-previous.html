@@ -1,0 +1,71 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="news-search/news-search.html">
+<dom-module id="news-previous">
+    <template>
+        <slot></slot>
+    </template>
+    <script>
+        class NewsPrevious extends Polymer.Element {
+            static get is() { return 'news-previous'; }
+            static get properties() {
+                return {
+                    parsedCat: {
+                        type: Array
+                    },
+                    count: {
+                        type: Number,
+                        value: 0
+                    },
+                    ten: {
+                        type: Array
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+
+            }
+
+            _log(data) {
+                console.log('previuos log', data)
+            }
+
+            createTemplate(item) {
+                let li = document.createElement('li'),
+                    newsListItem = document.createElement('news-list-item');
+                newsListItem.item = item
+                li.appendChild(newsListItem)
+                return li
+            }
+
+            videoDataChanged(data) {
+                if (data !== null && data !== undefined) {
+                    let cat = sessionStorage.getItem("topHeadLines");
+                    let parsedCat = JSON.parse(cat)
+                    this.parsedCat = parsedCat.articles.slice(10, parsedCat.articles.length)
+                    this._putItem()
+                }
+            }
+
+            _putItem() {
+                let ten = this._gimetTen()
+                console.log(' parsedCat', ten)
+                ten.map((function (item) {
+                    this.children[0].append(this.createTemplate(item))
+                }).bind(this))
+            }
+
+            _gimetTen() {
+                if (this.count < this.parsedCat.length) {
+                    let count = (this.parsedCat.length - this.count) >= 10 ? this.count + 10: this.parsedCat.length
+                    let ten = this.parsedCat.slice(this.count, count)
+                    this.count = count
+                    return ten
+                }
+            }
+        }
+        customElements.define(NewsPrevious.is, NewsPrevious);
+    </script>
+
+</dom-module>

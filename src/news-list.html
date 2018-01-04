@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../public/components/news-list-featured-item.html">
 <link rel="import" href="../public/components/news-list-item.html">
 <link rel="import" href="../public/components/news-side-list.html">
-
+<link rel="import" href="../public/components/news-previous.html">
 <dom-module id="news-list">
 
   <template>
@@ -156,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-route provides the name of the category.
     -->
     <app-route route="[[route]]" pattern="/:category" data="{{routeData}}"></app-route>
-    <news-search id="category" api="{{api}}" search="{{search}}" hide="true" video-data="{{videoData}}">
+    <news-search id="category" api="{{headLines}}" search="{{search}}" hide="true" video-data="{{videoData}}">
     </news-search>
     <div class="content1">
       <h1> Today's News</h1>
@@ -165,7 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="content">
         <h2> Latest </h2>
         <news-list-featured-item items="[[featured]]">
-        </news-list-featured-item>       
+        </news-list-featured-item>
         <ul class="app-grid article-grid fade-in" fadeIn$="[[fadeIn]]">
           <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item" mutableData>
             <li>
@@ -177,15 +177,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content1">
           <h1> Previous News</h1>
         </div>
-        <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
-          <template is="dom-repeat" items="{{opinions}}" as="item" mutableData>
-            <li>
-              <news-list-item horizontal item="[[item]]"></news-list-item>
-            </li>
-          </template>
-        </ul>
-      </div>
+        <news-previous id="previous" serach="[[search]] "sources="[[sources]]" query="[[query]]" lang="[[lang]]" from="[[from]]" to="[[to]]">
+          <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
 
+          </ul>
+        </news-previous>
+      </div>
       <aside>
         <div class="ad-container">
           <news-gpt-ad id="ad_slot_1" ad-unit-path="/6355419/Travel/Europe/France/Paris" ad-width="300" ad-height="250"></news-gpt-ad>
@@ -239,7 +236,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           category: {
             type: Object,
-            observer: '_slice'
+            //observer: '_slice'
           },
 
           offline: Boolean,
@@ -267,6 +264,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Number,
             value: 'en'
           },
+          search: {
+            type: Boolean,
+            value: false,
+            //  observer: '_log',
+          },
+          headLines: {
+            type: Object,
+            computed: 'computeTopHeadLines(sources, query, cat, lang)',
+            notify: true
+          },
+          videoData: {
+            type: Object,
+            notify: true,
+            observer: 'videoDataChanged'
+          },
+          routeData: Object,
+          loading: Boolean,
           from: {
             type: String,
             value: function () {
@@ -277,14 +291,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               if (month % 2 === 0) {
                 if (day === 1) {
                   if (month === 3) {
-                   // day = febuaryDAy()
-                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`): (month - 1)
+                    // day = febuaryDAy()
+                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
                   } else {
                     day = 29
-                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`): (month - 1)
+                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
                   }
                 } else {
-                  day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`): (day - 2)
+                  day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`) : (day - 2)
                 }
 
               } else {
@@ -295,9 +309,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 } else {
                   if (day === 1) {
                     day = 31
-                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`): (month - 1)
+                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
                   } else {
-                    day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`): (day - 2)
+                    day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`) : (day - 2)
                   }
                 }
               }
@@ -312,41 +326,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDay()
               return today
             }
-          },
-          search: {
-            type: Boolean,
-            value: false,
-          //  observer: '_log',
-          },
-          api: {
-            type: Object,
-            notify: true,
-            observer: '_log',
-          },
-          videoData: {
-            type: Object,
-            notify: true,
-            observer: 'videoDataChanged'
-          },
-          routeData: Object,
-          loading: Boolean
+          }
         }
       }
-
       ready() {
         super.ready();
         setTimeout(() => {
-          this.computeTopHeadLines()
-          console.log('computeTopHeadLines log')
           this.search = true
-          this.search = false
-          setTimeout(() => {
-            this.computeEverything()
-            console.log('computeEverything log')
-            this.search = true
-            this.search = false
-          }, 500)
-        }, 500)
+        }, 250)
       }
 
       static get observers() {
@@ -369,12 +356,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.removeEventListener('resize', this._boundResizeHandler);
       }
       categoryChanged(data) {
-        //console.log(data)
+        console.log(data)
       }
 
       videoDataChanged(data) {
         if (data !== null && data !== undefined) {
-          //   console.log('featured', data)      
+        //  console.log('featured', data.type)
           this[data.type](data)
           this.search = false
           this.fadeIn = true
@@ -382,43 +369,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       topHeadLines(data) {
+        sessionStorage.setItem('topHeadLines', data.arr);
         let parsed = JSON.parse(data.arr)
-       // console.log('topHeadLines', parsed.articles)
+        // console.log('topHeadLines', parsed.articles)
         this.featured = parsed.articles.slice(0, 1)
         this.topStories = parsed.articles.slice(1, 10)
+        this.$.previous.videoDataChanged(true)
       }
 
-      everything(data) {
-         console.log('everything', data)
-        let parsed = JSON.parse(data.arr)
-        this.opinions = parsed.articles
-      }
-
-      computeTopHeadLines() {
-        this.api = {
+      computeTopHeadLines(sources, query, cat, lang) {
+        return {
           method: "topHeadlines",
           api: "topHeadlines",
-          sources: this.sources,
-          q: this.query,
-          category: this.cat,
-          language: this.lang,
+          sources: sources,
+          q: query,
+          category: cat,
+          language: lang,
           country: ''
         }
       }
-      computeEverything() {
-        this.api = {
-          method: "everything",
-          api: "everything",
-          sources: this.sources,
-          domains: '',
-          q: this.query,
-          from: this.from,
-          to: this.to,
-          language: this.lang,
-          sortBy: 'publishedAt',
-          page: '10'
-        }
-      }
+
       _tryReconnect() {
         this.dispatchEvent(new CustomEvent('refresh-data', { bubbles: true, composed: true }));
       }
