@@ -127,8 +127,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             .nav {
                 width: 95%;
-                box-shadow: var(--app-shadow-value);  
-                margin-left: 2%            
+                box-shadow: var(--app-shadow-value);
+                margin-left: 2%
             }
 
             .nav[mini] {
@@ -199,7 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .contentView[bottom] {
                 font-size: 14px;
             }
-           
+
             .contentView[sideFix] {
                 margin-left: 10px;
             }
@@ -314,7 +314,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 super.ready()
                 setTimeout(() => {
                     this.$.background.style.background = `${this.background}`
-                   // this.$.background.style.backgroundSize = 'contain';
+                    // this.$.background.style.backgroundSize = 'contain';
                     this.$.background.style.height = this.$.content.clientHeight + "px"
                     //console.log(this.background)
                 }, 200)
@@ -422,16 +422,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
             _videoDataChanged(data) {
-                var allVideos = [];
-                var that = this;
-                // console.log("videos", data)
-                if (data !== undefined && data !== null && data.items !== null && data.items !== undefined) {
-                    //  console.log("videos", data)
-                    let temp = data.items
-                    //  console.log("videos", temp)
+                let allVideos = [];
+                let temp
+                let that = this;
+                
+                if (data !== undefined && data !== null) {                  
+                    if (typeof data === 'object') {
+                        temp = data.items                       
+                    }
+                    if (typeof data === 'string') {
+                        temp = JSON.parse(data)
+                        temp = temp.items                       
+                    }
                     if (temp[0]) {
-                        for (let i = 0; i < temp.length; i++) {
-                            // console.log(temp[i].snippet)
+                        for (let i = 0; i < temp.length; i++) {                            
                             let videoItem = temp[i]
                             allVideos.push(videoItem)
                         }
@@ -441,9 +445,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }, 100)
                 }
             }
+
             itemsChanged(data) {
                 let allVideos = []
-               // console.log('YTItem', data)
+                // console.log('YTItem', data)
                 data.map(function (videoItem) {
                     //  console.log(videoItem.id.videoId, videoItem.snippet.channelTitle.toLocaleLowerCase())
                     var youtubeVideo = {

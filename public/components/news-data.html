@@ -16,12 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function () {
 
       let categoryList = [
-        { name: 'topHeadlines', title: 'Top Headlines', items: [] },
-        { name: 'Sports', title: 'Sports', items: [] },
-        { name: 'chrome', title: 'Chrome', items: [] },
-        { name: 'search', title: 'Search', items: [] },
-        { name: 'shopping_payments', title: 'Shopping & Payments', items: '' },
-        { name: 'nonprofits', title: 'Nonprofits', items: '' }
+        { name: 'General', title: 'General', lang: ['en'], sources: ['google-news', 'fox-news', 'cbs-news', 'nbc-news', 'reuters', 'politico', 'the-washington-post'] },
+        { name: 'Sports', title: 'Sports',lang: ['en'], sources: ['espn', 'nhl-news', 'the-sport-bible', 'bbc-sport', 'fox-sports', 'four-four-two', 'talksport'] },
+        { name: 'Entertainment', title: 'Entertainment', lang: ['en'], sources: ['mtv-news', 'mtv-news-uk', 'entertainment-weekly', 'mashable', 'buzzfeed', 'the-lad-bible', 'polygon'] },
+        { name: 'Technology', title: 'Technology', lang: ['en'], sources: ['engadget', 'wired', 'techcrunch', 'hacker-news', 'the-verge', 'techradar'] },
+        { name: 'Business&Finance', title: 'Business & Finance', sources: ['cnbc','Bloomberg','the-wall-street-journal','the-economist','business-insider','financial-times', 'the-economist']}
       ];
 
       let textarea = document.createElement('textarea');
@@ -56,15 +55,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               value: false,
               notify: true
             },
-            api: {
-              type: Object,
-              notify: true
-            },
             category: {
               type: Object,
               computed: '_computeCategory(categoryName)',
               // observer: '_log',
               notify: true
+            },
+            previous: {
+              type: Object
             },
             failure: {
               type: Boolean,
@@ -155,7 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         static get observers() {
-          return [          
+          return [
           ]
         }
         _log(data) {
@@ -166,46 +164,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // console.log(categoryName, this.categories)
           for (let i = 0, c; c = this.categories[i]; ++i) {
             if (c.name === categoryName) {
+              this.previous = c
               return c;
             }
           }
-          return null;
+          return this.previous || this.categories[0];
         }
 
-
-        _unescapeText(text) {
-          textarea.innerHTML = text;
-          return textarea.textContent;
-        }
-
-        _getItemHref(item) {
-          return item.url ? '/article/' + this.categoryName + '/' + encodeURIComponent(item.url) : null;
-        }
-
-        _getItemImage(item) {
-          return item.urlToImage //? 'data/' + item.imgSrc : '';
-        }
-
-        _timeAgo(timestamp) {
-          if (!timestamp)
-            return ''
-
-          let minutes = (Date.now() - timestamp) / 1000 / 60;
-          if (minutes < 2)
-            return '1 min ago';
-          if (minutes < 60)
-            return Math.floor(minutes) + ' mins ago';
-          if (minutes < 120)
-            return '1 hour ago';
-
-          let hours = minutes / 60;
-          if (hours < 24)
-            return Math.floor(hours) + ' hours ago';
-          if (hours < 48)
-            return '1 day ago';
-
-          return Math.floor(hours / 24) + ' days ago';
-        }
 
         _trimRight(text, maxLength) {
           let breakIdx = text.indexOf(' ', maxLength);

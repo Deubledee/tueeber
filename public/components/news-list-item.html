@@ -113,19 +113,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <a href$="news?url=[[item.url]]">
       <news-img title="[[item.title]] [[item.source.name]]" src="[[item.urlToImage]]" alt="[[item.title]]"></news-img>
       <div class="headline" title="[[item.title]] [[item.source.name]]">
-        <div class="category" hidden$="[[!item.category]]">[[item.category]]</div>
-        <h2>[[item.title]]</h2>
+        <div class="category" hidden$="[[!item.source.name]]">[[item.source.name]]</div>
+        <h2>[[ _unescapeText(item.title)]]</h2>
         <div class="details" title="Author: [[item.author]] src: [[item.source.name]] [[item.publishedAt]]">
-          <div class="author"> Author: [[item.author]] </div>
-          <div class="author"> src: [[item.source.name]]</div>
+          <div class="author" hidden$="[[!item.author]]"> Author: [[item.author]] </div>
+          <div class="author" hidden$="[[!item.source.id]]"> src: [[item.source.id]]</div>
           <div class="author"> [[item.publishedAt]]</div>
         </div>
       </div>
     </a>
   </template>
 
-  <script>
-
+  <script>   
     class NewsListItem extends Polymer.Element {
 
       static get is() { return 'news-list-item'; }
@@ -140,6 +139,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       }
+
+      _unescapeText(text) {
+          textarea.innerHTML = text;
+          return textarea.textContent;
+        }
 
       _log(data) {
         console.log('log list items', data)

@@ -159,7 +159,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <news-search id="category" api="{{headLines}}" search="{{search}}" hide="true" video-data="{{videoData}}">
     </news-search>
     <div class="content1">
-      <h1> Today's News</h1>
+      <h1> [[category.title]]</h1>
     </div>
     <div class="container" fadeIn$="[[fadeIn]]" hidden$="[[failure]]">
       <div class="content">
@@ -177,7 +177,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content1">
           <h1> Previous News</h1>
         </div>
-        <news-previous id="previous" serach="[[search]] "sources="[[sources]]" query="[[query]]" lang="[[lang]]" from="[[from]]" to="[[to]]">
+        <news-previous id="previous" serach="[[search]] " sources="[[sources]]" query="[[query]]" lang="[[lang]]" from="[[from]]"
+          to="[[to]]">
           <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
 
           </ul>
@@ -236,7 +237,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           category: {
             type: Object,
-            //observer: '_slice'
+            observer: 'computeSources',
+            notify: true
           },
 
           offline: Boolean,
@@ -252,17 +254,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: ''
           },
+           domains: {
+            type: String
+          },
           sources: {
             type: String,
-            value: 'google-news, fox-news, cbs-news, nbc-news, reuters, politico, the-washington-post',
-          },
-          cat: {
-            type: String,
-            value: '',
+           // value: 'google-news, fox-news, cbs-news, nbc-news, reuters, politico, the-washington-post',
+           // computed: 'computeSources(category)'
           },
           lang: {
             type: Number,
-            value: 'en'
+            value: ''
           },
           search: {
             type: Boolean,
@@ -271,7 +273,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           headLines: {
             type: Object,
-            computed: 'computeTopHeadLines(sources, query, cat, lang)',
+            computed: 'computeTopHeadLines(sources, query, from, to, lang, domains)',
             notify: true
           },
           videoData: {
@@ -280,60 +282,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: 'videoDataChanged'
           },
           routeData: Object,
-          loading: Boolean,
-          from: {
-            type: String,
-            value: function () {
-              let d = new Date()
-              let month = (d.getMonth() + 1)
-              let day = (d.getDay())
-              let year = d.getFullYear()
-              if (month % 2 === 0) {
-                if (day === 1) {
-                  if (month === 3) {
-                    // day = febuaryDAy()
-                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
-                  } else {
-                    day = 29
-                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
-                  }
-                } else {
-                  day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`) : (day - 2)
-                }
-
-              } else {
-                if (month === 1 && day === 1) {
-                  year = year - 1
-                  day = 30
-                  month = 12
-                } else {
-                  if (day === 1) {
-                    day = 31
-                    month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
-                  } else {
-                    day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`) : (day - 2)
-                  }
-                }
-              }
-              let yesdtaerday = `${year}-${month}-${day}`
-              return yesdtaerday
-            }
-          },
-          to: {
-            type: String,
-            value: function () {
-              let d = new Date()
-              var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDay()
-              return today
-            }
-          }
+          loading: Boolean          
         }
       }
       ready() {
         super.ready();
-        setTimeout(() => {
-          this.search = true
-        }, 250)
       }
 
       static get observers() {
@@ -345,6 +298,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _log(data) {
         console.log('list log', data)
       }
+
+      computeSources(data) {
+        if (data !== null && data !== undefined) {
+          let sources = data.sources ? data.sources.join(', '): ''
+          let domains = data.domains ? data.domains.join(', ') : ''
+          let lang = data.lang ? data.lang.join(', ') : ''
+          console.log('computeSources', sources.toString())
+          console.log('computeSources domains', domains.toString())
+          this.domains = domains
+          this.sources = sources
+          this.lang = lang
+          this.search = true
+          this.search = false
+        }
+      }
+
       connectedCallback() {
         super.connectedCallback();
         this._boundResizeHandler = this._resizeHandler.bind(this);
@@ -355,11 +324,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.disconnectedCallback();
         window.removeEventListener('resize', this._boundResizeHandler);
       }
+
       categoryChanged(data) {
-        console.log(data)
+       // console.log(data)
+        this.categoryName = data
       }
 
       videoDataChanged(data) {
+       // console.log('featured', data)
         if (data !== null && data !== undefined) {
         //  console.log('featured', data.type)
           this[data.type](data)
@@ -368,24 +340,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
-      topHeadLines(data) {
-        sessionStorage.setItem('topHeadLines', data.arr);
-        let parsed = JSON.parse(data.arr)
-        // console.log('topHeadLines', parsed.articles)
+      everything(data) {
+        sessionStorage.setItem(this.routeData.category, data.arr);
+        let parsed = typeof data.arr === 'string' ? JSON.parse(data.arr): data.arr
+      //  console.log(typeof data.arr)
+       // console.log('topHeadLines', parsed.articles)
         this.featured = parsed.articles.slice(0, 1)
         this.topStories = parsed.articles.slice(1, 10)
-        this.$.previous.videoDataChanged(true)
+        this.$.previous.videoDataChanged(true, this.routeData.category)
       }
 
-      computeTopHeadLines(sources, query, cat, lang) {
+      computeTopHeadLines(sources, query, from, to, lang, domains) {
         return {
-          method: "topHeadlines",
-          api: "topHeadlines",
+          method: "everything",
+          api: "everything",
           sources: sources,
+          domains: domains,
           q: query,
-          category: cat,
+          from: '',
+          to: '',
           language: lang,
-          country: ''
+          sortBy: 'publishedAt',         
         }
       }
 

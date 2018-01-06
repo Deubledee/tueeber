@@ -393,7 +393,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="container">
       <iron-pages role="main" selected="[[page]]" attr-for-selected="name" fallback-selection="path-warning">
         <!-- list view of articles in a category -->
-        <news-list id="list" name="news" route="[[subroute]]" category-name="{{categoryName}}" category="[[category]]" loading="[[loading]]"
+        <news-list id="list" name="news" route="[[subroute]]" category-name="{{categoryName}}" category="{{category}}" loading="[[loading]]"
           offline="[[offline]]" failure="[[failure]]"></news-list>
         <!-- invalid top level paths -->
         <news-path-warning name="path-warning"></news-path-warning>
@@ -442,7 +442,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           category: {
             type: Object,
             notify: true,
-            // observer: '_log'
+            //  observer: '_log'
           },
           offline: {
             type: Boolean,
@@ -516,10 +516,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         if (!page) {
           // set default route if route path is empty
-          this.set('route.path', 'news/topHeadlines');
+          this.set('route.path', 'news/General');
           return;
         }
-        console.log('subroute', page)
+        // console.log('subroute', page)
         if (page === 'video') {
           this.$.player.pause = true
           this.video = true
@@ -537,15 +537,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         setTimeout(() => {
           if (this.query.url && this.query.url.length > 0) {
-           window.open(this.query.url, "_blank", "toolbar=yes,top=70,left=100,width=800,height=800")
-           console.log(this.page + '/' + this.category.name)
-             history.pushState({}, null, this.page + '/' + this.category.name + '?url=""')
-              window.dispatchEvent(new CustomEvent('location-changed'));
-              history.pushState({}, null, this.page + '/' + this.category.name)    
+            window.open(this.query.url, "_blank", "toolbar=yes,top=70,left=100,width=800,height=800")
+            //  console.log(this.page + '/' + this.category.name)
+            history.pushState({}, null, this.page + '/' + this.category.name + '?url=""')
+            window.dispatchEvent(new CustomEvent('location-changed'));
+            history.pushState({}, null, this.page + '/' + this.category.name)
           }
         }, 100)
-
-        //Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+        Polymer.AppLayout.scroll({ top: 55, behavior: 'silent' });
+        setTimeout(() => {
+          Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+        }, 50)
         // Close the drawer - in case the *route* change came from a link in the drawer.
         this.$.nav.closeDrawer();
       }

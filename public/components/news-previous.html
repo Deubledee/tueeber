@@ -35,25 +35,34 @@
                 let li = document.createElement('li'),
                     newsListItem = document.createElement('news-list-item');
                 newsListItem.item = item
+                newsListItem.setAttribute('horizontal', '')
                 li.appendChild(newsListItem)
                 return li
             }
 
-            videoDataChanged(data) {
-                if (data !== null && data !== undefined) {
-                    let cat = sessionStorage.getItem("topHeadLines");
+            videoDataChanged(data, name) {               
+                if (data !== null && data !== undefined && data === true) {
+                    let cat = sessionStorage.getItem(name);
                     let parsedCat = JSON.parse(cat)
                     this.parsedCat = parsedCat.articles.slice(10, parsedCat.articles.length)
+                    this.children[0].innerHTML = ''
+                    this.count = 0
+                  //  console.log(data, name)
                     this._putItem()
                 }
             }
 
             _putItem() {
-                let ten = this._gimetTen()
-                console.log(' parsedCat', ten)
-                ten.map((function (item) {
+              //  console.log('data, name')
+                let ten = this._gimetTen()   
+                try{
+                    ten.map((function (item) {
                     this.children[0].append(this.createTemplate(item))
                 }).bind(this))
+                }catch(err){
+                    console.log(err, ten)
+                }          
+                
             }
 
             _gimetTen() {
