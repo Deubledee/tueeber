@@ -281,7 +281,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-selector selected="[[routeTail.prefix]]" attr-for-selected="name" class="drawer-list" role="navigation">
                     <template class="flexchild-vertical" is="dom-repeat" items="{{items}}" as="video" mutable-data="true">
                         <div class="float" mini$="[[mini]]">
-                            <a name="/view1/video/" id="anav" href="/video/{{video.id}}" on-click="_seethisshit">
+                            <a name="/view1/video/" id="anav" href="/video/{{video.id}}">
                                 <paper-card mini$="[[mini]]" bottom$="[[bottom]]" sideWays$="[[sideWays]]" class="nav" title="{{video.title}}" alt="{{video.thumbnail}}"
                                     image="{{video.thumbnail}}">
                                 </paper-card>
@@ -291,7 +291,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     {{video.shortTitle}}
                                 </div>
                                 <div class="channelView" sideFix$="[[sideFix]]" mini$="[[mini]]" bottom$="[[bottom]]">
-                                    <paper-button on-click="_seethisshit">
+                                    <paper-button>
                                         src: {{video.channelTitle}}
                                     </paper-button>
                                 </div>
@@ -316,7 +316,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.background.style.background = `${this.background}`
                     // this.$.background.style.backgroundSize = 'contain';
                     this.$.background.style.height = this.$.content.clientHeight + "px"
-                    //console.log(this.background)
+                    // Polymer.AppLayout.scroll({top: 0, behavior: 'smooth'});
                 }, 200)
 
             }
@@ -425,25 +425,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 let allVideos = [];
                 let temp
                 let that = this;
-                
-                if (data !== undefined && data !== null) {                  
+
+                if (data !== undefined && data !== null) {
                     if (typeof data === 'object') {
-                        temp = data.items                       
+                        temp = data.items
                     }
                     if (typeof data === 'string') {
                         temp = JSON.parse(data)
-                        temp = temp.items                       
+                        temp = temp.items
                     }
                     if (temp[0]) {
-                        for (let i = 0; i < temp.length; i++) {                            
+                        for (let i = 0; i < temp.length; i++) {
                             let videoItem = temp[i]
                             allVideos.push(videoItem)
                         }
                     }
                     setTimeout(() => {
                         this.incomingItems = allVideos
+                        window.scrollTo({}, 0)
                     }, 100)
                 }
+               
             }
 
             itemsChanged(data) {
@@ -463,14 +465,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     allVideos.push(youtubeVideo)
                 })
                 //  console.log(allVideos)
+               // window.scrollBy({}, 0)
                 this.set('items', allVideos);
             }
 
             fuckedYouUp(data) {
-                // console.log('realy did..!!', data)
+               /* setTimeout(() => {
+                    window.scrollTo({}, 0)
+                    console.log(data)
+                }, 5000)*/
             }
             _seethisshit() {
-                //window.scrollTo({}, 0)
+               // window.scrollBy({}, 0)                
             }
         }
         window.customElements.define(youtubeResults.is, youtubeResults);

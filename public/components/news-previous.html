@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../public/components/news-list-previous.html">
 <link rel="import" href="news-search/news-search.html">
 <dom-module id="news-previous">
     <template>
@@ -19,58 +20,76 @@
                     },
                     ten: {
                         type: Array
+                    },
+                    plusTen: {
+                        type: String,
+                        value: '+ 10',
+                        notify: true
                     }
                 }
             }
             ready() {
                 super.ready();
-
+                this.children[1].addEventListener('click', this._putItem.bind(this));
+                this.children[1].style.marginLeft = '50%'
             }
-
             _log(data) {
                 console.log('previuos log', data)
             }
 
             createTemplate(item) {
                 let li = document.createElement('li'),
-                    newsListItem = document.createElement('news-list-item');
+                    newsListItem = document.createElement('news-previous-item');
                 newsListItem.item = item
                 newsListItem.setAttribute('horizontal', '')
                 li.appendChild(newsListItem)
                 return li
             }
 
-            videoDataChanged(data, name) {               
+            videoDataChanged(data, name) {
                 if (data !== null && data !== undefined && data === true) {
-                    let cat = sessionStorage.getItem(name);
-                    let parsedCat = JSON.parse(cat)
-                    this.parsedCat = parsedCat.articles.slice(10, parsedCat.articles.length)
-                    this.children[0].innerHTML = ''
+                    let cat = sessionStorage.getItem(name)
+                    try {
+                        let parsedCat = JSON.parse(JSON.stringify(cat))
+                        let obj = JSON.parse(parsedCat)
+                        this.parsedCat = name.indexOf('more') > 0 ? obj.articles : obj.articles.slice(10, obj.articles.length)
+                    } catch (err) {
+                        console.error(err)
+                    }
                     this.count = 0
-                  //  console.log(data, name)
-                    this._putItem()
+                    if (name.indexOf('more') < 0) {
+                        this.children[0].innerHTML = ''
+                        this._putItem()
+                    }
                 }
             }
 
             _putItem() {
-              //  console.log('data, name')
-                let ten = this._gimetTen()   
-                try{
-                    ten.map((function (item) {
-                    this.children[0].append(this.createTemplate(item))
-                }).bind(this))
-                }catch(err){
-                    console.log(err, ten)
-                }          
-                
+                //  console.log('data, name')
+                let ten = this._gimetTen()
+                if (ten) {
+                    try {
+                        ten.map((function (item) {
+                            this.children[0].append(this.createTemplate(item))
+                        }).bind(this))
+                    } catch (err) {
+                        console.log(err, ten)
+                    }
+                } else {
+                    this.plusTen = '+ 0'
+                }
             }
 
             _gimetTen() {
-                if (this.count < this.parsedCat.length) {
-                    let count = (this.parsedCat.length - this.count) >= 10 ? this.count + 10: this.parsedCat.length
-                    let ten = this.parsedCat.slice(this.count, count)
-                    this.count = count
-                    return ten
+                try {
+                    if (this.count < this.parsedCat.length) {
+                        let count = (this.parsedCat.length - this.count) >= 10 ? this.count + 10 : this.parsedCat.length
+                        let ten = this.parsedCat.slice(this.count, count)
+                        this.count = count
+                        return ten
+                    }
+                } catch (er) {
+                    console.error(er)
                 }
             }
         }

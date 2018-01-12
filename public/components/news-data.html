@@ -15,13 +15,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     (function () {
 
-      let categoryList = [
-        { name: 'General', title: 'General', lang: ['en'], sources: ['google-news', 'fox-news', 'cbs-news', 'nbc-news', 'reuters', 'politico', 'the-washington-post'] },
-        { name: 'Sports', title: 'Sports',lang: ['en'], sources: ['espn', 'nhl-news', 'the-sport-bible', 'bbc-sport', 'fox-sports', 'four-four-two', 'talksport'] },
-        { name: 'Entertainment', title: 'Entertainment', lang: ['en'], sources: ['mtv-news', 'mtv-news-uk', 'entertainment-weekly', 'mashable', 'buzzfeed', 'the-lad-bible', 'polygon'] },
-        { name: 'Technology', title: 'Technology', lang: ['en'], sources: ['engadget', 'wired', 'techcrunch', 'hacker-news', 'the-verge', 'techradar'] },
-        { name: 'Business&Finance', title: 'Business & Finance', sources: ['cnbc','Bloomberg','the-wall-street-journal','the-economist','business-insider','financial-times', 'the-economist']}
-      ];
+      let langList = [
+        { name: 'enUs', title: 'en/Us' },
+        { name: 'enUk', title: 'en/Uk' },
+        { name: 'enAu', title: 'en/Au' },
+        { name: 'pt', title: 'pt' },
+        { name: 'ptBr', title: 'pt/Br' },
+      ]
+
+      let categoryList =
+        {
+          enUs: [
+            { liveNow: 'Fox', videoId: 'uwM3GqJtU0k' },
+            { name: 'General', title: 'General', lang: ['en'], sources: ['fox-news', 'newsweek', 'cbs-news', 'new-york-magazine', 'reuters', 'politico', 'the-washington-post', 'time'] },
+            { name: 'Sports', title: 'Sports', lang: ['en'], sources: ['nhl-news', 'nfl-news', 'espn-cric-info', 'bleacher-report', 'fox-sports'] },
+            { name: 'Entertainment', title: 'Entertainment', lang: ['en'], sources: ['mtv-news', 'mtv-news-uk', 'entertainment-weekly', 'mashable', 'buzzfeed', 'the-lad-bible', 'polygon'] },
+            { name: 'Technology', title: 'Technology', lang: ['en'], sources: ['engadget', 'wired', 'techcrunch', 'hacker-news', 'the-verge', 'techradar'] },
+            { name: 'Science', title: 'Science', lang: ['en'], sources: ['nacional-geographic', 'next-big-future', 'new-scientist'] },
+            { name: 'Business&Finance', title: 'Business & Finance', lang: ['en'], sources: ['cnbc', 'Bloomberg', 'the-wall-street-journal', 'business-insider', 'the-economist'] }
+          ],
+          enUk: [
+            { liveNow: 'Sky', videoId: 'XOacA3RYrXk' },
+            { name: 'General-uk', title: 'General UK', lang: ['en'], sources: ['mirror', 'independent', 'metro', 'the-telegraph', 'bbc-news', 'daily-mail'] },
+            { name: 'Sports-uk', title: 'Sports UK', lang: ['en'], sources: ['four-four-tow', 'the-sport-bible', 'talksport'] },
+            { name: 'Entertainment-uk', title: 'Entertainment UK', lang: ['en'], sources: ['mtv-news-uk', 'the-lad-bible'] },
+            { name: 'Technology-uk', title: 'Technology', lang: ['en'], sources: ['engadget', 'wired', 'techcrunch', 'hacker-news', 'the-verge', 'techradar'] },
+            { name: 'Business&Finance-uk', title: 'Business & Finance', lang: ['en'], sources: ['Bloomberg', 'buisiness-insider-uk', 'the-economist', 'financial-times'] }
+          ],
+          enAu: [
+            { liveNow: 'TV2 AU', videoId: 'hfFLNPzQn6w' },
+            { name: 'General-au', title: 'General AU', lang: ['en'], sources: ['abc-news-au', 'news-com-au', 'the-guardian-au'] },
+            { name: 'Sports-au', title: 'Sports', lang: ['en'], sources: ['four-four-tow', 'the-sport-bible', 'talksport'] },
+            { name: 'Entertainment-au', title: 'Entertainment', lang: ['en'], sources: ['mtv-news-uk', 'the-lad-bible'] },
+            { name: 'Technology-au', title: 'Technology', lang: ['en'], sources: ['engadget', 'wired', 'techcrunch', 'hacker-news', 'the-verge', 'techradar'] },
+            { name: 'Business&Finance-au', title: 'Business & Finance', lang: ['en'], sources: ['Bloomberg', 'australian-inancial-times', 'the-economist'] }
+          ],
+          pt: [
+            { liveNow: 'EuronewsPT', videoId: 'SyA-D7NUGvw' },
+            { name: 'Geral-pt', title: 'Geral PT', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], lang: ['pt'], sources: [''] },
+            { name: 'Desporto-pt', title: 'Desporto PT', domains: ['ojogo.pt', 'sapo.pt', 'publico.pt', 'cmjornal.pt',], lang: ['pt'], query: ['jogo'], sources: [''] },
+          ],
+          ptBr: [
+            { liveNow: 'EuronewsBr', videoId: 'SyA-D7NUGvw' },
+            { name: 'Geral-br', title: 'Geral BR', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], lang: ['pt'], sources: [''] },
+            { name: 'Desporto', title: 'Desporto', domains: ['ojogo.pt', 'publico.pt'], lang: ['pt'], sources: [''] },
+            { name: 'Etertenimento', title: 'Etertenimento', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], lang: ['pt'], sources: [''] },
+            { name: 'Tecnologia', title: 'Tecnologia', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], lang: ['pt'], sources: [''] },
+            { name: 'Negocio&Finanças', title: 'Negocio & Finanças', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], lang: ['pt'], sources: [''] }
+          ]
+        };
 
       let textarea = document.createElement('textarea');
 
@@ -33,15 +75,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return {
 
             categories: {
-              type: Array,
+              type: Object,
               value: categoryList,
               readOnly: true,
               notify: true
             },
-
+            languages: {
+              type: Object,
+              value: langList,
+              readOnly: true,
+              notify: true
+            },
             categoryName: String,
-
-            articleId: String,
 
             offline: Boolean,
 
@@ -60,6 +105,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               computed: '_computeCategory(categoryName)',
               // observer: '_log',
               notify: true
+            },
+            language: {
+              type: String,
+              value: 'enUs',
+              notify: true,
             },
             previous: {
               type: Object
@@ -162,13 +212,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _computeCategory(categoryName) {
           // console.log(categoryName, this.categories)
-          for (let i = 0, c; c = this.categories[i]; ++i) {
+          for (let i = 0, c; c = this.categories[this.language][i]; ++i) {
             if (c.name === categoryName) {
               this.previous = c
               return c;
             }
           }
-          return this.previous || this.categories[0];
+          return this.previous || this.categories[this.language][0];
         }
 
 

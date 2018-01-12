@@ -10,16 +10,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-
 <link rel="import" href="news-img.html">
 
 <dom-module id="news-list-item">
 
   <template>
 
-    <style>
+    <style include="app-grid-style">
       :host {
         display: block;
+      }
+
+      [hidden] {
+        display: none !important;
       }
 
       a {
@@ -109,19 +112,112 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           display: none;
         }
       }
+
+      paper-button,
+      iron-icon {
+        z-index: 5
+      }
+
+      paper-button {
+        height: 20px;
+        padding-left: 45px;
+        left: 70%;
+        padding-right: 1px;
+        margin-top: -10px;
+      }
+
+      .description {
+        position: absolute;
+        margin-top: -36px;
+        width: 13%;
+        padding: 6px 20px 7px;
+        display: block;
+        z-index: 2;
+        background: beige;
+      }
+
+      .description[hidden] {
+        visibility: hidden;
+        width: 0px;
+        height: 0px;
+        margin-top: 0px;
+        padding: 0px;
+      }
+      .article-grid,
+        {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .article-grid {
+        margin-top: 32px;
+      }
+
+      li {
+        display: block;
+      }
+
+
+      /* mobile */
+
+      @media (max-width: 767px) {
+
+        .article-grid li {
+          border-bottom: var(--app-border-style);
+          margin: 0px 24px 24px 24px;
+          padding-bottom: 24px;
+        }
+
+        .article-grid li:last-of-type {
+          border-bottom: none;
+        }
+      }
+
+      /* desktop */
+
+      @media (min-width: 768px) {
+        :host {
+          --app-grid-columns: 4;
+          --app-grid-gutter: 32px;
+        }
+
+        .article-grid {
+          margin-right: -32px;
+          margin-left: -30px;
+        }
+      }
     </style>
-    <a href$="news?url=[[item.url]]">
-      <news-img title="[[item.title]] [[item.source.name]]" src="[[item.urlToImage]]" alt="[[item.title]]"></news-img>
-      <div class="headline" title="[[item.title]] [[item.source.name]]">
-        <div class="category" hidden$="[[!item.source.name]]">[[item.source.name]]</div>
-        <h2>[[ _unescapeText(item.title)]]</h2>
-        <div class="details" title="Author: [[item.author]] src: [[item.source.name]] [[item.publishedAt]]">
-          <div class="author" hidden$="[[!item.author]]"> Author: [[item.author]] </div>
-          <div class="author" hidden$="[[!item.source.id]]"> src: [[item.source.id]]</div>
-          <div class="author"> [[item.publishedAt]]</div>
-        </div>
-      </div>
-    </a>
+
+    <ul class="app-grid article-grid">
+      <template is="dom-repeat" id="[[ide]]" items="{{items}}" as="item" mutableData>
+        <li>
+          <a href$="news?url=[[item.url]]">
+            <news-img title="[[item.title]] [[item.source.name]]" src="[[_getItemImage(item.urlToImage)]]" alt="[[item.title]]">
+            </news-img>
+            <div class="headline" title="[[item.title]] [[item.source.name]]">
+              <div class="category" hidden$="[[!item.source.name]]">[[item.source.name]]</div>
+              <h2>[[ _unescapeText(item.title)]]</h2>
+            </div>
+          </a>
+          <div class="headline" title="[[item.title]] [[item.source.name]]">
+            <paper-button on-click="showDescription">
+              <iron-icon icon="hardware:keyboard-arrow-up" hidden$="{{item.show}}"></iron-icon>
+              <iron-icon icon="hardware:keyboard-arrow-down" hidden$="{{!item.show}}"></iron-icon>
+            </paper-button>
+            <div class="description" hidden$="{{item.show}}">
+              <p>[[_unescapeText(item.description)]]</p>
+            </div>
+            <div class="details" title="Author: [[item.author]] src: [[item.source.name]] [[item.publishedAt]]">
+              <div class="author" hidden$="[[!item.author]]"> Author: [[item.author]] </div>
+              <div class="author" hidden$="[[!item.source.id]]"> src: [[item.source.id]]</div>
+              <div class="author"> [[item.publishedAt]]</div>
+            </div>
+          </div>
+        </li>
+      </template>
+    </ul>
+
   </template>
 
   <script>   
@@ -131,9 +227,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get properties() {
         return {
-
-          item: {
-            type: Object,
+          items: {
+            type: Array,
             notify: true,
             // observer: '_log'
           }
@@ -141,12 +236,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _unescapeText(text) {
-          textarea.innerHTML = text;
-          return textarea.textContent;
-        }
+        textarea.innerHTML = text;
+        return textarea.textContent;
+      }
+
+      _getItemImage(item) {
+        return item || 'public/images/news-icon-512.png';
+      }
 
       _log(data) {
-        console.log('log list items', data)
+        //    console.log('log list items', data)
+      }
+
+      showDescription(event) {
+        event.model.set('item.show', !event.model.item.show);
+        //data.model.item.show = true
+        this.notifyPath('items');
       }
     }
 

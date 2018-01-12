@@ -183,7 +183,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-repeat" items="{{items}}" as="item" mutableData>
       <a href$="news?url=[[item.url]]">
         <div class="img-container" title="[[item.title]] - [[item.source.name]]">
-          <news-img alt="[[item.title]]" src="[[item.urlToImage]]" placeholder-src="[[item.title]]"></news-img>
+          <news-img alt="[[item.title]]" src="[[_getItemImage(item.urlToImage, item.source.id)]]" placeholder-src="[[item.title]]"></news-img>
           <div class="scrim"></div>
         </div>
         <div class="headline" title="[[item.title]] - [[item.source.name]]">
@@ -219,7 +219,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           textarea.innerHTML = text;
           return textarea.textContent;
         }
-
+        _getItemImage(item) {
+        return item || 'public/images/news-icon-512.png';
+      }
       _log(data) {
         try {
           console.log('log featured', data)

@@ -179,7 +179,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .zaline {
-        width: 30%;
+        width: 13%;
+        font-size: var(--app-font-size-2);
+        letter-spacing: 12px;
+        font-style: italic;
+        text-shadow: 1px 1px 1px var(--app-shadow-color);
+      }
+
+      .zaline1 {
+        width: 10%;
         font-size: var(--app-font-size-2);
         letter-spacing: 12px;
         font-style: italic;
@@ -213,7 +221,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .someColor {
-        width: 65px;
+        width: 71px;
         position: relative;
         top: 7px;
         height: 14px;
@@ -287,6 +295,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 70% !important;
       }
 
+      .langContainer {
+        cursor: pointer;
+        margin-top: 0px;
+        font-size: 10px;
+        font-family: sans-serif;
+        font-style: initial;
+        letter-spacing: 1px;
+        display: inline-flex;
+        text-decoration: none;
+        color: #d1d1da;
+        list-style: none;
+      }
+
+      .langItem {
+        margin-left: 4px;
+        /* border: 1px solid #436557; */
+        padding: 4px;
+        box-shadow: 1px 1px 5px #6c6c78;
+      }
+
       @media (min-width: 576px) {
         .container5 {
           max-width: 540px;
@@ -354,13 +382,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       news-data provides the list of categories and the articles for the category.
     -->
     <news-data id="data" api="{{api}}" search="{{search}}" categories="{{categories}}" category-name="[[categoryName]]" response="{{response}}"
-      category="{{category}}" article-id="[[articleId]]" article="{{article}}" loading="{{loading}}" offline="[[offline]]"
+      category="{{category}}" language="{{language}}" languages="{{languages}}" loading="{{loading}}" offline="[[offline]]"
       failure="{{failure}}">
     </news-data>
     <div class="row">
       <app-toolbar class="logo-toolbar">
         <div class="zaline logo">
           <a href="/" aria-label$="[[appTitle]]">[[appTitle]]</a>
+        </div>
+        <div class="zaline1">
+          <ul class="langContainer">
+            <template is="dom-repeat" items="{{languages}}" as="item">
+              <li class="langItem" on-click="calculateLang"> {{item.name}} </li>
+            </template>
+          </ul>
         </div>
         <div class="zaline2">
           <div class="someColor">
@@ -374,8 +409,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button class="mobile-toggle-drawer-btn2" goleft$="[[goleft]]" icon="menu" on-click="_toggleDrawer" aria-label="navigation"></paper-icon-button>
         </div>
       </app-toolbar>
-      </nav>
-
       <nav class="container5 bottomer flex-horizontal">
         <div class="flexchild-verticalext2">
           <youtube-results id="results4" side-fix search="[[liveNow]] news">
@@ -383,10 +416,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </youtube-results>
         </div>
         <div class="flexchild-verticalext">
-          <news-player id="player" live-now="{{liveNow}}"></news-player>
+          <news-player id="player" live-now="{{liveNow}}" videoId></news-player>
         </div>
+      </nav>
     </div>
-    <news-nav id="nav" app-title="[[appTitle]]" page="[[page]]" categories="[[categories]]" category="[[category]]" load-complete="[[loadComplete]]">
+    <news-nav id="nav" app-title="[[appTitle]]" page="[[page]]" categories="[[categories]]" category="[[category]]" language="[[language]]"
+      load-complete="[[loadComplete]]">
       [[articleHeadline]]
     </news-nav>
 
@@ -397,7 +432,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           offline="[[offline]]" failure="[[failure]]"></news-list>
         <!-- invalid top level paths -->
         <news-path-warning name="path-warning"></news-path-warning>
-
       </iron-pages>
     </div>
     <footer>
@@ -432,17 +466,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           routeData: Object,
           categories: {
-            type: Array,
+            type: Object,
             notify: true
           },
           categoryName: {
             type: String,
             notify: true
           },
+          languages: {
+            type: Array,
+            notify: true
+          },
+          language: {
+            type: String,
+            notify: true,
+            observer: 'changeLanguage'
+          },
           category: {
             type: Object,
             notify: true,
             //  observer: '_log'
+          },
+          popUp: {
+            type: Boolean,
+            value: false
+          },
+          change: {
+            type: Boolean,
+            value: true
           },
           offline: {
             type: Boolean,
@@ -473,6 +524,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       static get observers() {
         return [
           '_routePageChanged(routeData.page, isAttached)',
+          '_subRoutePageChanged(subroute, isAttached)',
         ]
       }
 
@@ -510,6 +562,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.isAttached = true;
       }
 
+      _subRoutePageChanged(data) {
+        if (this.change === true) {
+          this.liveNow = this.categories[this.language][0].liveNow
+          this.$.player.videoId = this.categories[this.language][0].videoId
+          this.change = false
+        }
+
+        setTimeout(() => {
+          if (this.query.url === undefined && this.popUp === false) {
+            Polymer.AppLayout.scroll({ top: 55, behavior: 'silent' });
+            setTimeout(() => {
+              Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
+            }, 50)
+          }
+          this.popUp = false
+        }, 100)
+      }
+
       _routePageChanged(page, isAttached) {
         if (!isAttached) {
           return;
@@ -519,37 +589,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.set('route.path', 'news/General');
           return;
         }
-        // console.log('subroute', page)
+        // console.log('subroute', page) 
         if (page === 'video') {
           this.$.player.pause = true
-          this.video = true
-          this.$.video.videoId = this.subroute.path.slice(1, this.subroute.path.length)
-          setTimeout(() => {
-            window.history.pushState({}, null, this.page + '/' + this.category.name)
-          }, 100)
+          // this.video = true
+          this.$.player.videoId = this.subroute.path.slice(1, this.subroute.path.length)
+          this.$.player.pause = false
+          history.pushState({}, null, this.page + '/' + this.category.name)
+          window.dispatchEvent(new CustomEvent('location-changed'));
         } else if (page !== this.page && !this.query.url) {
-          //console.log('this.page', this.categoryName)
           this.video = this.video === true ? !this.video : this.video
           this.page = page || 'news';
           this.categoryName = this.subroute.path.split('/').join('')
-
         }
 
         setTimeout(() => {
           if (this.query.url && this.query.url.length > 0) {
             window.open(this.query.url, "_blank", "toolbar=yes,top=70,left=100,width=800,height=800")
-            //  console.log(this.page + '/' + this.category.name)
-            history.pushState({}, null, this.page + '/' + this.category.name + '?url=""')
-            window.dispatchEvent(new CustomEvent('location-changed'));
+            this.query.url = ''
             history.pushState({}, null, this.page + '/' + this.category.name)
+            this.popUp = true
+            window.dispatchEvent(new CustomEvent('location-changed'));
           }
         }, 100)
-        Polymer.AppLayout.scroll({ top: 55, behavior: 'silent' });
-        setTimeout(() => {
-          Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
-        }, 50)
         // Close the drawer - in case the *route* change came from a link in the drawer.
         this.$.nav.closeDrawer();
+      }
+
+      changeLanguage(data) {
+        if (this.page !== undefined) {
+          console.log('this.categoryName =', this.categories[data][1].name)
+          window.history.pushState({}, null, this.page + '/' + this.categories[data][1].name)
+          window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+      }
+
+      calculateLang(data) {
+        this.change = true
+        this.language = data.model.item.name
+        console.log(data)
       }
 
       closeVideo() {

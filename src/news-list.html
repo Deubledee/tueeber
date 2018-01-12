@@ -11,7 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../public/bower_components/polymer/polymer-element.html">
 <link rel="import" href="../public/bower_components/app-route/app-route.html">
 <link rel="import" href="../public/bower_components/app-layout/app-grid/app-grid-style.html">
-
 <link rel="import" href="../public/components/news-list-featured-item.html">
 <link rel="import" href="../public/components/news-list-item.html">
 <link rel="import" href="../public/components/news-side-list.html">
@@ -166,33 +165,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h2> Latest </h2>
         <news-list-featured-item items="[[featured]]">
         </news-list-featured-item>
-        <ul class="app-grid article-grid fade-in" fadeIn$="[[fadeIn]]">
-          <template is="dom-repeat" id="[[ide]]" items="{{topStories}}" as="item" mutableData>
-            <li>
-              <news-list-item item="[[item]]"></news-list-item>
-            </li>
-          </template>
-        </ul>
-
+        <news-list-item items="{{topStories}}" class="fade-in" fadeIn$="[[fadeIn]]">
+        </news-list-item>
         <div class="content1">
           <h1> Previous News</h1>
         </div>
-        <news-previous id="previous" serach="[[search]] " sources="[[sources]]" query="[[query]]" lang="[[lang]]" from="[[from]]"
-          to="[[to]]">
+        <news-previous id="previous" plus-ten="{{plusTen}}">
           <ul class="opinions-grid fade-in" fadeIn$="[[fadeIn]]">
-
           </ul>
+          <paper-button>
+            <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+            <div> [[plusTen]]</div>
+          </paper-button>
         </news-previous>
-      </div>
-      <aside>
-        <div class="ad-container">
-          <news-gpt-ad id="ad_slot_1" ad-unit-path="/6355419/Travel/Europe/France/Paris" ad-width="300" ad-height="250"></news-gpt-ad>
-        </div>
         <news-side-list class="" items="[[mostRead]]">
           Most Read
         </news-side-list>
         <news-side-list class="" featured items="[[moreTopStories]]">
           More Top Stories
+          </news-side-list-->
+      </div>
+      <aside>
+
+        <news-side-list class="" items="[[mostRead]]">
+          sponsored
+        </news-side-list>
+        <news-side-list class="" items="[[mostRead]]">
+          blogs
+        </news-side-list>
+        <news-side-list class="" featured items="[[moreTopStories]]">
+          adds
+          <div class="ad-container">
+            <news-gpt-ad id="ad_slot_1" ad-unit-path="/6355419/Travel/Europe/France/Paris" ad-width="300" ad-height="250"></news-gpt-ad>
+          </div>
           </news-side-list-->
       </aside>
     </div>
@@ -233,6 +238,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Array,
             notify: true
           },
+          plusTen: {
+            type: String,
+            notify: true
+          },
           route: Object,
 
           category: {
@@ -254,13 +263,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: ''
           },
-           domains: {
+          domains: {
             type: String
           },
           sources: {
             type: String,
-           // value: 'google-news, fox-news, cbs-news, nbc-news, reuters, politico, the-washington-post',
-           // computed: 'computeSources(category)'
+            // value: 'google-news, fox-news, cbs-news, nbc-news, reuters, politico, the-washington-post',
+            // computed: 'computeSources(category)'
+          },
+          page: {
+            type: Number,
+            value: 1,
+            observer: 'changeFirst'
+          },
+          first: {
+            type: Number,
+            value: 1
           },
           lang: {
             type: Number,
@@ -273,7 +291,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           headLines: {
             type: Object,
-            computed: 'computeTopHeadLines(sources, query, from, to, lang, domains)',
+            computed: 'computeTopHeadLines(sources, query, from, to, lang, domains, page)',
             notify: true
           },
           videoData: {
@@ -282,7 +300,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: 'videoDataChanged'
           },
           routeData: Object,
-          loading: Boolean          
+          loading: Boolean
         }
       }
       ready() {
@@ -300,12 +318,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       computeSources(data) {
+        //   console.log(data)
         if (data !== null && data !== undefined) {
-          let sources = data.sources ? data.sources.join(', '): ''
+          let sources = data.sources ? data.sources.join(', ') : ''
           let domains = data.domains ? data.domains.join(', ') : ''
           let lang = data.lang ? data.lang.join(', ') : ''
-          console.log('computeSources', sources.toString())
-          console.log('computeSources domains', domains.toString())
+          let query = data.query ? data.query.join(', ') : ''
+          //  console.log('computeSources', sources.toString())
+          // console.log('computeSources domains', domains.toString())  
+          this.query = query
           this.domains = domains
           this.sources = sources
           this.lang = lang
@@ -324,16 +345,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.disconnectedCallback();
         window.removeEventListener('resize', this._boundResizeHandler);
       }
-
+      /*
+      *Faz o trigger da mudança de linguagem
+      */
       categoryChanged(data) {
-       // console.log(data)
+        // console.log('categoryName', data)
+        this.page = 1
         this.categoryName = data
+        this.first = 1
+        this.plusTen = '+ 10'
       }
 
       videoDataChanged(data) {
-       // console.log('featured', data)
+        // console.log('featured', data)
         if (data !== null && data !== undefined) {
-        //  console.log('featured', data.type)
+          // console.log('featured', data.type)
           this[data.type](data)
           this.search = false
           this.fadeIn = true
@@ -341,16 +367,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       everything(data) {
-        sessionStorage.setItem(this.routeData.category, data.arr);
-        let parsed = typeof data.arr === 'string' ? JSON.parse(data.arr): data.arr
-      //  console.log(typeof data.arr)
-       // console.log('topHeadLines', parsed.articles)
-        this.featured = parsed.articles.slice(0, 1)
-        this.topStories = parsed.articles.slice(1, 10)
-        this.$.previous.videoDataChanged(true, this.routeData.category)
+        // console.log('data', data.arr)
+        if (this.first === 1) {
+          let parsed = typeof data.arr === 'string' ? JSON.parse(data.arr) : data.arr
+          sessionStorage.setItem(this.routeData.category, data.arr);
+          this.featured = parsed.articles.slice(0, 1)
+
+          var articles = parsed.articles.map(item => {
+            item.show = true
+            return item
+          })
+          console.log('articles', articles)
+          this.topStories = articles.slice(1, 10)
+          this.first = 2
+          setTimeout(() => {
+            this.$.previous.videoDataChanged(true, this.routeData.category)
+          }, 200)
+        }
+        if (this.first === 2) {
+          this.page = 7
+          this.search = true
+          this.search = false
+          //console.log('data', this.first )
+        }
+        if (this.first >= 3) {
+          setTimeout(() => {
+            sessionStorage.setItem(this.routeData.category + 'more', data.arr);
+            this.$.previous.videoDataChanged(true, this.routeData.category + 'more')
+          }, 500)
+        }
       }
 
-      computeTopHeadLines(sources, query, from, to, lang, domains) {
+      changeFirst(data) {
+        // setTimeout(() => {
+        this.first = (this.first + 1)
+        // }, 100)
+      }
+
+      computeTopHeadLines(sources, query, from, to, lang, domains, page) {
         return {
           method: "everything",
           api: "everything",
@@ -360,7 +414,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           from: '',
           to: '',
           language: lang,
-          sortBy: 'publishedAt',         
+          sortBy: 'publishedAt',
+          page: page
         }
       }
 
@@ -372,26 +427,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._resizeDebouncer = Polymer.Debouncer.debounce(this._resizeDebouncer,
           Polymer.Async.timeOut.after(50), () => { this.updateStyles(); });
       }
-
-      _slice(list) {
-        // console.log(this.route)
-        if (this.route.prefix !== '/video' && list) {
-          console.log(this.route)
-        }
-      }
-
-
-      _createArray(data, begin, end) {
-        let temp = [data.slice(begin, end)]
-        temp = new Array(temp[0])
-        // console.log('data', temp)
-        return temp
-      }
-
-      _return(value) {
-        return value;
-      }
-
     }
 
     customElements.define(NewsList.is, NewsList);

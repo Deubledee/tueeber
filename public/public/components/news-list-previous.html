@@ -1,0 +1,168 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="news-img.html">
+
+<dom-module id="news-previous-item">
+
+  <template>
+
+    <style include="app-grid-style">
+      :host {
+        display: block;
+      }
+
+      a {
+        display: block;
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+        overflow: hidden;
+      }
+
+      news-img {
+        height: 150px;
+      }
+
+      h2 {
+        margin: 18px 0;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+      }
+
+      .category {
+        padding: 6px 20px 7px;
+        border: var(--app-border-style);
+        display: inline-block;
+        font-weight: bold;
+        font-size: 11px;
+      }
+
+      .category[hidden] {
+        visibility: hidden;
+        height: 0px;
+        margin-top: 0px;
+        padding: 0px;
+      }
+
+      .details {
+
+        font-size: 11px;
+        font-weight: bold;
+      }
+
+      .time-ago {
+        white-space: nowrap;
+      }
+
+      .author {
+        padding-left: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* mobile */
+
+      @media (max-width: 767px) {
+        news-img {
+          display: none;
+        }
+      }
+
+      /* desktop */
+
+      @media (min-width: 768px) {
+        :host([horizontal]) {
+          margin-bottom: 24px;
+        }
+
+        .category {
+          margin-top: 20px;
+        }
+      }
+
+      /* desktop large */
+
+      @media (min-width: 1310px) {
+        :host([horizontal]) a {
+          @apply --layout-horizontal;
+        }
+
+        :host([horizontal]) news-img {
+          min-width: 150px;
+          margin-right: 24px;
+        }
+
+        :host([horizontal]) .category {
+          display: none;
+        }
+      }
+
+
+    </style>
+        <li>
+          <a href$="news?url=[[item.url]]">
+            <news-img title="[[item.title]] [[item.source.name]]" src="[[_getItemImage(item.urlToImage)]]" alt="[[item.title]]"></news-img>
+            <div class="headline" title="[[item.title]] [[item.source.name]]">
+              <div class="category" hidden$="[[!item.source.name]]">[[item.source.name]]</div>
+              <h2>[[ _unescapeText(item.title)]]</h2>             
+              <div class="details" title="Author: [[item.author]] src: [[item.source.name]] [[item.publishedAt]]">
+                <div class="author" hidden$="[[!item.author]]"> Author: [[item.author]] </div>
+                <div class="author" hidden$="[[!item.source.id]]"> src: [[item.source.id]]</div>
+                <div class="author"> [[item.publishedAt]]</div>
+              </div>
+            </div>
+          </a>
+        </li> 
+  </template>
+
+  <script>   
+    class newsPreviousItem extends Polymer.Element {
+
+      static get is() { return 'news-previous-item'; }
+
+      static get properties() {
+        return {
+          item: {
+            type: Object,
+            notify: true,
+            // observer: '_log'
+          }
+        }
+      }
+
+      _unescapeText(text) {
+        textarea.innerHTML = text;
+        return textarea.textContent;
+      }
+
+      _getItemImage(item) {
+        return item || 'public/images/news-icon-512.png';
+      }
+
+      _log(data) {
+        console.log('log list items', data)
+      }
+
+      showDescription(data) {
+        console.log(data)
+        data.model.item.show = true
+      }
+    }
+
+    customElements.define(newsPreviousItem.is, newsPreviousItem);
+
+  </script>
+
+</dom-module>

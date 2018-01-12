@@ -5,46 +5,21 @@ const querystring = require('querystring');
 /* GET home page. */
 const apiKey = '16bb1647c69145dc8a5c8f18373cd2cf'
 const Newsapi = new NewsAPI(apiKey);
+
 function from () {
-    let d = new Date()
-    let month = (d.getMonth() + 1)
-    let day = (d.getDay())
-    let year = d.getFullYear()
-    if (month % 2 === 0) {
-      if (day === 1) {
-        if (month === 3) {
-          // day = febuaryDAy()
-          month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
-        } else {
-          day = 29
-          month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
-        }
-      } else {
-        day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`) : (day - 2)
-      }
-
-    } else {
-      if (month === 1 && day === 1) {
-        year = year - 1
-        day = 30
-        month = 12
-      } else {
-        if (day === 1) {
-          day = 31
-          month = (month - 1) < 10 ? parseInt(`0${(month - 1)}`) : (month - 1)
-        } else {
-          day = (day - 2) < 10 ? parseInt(`0${(day - 2)}`) : (day - 2)
-        }
-      }
-    }
-    let yesdtaerday = `${year}-${month}-${day}`
-    return yesdtaerday
-  }
-
+  let date = new Date();
+  let yesterday = date - 1000 * 60 * 60 * 24 * 2;
+  yesterday = new Date(yesterday);
+  yesterday = JSON.stringify(yesterday)
+  yesterday = yesterday.split('T')
+  yesterday = yesterday[0].split('-')
+  yesterday = `${yesterday[0]}-${yesterday[1]}-${yesterday[2]}`
+  return yesterday.replace(/\"/g, "")
+} 
 
 function to () {
     let d = new Date()
-    var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDay()
+    var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
     return today
   }
 

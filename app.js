@@ -45,21 +45,22 @@ client.on('error', function (item) {
 
 //queries cached
 setInterval(() => {
-  client.keys('*sources*', function (err, result) {  
- //   console.log(result.length, i)
+  client.keys('*sources*', function (err, result) {
+    //   console.log(result.length, i)
     if (result.length > obj.cached.length) {
       obj.cached = []
       result.map((item) => {
         obj.cached.push(JSON.parse(item))
       })
+      console.log("result cached", result)
     }
-    if (result.length < obj.cached.length) {     
+    if (result.length < obj.cached.length && result.length !== obj.cached.length) {
       obj.cached.map((item) => {
-        newsapi(item, client, function (result) {
-          console.log("result updated", item)
-       }, true)
+        newsapi(item, client, function (resulto) {
+          console.log("result updated", result.length < obj.cached.length, result.length, obj.cached.length)          
+        }, true)
       })
-    }   
+    }
   })
 }
   , 5000)

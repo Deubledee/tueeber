@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="youtube-lite.html">
 <dom-module id="news-player">
-    <template> 
+    <template>
         <style>
             :host {
                 width: 100%;
@@ -79,10 +79,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 margin: 1px;
                 min-height: 20px;
                 margin-bottom: 0px;
-                width: 25px;
+                width: 52px;
                 overflow-y: hidden;
+                text-overflow: hidden;
                 text-transform: initial;
-
+                overflow-x: hidden;
             }
 
             .flex-vertical {
@@ -121,60 +122,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div id="content" class="content" open$="[[open]]" on-click="openThisShit">
             <div id="up" class="playing  container flex-horizontal" open$="[[open]]">
-                <paper-button class="flexchild-vertical" on-click="_fox">
-                    Fox
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_cnn">
-                    CNN
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_abc">
-                    ABC
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_bbc">
-                    BBC
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_sky">
-                    Sky
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_n3Sports">
-                    N3 Sports
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_snookerLive">
-                    Snooker
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_esperss">
-                    Express
-                </paper-button>
-
-                <paper-button class="flexchild-vertical" on-click="_france24">
-                    France24
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_alJazeera">
-                    AlJazeera
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_onlineNews">
-                    BBTSIP
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_nasa">
-                    Nasa
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_bloomberg">
-                    Bloomberg
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_euronews">
-                    Euronews
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_newsmax">
-                    Newsmax
-                </paper-button>
-                <paper-button class="flexchild-vertical" on-click="_nbc2">
-                    NBC2
-                </paper-button>
+                <template is="dom-repeat" items="{{sources}}" as="item">
+                    <paper-button class="flexchild-vertical" on-click="clicked" title="[[item.title]]">
+                        [[item.name]]
+                    </paper-button>
+                </template>
             </div>
             <youtube-lite id="player" class="player" video-id="{{videoId}}"></youtube-lite>
             <div id="down" class="playingB" open$="[[open]]"></div>
     </template>
     <script>
+        let sourcesList = [
+            { title: 'Fox news', name: 'Fox', source: 'uwM3GqJtU0k', channelId: 'UCOqCZ6TOnYKuKX4B18hyxWg' },            
+            { title: 'CNN news',name: 'CNN', source: 'sWyvjf2USlw', channelId: 'UCef1-8eOpJgud7szVPlZQAQ' },
+            { title: 'Euronews',name: 'Euronews', source: 'xAE4xX8Izvo', channelId: 'UCSrZ3UV4jOidv8ppoVuvW9Q' },
+            { title: 'Euronews Portugal',name: 'Euro...Pt', source: 'SyA-D7NUGvw', channelId: 'UCSrZ3UV4jOidv8ppoVuvW9Q' },            
+            { title: 'Sky News',name: 'Sky', source: 'XOacA3RYrXk', channelId: 'UCoMdktPbSTixAyNGwb-UYkQ' },
+            { title: 'TV2 Australia',name: 'TV2 AU', source: 'hfFLNPzQn6w', channelId: 'UCO7e_DD3X2ZqOyp4DCFgEXQ' },
+            { title: 'Bloomberg',name: 'Bloomberg', source: 'Ga3maNZ0x0w', channelId: 'UCUMZ7gohGI9HcU9VNsr2FJQ' },
+            { title: 'Express news',name: 'Express', source: '_-jyVPai8Po', channelId: 'UCTur7oM6mLL0rM2k0znuZpQ' },
+            { title: 'France24',name: 'France24', source: '9c_Bac-17Rk', channelId: 'UCQfwfsi5VrQ8yKZ-UWmAEFg' },
+            { title: 'Aljazeera',name: 'Aljazeera', source: 'nVHt1_SWTZg', channelId: 'UCNye-wNBqNL5ZzHSJj3l8Bg' },
+            { title: 'Newsmax',name: 'Newsmax', source: 'FbjHJD5iVJU', channelId: 'UCx6h-dWzJ5NpAlja1YsApdg' },
+            { title: 'NBC2 news',name: 'NBC2', source: '_egSTyWb1gk', channelId: 'UCIYVU7fPs_n6gJIBso3ryeg' },
+            { title: 'N3 Sports',name: 'N3 Sports', source: 'Hsj9s_RGU8c', channelId: 'UC4zbuZwiQxQ53v6LtG69LMw' },
+            { title: 'BDODarts chanpionship live',name: 'BDODarts', source: 'ml9iKlbPBoo', channelId: 'UC4zbuZwiQxQ53v6LtG69LMw' },
+            { title: 'NASA Space Station live feed',name: 'NASA', source: 'RtU_mdL2vBM', channelId: 'UCIR_LPmEQ9QHR0yB2lxgaxQ' },
+        ]
         class newsPlayer extends Polymer.Element {
             static get is() {
                 return 'news-player';
@@ -201,18 +175,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     },
                     videoId: {
                         type: String,
-                        value: "uwM3GqJtU0k",
-                        notify: true
+                        notify: true,
+                        observer: 'calculateSource'
                     },
                     liveNow: {
                         type: String,
                         notify: true,
-                        value: 'fox'
                     },
                     pause: {
                         type: Boolean,
                         notify: true,
                         observer: '_pause'
+                    },
+                    sources: {
+                        type: Array,
+                        value: sourcesList
                     }
                 }
             }
@@ -230,87 +207,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
 
-            _cnn() {
-                this.videoId = 'TIrxBGM8ifA'
-                this.$.player.$.player.play()
-                this.liveNow = 'cnn'
+            clicked(data) {
+                this.calculateSource(data.model.item.source)
+                this.liveNow = data.model.item.name
             }
 
-            _fox() {
-                this.videoId = 'uwM3GqJtU0k'
+            calculateSource(data) {
+                // console.log('calculateSource', data.model.item)
+                this.videoId = data
                 this.$.player.$.player.play()
-                this.liveNow = 'fox'
-            }
-
-            _sky() {
-                this.videoId = 'XOacA3RYrXk'
-                this.$.player.$.player.play()
-                this.liveNow = 'sky'
-            }
-            _bbc() {
-                this.videoId = 'HXeGpCFGu-k'
-                this.$.player.$.player.play()
-                this.liveNow = 'bbc'
-            }
-            _esperss() {
-                this.videoId = 'ZntopWITxYg'
-                this.$.player.$.player.play()
-                this.liveNow = 'esperss'
-            }
-            _abc() {
-                this.videoId = 'BAvMpdOckR8'
-                this.$.player.$.player.play()
-                this.liveNow = 'abc'
-            }
-            _n3Sports() {
-                this.videoId = 'IrKzxERBa-c'
-                this.$.player.$.player.play()
-                this.liveNow = 'n3 Sports'
-            }
-            _snookerLive() {
-                this.videoId = 'EfVWJo7DUiQ'
-                this.$.player.$.player.play()
-                this.liveNow = 'snooker Live'
-            }
-            _france24() {
-                this.videoId = '9c_Bac-17Rk'
-                this.$.player.$.player.play()
-                this.liveNow = 'france24'
-            }
-            _alJazeera() {
-                this.videoId = 'nVHt1_SWTZg'
-                this.$.player.$.player.play()
-                this.liveNow = 'alJazeera'
-            }
-            _onlineNews() {
-                this.videoId = 'bqanTi-fz9o'
-                this.$.player.$.player.play()
-                this.liveNow = 'bbbtsip'
-            }
-            _bloomberg() {
-                this.videoId = 'Ga3maNZ0x0w'
-                this.$.player.$.player.play()
-                this.liveNow = 'bloomberg'
-            }
-            _euronews() {
-                this.videoId = '3Dhtg0GWpbU'
-                this.$.player.$.player.play()
-                this.liveNow = 'euronews'
-            }
-            _nasa() {
-                this.videoId = 'RtU_mdL2vBM'
-                this.$.player.$.player.play()
-                this.liveNow = 'nasa'
-            }
-            _newsmax() {
-                this.videoId = 'FbjHJD5iVJU'
-                this.$.player.$.player.play()
-                this.liveNow = 'newsmax'
-            }
-            _nbc2() {
-                this.videoId = '_egSTyWb1gk'
-                this.$.player.$.player.play()
-                this.liveNow = 'nbc2'
             }
         }
         window.customElements.define(newsPlayer.is, newsPlayer);

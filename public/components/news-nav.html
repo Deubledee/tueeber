@@ -19,14 +19,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-media-query query="max-width: 767px" query-matches="{{_smallScreen}}"></iron-media-query>
 
-    <news-header
-        app-title="[[appTitle]]"
-        page="[[page]]"
-        categories="[[categories]]"
-        category="[[category]]"
-        small-screen="[[_smallScreen]]"
-        drawer-opened="{{_drawerOpened}}"
-        number="[[threshold]]">        
+    <news-header app-title="[[appTitle]]" page="[[page]]" categories="[[categories]]" category="[[category]]" small-screen="[[_smallScreen]]"
+      drawer-opened="{{_drawerOpened}}" number="[[threshold]]" language="[[language]]">
       <slot></slot>
     </news-header>
 
@@ -35,10 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     -->
     <dom-if if="[[_shouldRenderDrawer(_smallScreen, loadComplete)]]">
       <template>
-        <news-drawer
-            categories="[[categories]]"
-            category="[[category]]"
-            drawer-opened="{{_drawerOpened}}">
+        <news-drawer categories="[[categories]]" category="[[category]]" drawer-opened="{{_drawerOpened}}">
         </news-drawer>
       </template>
     </dom-if>
@@ -52,33 +43,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get is() { return 'news-nav'; }
 
-      static get properties() { return {
+      static get properties() {
+        return {
 
-        appTitle: String,
+          appTitle: String,
 
-        page: String,
+          page: String,
 
-        categories: Array,
+          categories: Object,
 
-        category: Object,
+          category: Object,
 
-        loadComplete: Boolean,
+          language: {
+            type: String,
+            notify: true
+          },
 
-        threshold: {
-          type: Number,
-          notify: true,
-          value: '', 
-         // observer: 'log'
-        },
+          loadComplete: Boolean,
 
-        _smallScreen: Boolean,
+          threshold: {
+            type: Number,
+            notify: true,
+            value: '',
+            // observer: 'log'
+          },
 
-        _drawerOpened: Boolean
+          _smallScreen: Boolean,
 
-      }}
+          _drawerOpened: Boolean
 
-      log(data){
-        console.log(data)
+        }
+      }
+
+      log(data) {
+        console.log('nav', data)
       }
 
       closeDrawer() {

@@ -231,7 +231,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           will-change: transform;
           z-index: -1;
           padding-top: 20px;
-          padding-bottom: 40px;         
+          padding-bottom: 40px;
         }
 
         .grid-container {
@@ -277,30 +277,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!--
       Sticky nav reveals when scrolled down on the page.
     -->
-    <app-box role="banner" class="sticky-nav" threshold="[[threshold]]">   
-        <app-toolbar class="sticky-nav-toolbar">
-          <paper-icon-button arial-label="Main navigation" icon="[[_menuIcon(drawerOpened)]]" on-click="_toggleDrawer"></paper-icon-button>
-          <div class="sticky-nav-center">
-            <div class="logo">
-              <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
-            </div>
-            <div class="date-line" role="heading">
-              [[category.title]]
-              <span aria-hidden="true">&nbsp; &middot; &nbsp;</span> [[_currentTime()]]
-            </div>
-            <div class="article-headline">
-              <slot></slot>
-            </div>
+    <app-box role="banner" class="sticky-nav" threshold="[[threshold]]">
+      <app-toolbar class="sticky-nav-toolbar">
+        <paper-icon-button arial-label="Main navigation" icon="[[_menuIcon(drawerOpened)]]" on-click="_toggleDrawer"></paper-icon-button>
+        <div class="sticky-nav-center">
+          <div class="logo">
+            <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
           </div>
-          <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
-          <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
-        </app-toolbar>  
-     
+          <div class="date-line" role="heading">
+            [[category.title]]
+            <span aria-hidden="true">&nbsp; &middot; &nbsp;</span> [[_currentTime()]]
+          </div>
+          <div class="article-headline">
+            <slot></slot>
+          </div>
+        </div>
+        <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
+        <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
+      </app-toolbar>
+
       <div class="sticky-nav-menu" shown$="[[drawerOpened]]">
         <iron-selector class="grid-container" role="navigation" selected="[[category.name]]" attr-for-selected="name">
-          <dom-repeat items="[[categories]]" as="category" initial-count="9">
+          <dom-repeat items="[[items]]" as="item" initial-count="9" mutableData>
             <template>
-              <a name="[[category.name]]" href="/news/[[category.name]]">[[category.title]]</a>
+              <a name="[[item.name]]" href="/news/[[item.name]]">[[item.title]]</a>
             </template>
           </dom-repeat>
         </iron-selector>
@@ -325,10 +325,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true
           },
 
-          categories: Array,
-
-          category: Object,
-
+          categories: {
+            type: Object,
+           // observer: '_log'
+          },
+          language: {
+            type: String,
+            notify: true
+          },
+          category: {
+            type: Object,
+            // observer: '_log'
+          },
+          items: {
+            type: Array,
+            notify: true,
+            computed: 'computeCategories(categories, language)'
+          },
           smallScreen: {
             type: Boolean,
             notify: true
@@ -351,6 +364,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
 
         }
+      }
+
+      computeCategories(data, lang) {
+       //this.items = data[this.language]
+        //console.log('header', data[lang])
+        return data[lang]
       }
 
       _menuIcon(drawerOpened) {
