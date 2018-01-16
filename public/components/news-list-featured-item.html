@@ -161,6 +161,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 38px;
           line-height: 48px;
         }
+        .headline {
+          width: 48%;
+        }
 
         news-img {
           @apply --layout-fit;
@@ -216,10 +219,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _unescapeText(text) {
-          textarea.innerHTML = text;
-          return textarea.textContent;
-        }
-        _getItemImage(item) {
+        textarea.innerHTML = text;
+        return textarea.textContent;
+      }
+      _getItemImage(item) {
         return item || 'public/images/news-icon-512.png';
       }
       _log(data) {

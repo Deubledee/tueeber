@@ -1,0 +1,37 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<dom-module id="news-slide">
+    <template>
+        <style>
+
+        </style>
+    </template>
+    <script>
+        class newsSlide extends Polymer.Element {
+            static get is() {
+                return 'news-slide'
+            }
+            static get properties() {
+                return {
+                    item: {
+                        type: Array,
+                        notify: true,
+                       // observer: 'log'
+                    }
+                }
+            }
+
+            ready() {
+                super.ready()
+            } 
+
+            log(data) {
+                console.log('image', data)
+            }
+
+            _seethisshit() {
+                window.scrollTo({}, 0)
+            }
+        }
+        window.customElements.define(newsSlide.is, newsSlide);
+    </script>
+</dom-module>

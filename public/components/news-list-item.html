@@ -121,9 +121,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-button {
         height: 20px;
         padding-left: 45px;
-        left: 70%;
+        left: 60%;
         padding-right: 1px;
         margin-top: -10px;
+      }
+
+      paper-button.diferent {
+        height: 20px;
+        padding-left: 25px;
+        left: 70%;
+        padding-right: 1px;
+        margin-top: -20px;
       }
 
       .description {
@@ -143,6 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-top: 0px;
         padding: 0px;
       }
+
       .article-grid,
         {
         margin: 0;
@@ -188,19 +197,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
     </style>
-
     <ul class="app-grid article-grid">
       <template is="dom-repeat" id="[[ide]]" items="{{items}}" as="item" mutableData>
         <li>
-          <a href$="news?url=[[item.url]]">
+          <a href$="news/[[categoryName]]?urlToImage=[[item.urlToImage]]&discription=[[_unescapeText(item.description)]]&title=[[_unescapeText(item.title)]]">
             <news-img title="[[item.title]] [[item.source.name]]" src="[[_getItemImage(item.urlToImage)]]" alt="[[item.title]]">
             </news-img>
-            <div class="headline" title="[[item.title]] [[item.source.name]]">
-              <div class="category" hidden$="[[!item.source.name]]">[[item.source.name]]</div>
-              <h2>[[ _unescapeText(item.title)]]</h2>
-            </div>
           </a>
           <div class="headline" title="[[item.title]] [[item.source.name]]">
+            <div class="category" hidden$="[[!item.source.name]]">
+              [[item.source.name]]
+            </div>
+            <h2>[[ _unescapeText(item.title)]]</h2>
+          </div>
+          <div class="headline" title="[[item.title]] [[item.source.name]]">
+            <a href$="news?url=[[item.url]]">
+              <iron-icon icon="link"></iron-icon>
+            </a>
             <paper-button on-click="showDescription">
               <iron-icon icon="hardware:keyboard-arrow-up" hidden$="{{item.show}}"></iron-icon>
               <iron-icon icon="hardware:keyboard-arrow-down" hidden$="{{!item.show}}"></iron-icon>
@@ -231,7 +244,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Array,
             notify: true,
             // observer: '_log'
-          }
+          },
+          categoryName: {
+            type: String,
+            //computed: '_return(routeData.category)',
+            notify: true
+          },
         }
       }
 

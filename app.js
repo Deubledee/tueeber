@@ -17,7 +17,12 @@ const server = new RedisServer({
   conf: 'redis.conf'
 });
 var obj = {
-  cached: []
+  everything: [],
+  topHeadLines: [],
+  date: function () {
+    let t = new date()
+    return t
+  }
 }
 server.open((err) => {
   if (err === null) {
@@ -35,35 +40,62 @@ client.on('connect', function (item) {
 client.on('error', function (item) {
   console.log('an eror ocurred', item)
 })
-
-
 /*
-  commands.list.forEach(function (command) {
-      console.log(command);
-    });
+commands.list.forEach(function (command) {
+  console.log(command);
+});
 */
+
+function update(pathName) {
+  let arr = obj[pathName]
+  arr.map((item) => {
+    newsapi(item, client, function (resulto) {
+      console.log("result updated", obj[pathName])
+    }, true, pathName)
+  })
+}
 
 //queries cached
 setInterval(() => {
-  client.keys('*sources*', function (err, result) {
+  let date = new Date()
+  if (date === (obj.date + 1000 * 60 * 60 * 24 * 1)) {
+    client.flushall((err, info) => {
+      console.log('flushall', err, info)
+      update('everything')
+      update('topHeadLines')
+      obj.date = date
+      obj.everything = [] 
+      obj.topHeadLines = []
+    })
+    console.log('date cahnged', date)
+  }
+  client.keys('*everything*', function (err, result) {
     //   console.log(result.length, i)
-    if (result.length > obj.cached.length) {
-      obj.cached = []
+    if (result.length > obj.everything.length) {
+      obj.everything = []
       result.map((item) => {
-        obj.cached.push(JSON.parse(item))
+        obj.everything.push(item)
       })
-      console.log("result cached", result)
+      console.log("result everything cached", result)
     }
-    if (result.length < obj.cached.length && result.length !== obj.cached.length) {
-      obj.cached.map((item) => {
-        newsapi(item, client, function (resulto) {
-          console.log("result updated", result.length < obj.cached.length, result.length, obj.cached.length)          
-        }, true)
+    if (result.length < obj.everything.length && result.length !== obj.everything.length) {
+      update('everything')
+    }
+  }) 
+   client.keys('*topHeadLines*', function (err, result) {
+    //   console.log(result.length, i)
+    if (result.length > obj.topHeadLines.length) {
+      obj.topHeadLines = []
+      result.map((item) => {
+        obj.topHeadLines.push(item)
       })
+      console.log("result topHeadLines cached", result)
+    }
+    if (result.length < obj.topHeadLines.length && result.length !== obj.topHeadLines.length) {
+      update('topHeadLines')
     }
   })
-}
-  , 5000)
+}, 5000)
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -82,18 +114,9 @@ app.use('/src', express.static(path.join(__dirname, 'src')));
 
 app.use('/', index);
 app.use('/news/*', index);
-app.use('/articles/*', index);
-app.use('/sports', index);
-app.use('/movies', index);
-app.use('/radio', index);
-app.use('/animation', index);
-app.use('/music', index);
-app.use('/technology', index);
-app.use('/channels', index);
-app.use('/finance', index);
-app.use('/leran', index);
-app.use('/teach', index);
-app.use('/comedy', index);
+app.use('/blog/*', index);
+app.use('/profile/*', index);
+
 //app.use('/newsapi', newsapi);
 //app.use('/youtube', youtube);
 app.get('/youtube/*', function (req, res) {
@@ -102,7 +125,9 @@ app.get('/youtube/*', function (req, res) {
   })
 })
 app.get('/newsapi/*', function (req, res, ) {
+//  console.log('/newsapi/*', req)
   newsapi(req, client, function (result) {
+    console.log('/newsapi/*')
     res.send(result)
   }, false)
 })

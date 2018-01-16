@@ -524,7 +524,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       static get observers() {
         return [
           '_routePageChanged(routeData.page, isAttached)',
-          '_subRoutePageChanged(subroute, isAttached)',
+          '_subRoutePageChanged(subroute, isAttached, query)',
         ]
       }
 
@@ -562,22 +562,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.isAttached = true;
       }
 
-      _subRoutePageChanged(data) {
-        if (this.change === true) {
+      _subRoutePageChanged(data, boll, query) {
+        if (this.change === true && !query.urlToImage) {
           this.liveNow = this.categories[this.language][0].liveNow
           this.$.player.videoId = this.categories[this.language][0].videoId
           this.change = false
         }
-
         setTimeout(() => {
-          if (this.query.url === undefined && this.popUp === false) {
+        //  console.log(this.query.url, this.popUp, !query.urlToImage)
+          if (this.query.url === undefined && this.popUp === false && !query.urlToImage) {
             Polymer.AppLayout.scroll({ top: 55, behavior: 'silent' });
             setTimeout(() => {
               Polymer.AppLayout.scroll({ top: 0, behavior: 'silent' });
             }, 50)
+          } else {
+            setTimeout(() => {
+              this.popUp = false
+            }, 1000)
           }
-          this.popUp = false
-        }, 100)
+        }, 200)
+        if (query !== undefined && !query !== null && query.urlToImage) {
+          this.popUp = true
+          let arr = new Array()
+          arr.push(query.urlToImage)
+          arr.push(query.description)
+          arr.push(query.title)
+          this.$.video.item = arr
+          this.video = true
+          setTimeout(() => {
+            window.history.pushState({}, null, this.page + '/' + this.category.name)            
+          }, 100)
+          this.query = {}
+        }
       }
 
       _routePageChanged(page, isAttached) {

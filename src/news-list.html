@@ -95,7 +95,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         aside {
           display: none;
         }
-
+        .content {
+          width: 100%
+        }
         .article-grid li,
         .opinions-grid li {
           border-bottom: var(--app-border-style);
@@ -142,6 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         .content {
           margin-right: 24px;
+          width: 77%
         }
 
         aside {
@@ -155,7 +158,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-route provides the name of the category.
     -->
     <app-route route="[[route]]" pattern="/:category" data="{{routeData}}"></app-route>
-    <news-search id="category" api="{{headLines}}" search="{{search}}" hide="true" video-data="{{videoData}}">
+    <news-search id="category" api="{{api}}" search="{{search}}" hide="true" video-data="{{videoData}}">
     </news-search>
     <div class="content1">
       <h1> [[category.title]]</h1>
@@ -178,23 +181,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div> [[plusTen]]</div>
           </paper-button>
         </news-previous>
-        <news-side-list class="" items="[[mostRead]]">
-          Most Read
-        </news-side-list>
-        <news-side-list class="" featured items="[[moreTopStories]]">
-          More Top Stories
-          </news-side-list-->
       </div>
       <aside>
 
         <news-side-list class="" items="[[mostRead]]">
-          sponsored
+          Top Headlines
         </news-side-list>
-        <news-side-list class="" items="[[mostRead]]">
+        <news-side-list class="" items="[[]]">
           blogs
         </news-side-list>
-        <news-side-list class="" featured items="[[moreTopStories]]">
-          adds
+        <news-side-list class="" featured items="[[]]">
+          moreTopStories
           <div class="ad-container">
             <news-gpt-ad id="ad_slot_1" ad-unit-path="/6355419/Travel/Europe/France/Paris" ad-width="300" ad-height="250"></news-gpt-ad>
           </div>
@@ -266,10 +263,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           domains: {
             type: String
           },
+          cat: {
+            type: String
+          },
+          country: {
+            type: String
+          },
+          method: {
+            type: String
+          },
           sources: {
-            type: String,
-            // value: 'google-news, fox-news, cbs-news, nbc-news, reuters, politico, the-washington-post',
-            // computed: 'computeSources(category)'
+            type: String
           },
           page: {
             type: Number,
@@ -289,9 +293,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: false,
             //  observer: '_log',
           },
-          headLines: {
+          api: {
             type: Object,
-            computed: 'computeTopHeadLines(sources, query, from, to, lang, domains, page)',
+            computed: 'computeSearch(sources, query, from, to, lang, domains, page, cat, country, method)',
             notify: true
           },
           videoData: {
@@ -309,30 +313,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get observers() {
         return [
-          'categoryChanged(routeData.category)'
+          'categoryPageChanged(routeData.category)'
         ]
       }
 
       _log(data) {
         console.log('list log', data)
-      }
-
-      computeSources(data) {
-        //   console.log(data)
-        if (data !== null && data !== undefined) {
-          let sources = data.sources ? data.sources.join(', ') : ''
-          let domains = data.domains ? data.domains.join(', ') : ''
-          let lang = data.lang ? data.lang.join(', ') : ''
-          let query = data.query ? data.query.join(', ') : ''
-          //  console.log('computeSources', sources.toString())
-          // console.log('computeSources domains', domains.toString())  
-          this.query = query
-          this.domains = domains
-          this.sources = sources
-          this.lang = lang
-          this.search = true
-          this.search = false
-        }
       }
 
       connectedCallback() {
@@ -345,10 +331,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.disconnectedCallback();
         window.removeEventListener('resize', this._boundResizeHandler);
       }
-      /*
-      *Faz o trigger da mudança de linguagem
-      */
-      categoryChanged(data) {
+
+      // Faz o trigger da mudança de linguagem \\
+      categoryPageChanged(data) {
         // console.log('categoryName', data)
         this.page = 1
         this.categoryName = data
@@ -356,8 +341,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.plusTen = '+ 10'
       }
 
+      computeSources(data) {
+        //   console.log(data)
+        if (data !== null && data !== undefined) {
+          data.method.map((item) => {
+            let par = 'compute' + item
+            this.computeEverything(data)
+          })
+        }
+      }
+
+      computeEverything(data) {
+        let sources = data.sources ? data.sources.join(', ') : ''
+        let domains = data.domains ? data.domains.join(', ') : ''
+        let lang = data.lang ? data.lang.join(', ') : ''
+        let query = data.query ? data.query.join(', ') : ''
+
+        this.method = data.method[0]
+        this.cat = ''
+        this.country = ''
+        this.query = query
+        this.domains = domains
+        this.sources = sources
+        this.lang = lang
+        this.search = true
+        this.search = false
+      }
+
+      computeTopHeadLines(data) {
+        let cat = data.category
+        let country = data.country
+        let lang = data.lang ? data.lang.join(', ') : ''
+
+        this.method = data.method[1]
+        this.cat = cat
+        this.country = country
+        this.query = ''
+        this.domains = ''
+        this.sources = ''
+        this.lang = lang
+        this.search = true
+        this.search = false
+      }
+
+      computeSearch(sources, query, from, to, lang, domains, page, cat, country, method) {
+        if (method === 'Everything') {
+          return {
+            method: "everything",
+            api: "everything",
+            sources: sources,
+            domains: domains,
+            q: query,
+            from: '',
+            to: '',
+            language: lang,
+            sortBy: 'publishedAt',
+            page: page
+          }
+        } else {
+          return {
+            method: "topHeadlines",
+            api: "topHeadlines",
+            sources: '',
+            q: '',
+            category: cat,
+            language: lang,
+            country: country
+          }
+        }
+      }
+
       videoDataChanged(data) {
-        // console.log('featured', data)
+        //  console.log('featured', data)
         if (data !== null && data !== undefined) {
           // console.log('featured', data.type)
           this[data.type](data)
@@ -372,12 +427,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           let parsed = typeof data.arr === 'string' ? JSON.parse(data.arr) : data.arr
           sessionStorage.setItem(this.routeData.category, data.arr);
           this.featured = parsed.articles.slice(0, 1)
-
           var articles = parsed.articles.map(item => {
             item.show = true
             return item
           })
-          console.log('articles', articles)
+          // console.log('articles', articles)
           this.topStories = articles.slice(1, 10)
           this.first = 2
           setTimeout(() => {
@@ -388,35 +442,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.page = 7
           this.search = true
           this.search = false
-          //console.log('data', this.first )
         }
         if (this.first >= 3) {
           setTimeout(() => {
             sessionStorage.setItem(this.routeData.category + 'more', data.arr);
             this.$.previous.videoDataChanged(true, this.routeData.category + 'more')
+            this.computeTopHeadLines(this.category)
           }, 500)
         }
+      }
+
+      topHeadLines(data) {
+        // console.log('data', data.arr)      
+        let parsed = typeof data.arr === 'string' ? JSON.parse(data.arr) : data.arr
+        var articles = parsed.articles.map(item => {
+          item.show = true
+          return item
+        })
+        this.mostRead = articles
       }
 
       changeFirst(data) {
         // setTimeout(() => {
         this.first = (this.first + 1)
         // }, 100)
-      }
-
-      computeTopHeadLines(sources, query, from, to, lang, domains, page) {
-        return {
-          method: "everything",
-          api: "everything",
-          sources: sources,
-          domains: domains,
-          q: query,
-          from: '',
-          to: '',
-          language: lang,
-          sortBy: 'publishedAt',
-          page: page
-        }
       }
 
       _tryReconnect() {
