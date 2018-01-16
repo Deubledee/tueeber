@@ -12,10 +12,10 @@ const responseTime = require('response-time')
 const redis = require('redis');
 const RedisServer = require('redis-server');
 var commands = require('redis-commands');
-const server = new RedisServer({
+/*const server = new RedisServer({
   port: 6379,
   conf: 'redis.conf'
-});
+});*/
 var obj = {
   everything: [],
   topHeadLines: [],
