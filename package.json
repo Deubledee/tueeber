@@ -13,7 +13,7 @@
     "jwks-rsa": "^1.2.1"
   },
   "scripts": {
-    "startNode": "node ./bin/www",
+    "start": "node ./bin/www",
     "startPrpl": "prpl-server --root . --config polymer.json --port 3000",
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
