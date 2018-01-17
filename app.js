@@ -10,7 +10,7 @@ const newsapi = require('./routes/newsapi');
 const app = express();
 const responseTime = require('response-time')
 const redis = require('redis');
-const RedisServer = require('redis-server');
+//const RedisServer = require('redis-server');
 var commands = require('redis-commands');
 /*const server = new RedisServer({
   port: 6379,
