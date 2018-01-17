@@ -24,14 +24,14 @@ var obj = {
     return t
   }
 }
-server.open((err) => {
+/*server.open((err) => {
   if (err === null) {
     // You may now connect a client to the Redis
     // server bound to `server.port` (e.g. 6379).
     console.log('server open')
   }
 });
-
+**/
 const client = redis.createClient();
 client.on('connect', function (item) {
   console.log('redis conected port: 6379')
