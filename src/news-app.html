@@ -393,7 +393,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="zaline1">
           <ul class="langContainer">
             <template is="dom-repeat" items="{{languages}}" as="item">
-              <li class="langItem" on-click="calculateLang"> {{item.name}} </li>
+              <li class="langItem" on-click="calculateLang" title="{{item.title}}">{{item.title}}</li>
             </template>
           </ul>
         </div>
@@ -428,7 +428,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="container">
       <iron-pages role="main" selected="[[page]]" attr-for-selected="name" fallback-selection="path-warning">
         <!-- list view of articles in a category -->
-        <news-list id="list" name="news" route="[[subroute]]" category-name="{{categoryName}}" category="{{category}}" loading="[[loading]]"
+        <news-list id="list" name="news" route="[[subroute]]" category-name="{{categoryName}}" category="{{category}}" loading="[[loading]]" language="{{language}}" change="{{change}}"
           offline="[[offline]]" failure="[[failure]]"></news-list>
         <!-- invalid top level paths -->
         <news-path-warning name="path-warning"></news-path-warning>
@@ -563,13 +563,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _subRoutePageChanged(data, boll, query) {
+        console.log(this.change)
         if (this.change === true && !query.urlToImage) {
+          console.log(this.language)
           this.liveNow = this.categories[this.language][0].liveNow
           this.$.player.videoId = this.categories[this.language][0].videoId
+          console.log(this.language, this.categories[this.language][0].videoId)
           this.change = false
         }
         setTimeout(() => {
-        //  console.log(this.query.url, this.popUp, !query.urlToImage)
+          //  console.log(this.query.url, this.popUp, !query.urlToImage)
           if (this.query.url === undefined && this.popUp === false && !query.urlToImage) {
             Polymer.AppLayout.scroll({ top: 55, behavior: 'silent' });
             setTimeout(() => {
@@ -590,7 +593,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.video.item = arr
           this.video = true
           setTimeout(() => {
-            window.history.pushState({}, null, this.page + '/' + this.category.name)            
+            window.history.pushState({}, null, this.page + '/' + this.category.name)
           }, 100)
           this.query = {}
         }
@@ -633,8 +636,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       changeLanguage(data) {
-        if (this.page !== undefined) {
-          console.log('this.categoryName =', this.categories[data][1].name)
+        if (this.page !== undefined && data !== undefined) {
+         // console.log('this.categoryName =', this.categories[data][1].name)
           window.history.pushState({}, null, this.page + '/' + this.categories[data][1].name)
           window.dispatchEvent(new CustomEvent('location-changed'));
         }
@@ -643,7 +646,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       calculateLang(data) {
         this.change = true
         this.language = data.model.item.name
-        console.log(data)
+       // console.log(data)
       }
 
       closeVideo() {

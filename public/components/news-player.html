@@ -128,26 +128,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-button>
                 </template>
             </div>
-            <youtube-lite id="player" class="player" video-id="{{videoId}}"></youtube-lite>
+            <youtube-lite id="player" class="player" video-id="{{video}}"></youtube-lite>
             <div id="down" class="playingB" open$="[[open]]"></div>
     </template>
     <script>
         let sourcesList = [
-            { title: 'Fox news', name: 'Fox', source: 'ceFBKpZCtuI', channelId: 'UCOqCZ6TOnYKuKX4B18hyxWg' },            
-            { title: 'CNN news',name: 'CNN', source: 'B1GcfWXHuZ8', channelId: 'UCef1-8eOpJgud7szVPlZQAQ' },
-            { title: 'Euronews',name: 'Euronews', source: 'xAE4xX8Izvo', channelId: 'UCSrZ3UV4jOidv8ppoVuvW9Q' },
-            { title: 'Euronews Portugal',name: 'Euron..Pt', source: 'KgMCuLACuMA', channelId: 'UCSrZ3UV4jOidv8ppoVuvW9Q' },            
-            { title: 'Sky News',name: 'Sky', source: 'XOacA3RYrXk', channelId: 'UCoMdktPbSTixAyNGwb-UYkQ' },
-            { title: 'TV2 Australia',name: 'TV2 AU', source: 'hfFLNPzQn6w', channelId: 'UCO7e_DD3X2ZqOyp4DCFgEXQ' },
-            { title: 'Bloomberg',name: 'Bloomberg', source: 'Ga3maNZ0x0w', channelId: 'UCUMZ7gohGI9HcU9VNsr2FJQ' },
-            { title: 'Express news',name: 'Express', source: '_-jyVPai8Po', channelId: 'UCTur7oM6mLL0rM2k0znuZpQ' },
-            { title: 'France24',name: 'France24', source: '9c_Bac-17Rk', channelId: 'UCQfwfsi5VrQ8yKZ-UWmAEFg' },
-            { title: 'Aljazeera',name: 'Aljazeera', source: 'nVHt1_SWTZg', channelId: 'UCNye-wNBqNL5ZzHSJj3l8Bg' },
-            { title: 'Newsmax',name: 'Newsmax', source: 'FbjHJD5iVJU', channelId: 'UCx6h-dWzJ5NpAlja1YsApdg' },
-            { title: 'NBC2 news',name: 'NBC2', source: '_egSTyWb1gk', channelId: 'UCIYVU7fPs_n6gJIBso3ryeg' },
-            { title: 'N3 Sports',name: 'N3 Sports', source: 'Hsj9s_RGU8c', channelId: 'UC4zbuZwiQxQ53v6LtG69LMw' },
-            { title: 'BDODarts chanpionship live',name: 'BDODarts', source: 'ml9iKlbPBoo', channelId: 'UC4zbuZwiQxQ53v6LtG69LMw' },
-            { title: 'NASA Space Station live feed',name: 'NASA', source: 'RtU_mdL2vBM', channelId: 'UCIR_LPmEQ9QHR0yB2lxgaxQ' },
+            { title: 'Fox news', name: 'Fox', source: 'ceFBKpZCtuI', channelId: 'UCOqCZ6TOnYKuKX4B18hyxWg' },
+            { title: 'CNN news', name: 'CNN', source: 'B1GcfWXHuZ8', channelId: 'UCef1-8eOpJgud7szVPlZQAQ' },
+            { title: 'NBC2 news', name: 'NBC2', source: '_egSTyWb1gk', channelId: 'UCIYVU7fPs_n6gJIBso3ryeg' },
+            { title: 'MSNBC news', name: 'MSNBC', source: 'ISJAbtn2l1A', channelId: 'UCIYVU7fPs_n6gJIBso3ryeg' },
+            { title: 'Euronews', name: 'Euronews', source: 'xAE4xX8Izvo', channelId: 'UCSrZ3UV4jOidv8ppoVuvW9Q' },
+            { title: 'Euronews Portugal', name: 'Euron..Pt', source: 'KgMCuLACuMA', channelId: 'UCSrZ3UV4jOidv8ppoVuvW9Q' },
+            { title: 'Sky News', name: 'Sky', source: 'XOacA3RYrXk', channelId: 'UCoMdktPbSTixAyNGwb-UYkQ' },
+            { title: 'TV2 Australia', name: 'TV2 AU', source: 'hfFLNPzQn6w', channelId: 'UCO7e_DD3X2ZqOyp4DCFgEXQ' },
+            { title: 'Bloomberg', name: 'Bloomberg', source: 'Ga3maNZ0x0w', channelId: 'UCUMZ7gohGI9HcU9VNsr2FJQ' },
+            { title: 'Express news', name: 'Express', source: '_-jyVPai8Po', channelId: 'UCTur7oM6mLL0rM2k0znuZpQ' },
+            { title: 'France24', name: 'France24', source: '9c_Bac-17Rk', channelId: 'UCQfwfsi5VrQ8yKZ-UWmAEFg' },
+            { title: 'Aljazeera', name: 'Aljazeera', source: 'nVHt1_SWTZg', channelId: 'UCNye-wNBqNL5ZzHSJj3l8Bg' },
+            { title: 'Newsmax', name: 'Newsmax', source: 'FbjHJD5iVJU', channelId: 'UCx6h-dWzJ5NpAlja1YsApdg' },
+            { title: 'N3 Sports', name: 'N3 Sports', source: 'Hsj9s_RGU8c', channelId: 'UC4zbuZwiQxQ53v6LtG69LMw' },
+            { title: 'BDODarts chanpionship live', name: 'BDODarts', source: 'ml9iKlbPBoo', channelId: 'UC4zbuZwiQxQ53v6LtG69LMw' },
+            { title: 'NASA Space Station live feed', name: 'NASA', source: 'RtU_mdL2vBM', channelId: 'UCIR_LPmEQ9QHR0yB2lxgaxQ' },
         ]
         class newsPlayer extends Polymer.Element {
             static get is() {
@@ -172,6 +173,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         type: Boolean,
                         value: false,
                         notify: true
+                    },
+                    timeputs: {
+                        type: Object,
+                        value: function () {
+                            return {
+                                time1: null,
+                                time2: null
+                            }
+                        }
+                    },
+                    video: {
+                        type: String,
+                        notify: true,
                     },
                     videoId: {
                         type: String,
@@ -213,9 +227,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             calculateSource(data) {
-                // console.log('calculateSource', data.model.item)
-                this.videoId = data
-                this.$.player.$.player.play()
+                this.$.player.$.player.pause()
+                if (this.timeputs.time1 !== null) {
+                    clearTimeout(this.timeputs.time1)
+                    clearTimeout(this.timeputs.time2)
+                    this.timeputs.time1 = null
+                    this.timeputs.time2 = null
+                }
+
+                this.timeputs.time1 = setTimeout(() => {
+                    this.video = data                    
+                }, 2000)
+
+                this.timeputs.time2 = setTimeout(() => {
+                    this.$.player.$.player.play()
+                }, 2500)
             }
         }
         window.customElements.define(newsPlayer.is, newsPlayer);

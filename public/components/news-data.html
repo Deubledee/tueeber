@@ -16,16 +16,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function () {
 
       let langList = [
-        { name: 'enUs', title: 'en/Us' },
-        { name: 'enUk', title: 'en/Uk' },
-        { name: 'enAu', title: 'en/Au' },
+        { name: 'us', title: 'en/Us' },
+        { name: 'uk', title: 'en/Uk' },
+        { name: 'au', title: 'en/Au' },
         { name: 'pt', title: 'pt' },
-        { name: 'ptBr', title: 'pt/Br' },
+        { name: 'br', title: 'pt/Br' },
       ]
 
       let categoryList =
         {
-          enUs: [
+          us: [
             { liveNow: 'Fox', videoId: 'ceFBKpZCtuI' },
             { name: 'General', method: ['Everything', 'TopHeadLines' ], title: 'General', category: 'general', country:'us', lang: ['en'], domains: ['npr.org'], sources: ['fox-news', 'newsweek', 'cbs-news', 'new-york-magazine', 'reuters', 'politico', 'the-washington-post', 'time'] },
             { name: 'Sports', method: ['Everything', 'TopHeadLines'], title: 'Sports', category: 'general', country:'us', lang: ['en'],  domains: [''], sources:['nhl-news', 'nfl-news', 'espn-cric-info', 'bleacher-report', 'fox-sports'] },
@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             { name: 'Science', method: ['Everything', 'TopHeadLines'], title: 'Science', category: 'general', country:'us', lang: ['en'],  domains: [''], sources:['nacional-geographic', 'next-big-future', 'new-scientist'] },
             { name: 'Business&Finance', method: ['Everything', 'TopHeadLines'], title: 'Business & Finance', category: 'general', country:'us', lang: ['en'],  domains: [''], sources:['cnbc', 'Bloomberg', 'the-wall-street-journal', 'business-insider', 'the-economist'] }
           ],
-          enUk: [
+          uk: [
             { liveNow: 'Sky', videoId: 'XOacA3RYrXk' },
             { name: 'General-uk', method: ['Everything', 'TopHeadLines'], title : 'General UK', category: 'general', country:'gb', lang: ['en'],  domains: [''], sources:['mirror', 'independent', 'metro', 'the-telegraph', 'bbc-news', 'daily-mail'] },
             { name: 'Sports-uk', method: ['Everything', 'TopHeadLines'], title : 'Sports UK', category: 'general', country:'gb', lang: ['en'],  domains: [''], sources:['four-four-tow', 'the-sport-bible', 'talksport'] },
@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             { name: 'Technology-uk', method: ['Everything', 'TopHeadLines'], title : 'Technology', category: 'general', country:'gb', lang: ['en'],  domains: [''], sources:['engadget', 'wired', 'techcrunch', 'hacker-news', 'the-verge', 'techradar'] },
             { name: 'Business&Finance-uk', method: ['Everything', 'TopHeadLines'], title : 'Business & Finance', category: 'general', country:'gb', lang: ['en'],  domains: [''], sources:['Bloomberg', 'buisiness-insider-uk', 'the-economist', 'financial-times'] }
           ],
-          enAu: [
+          au: [
             { liveNow: 'TV2 AU', videoId: 'hfFLNPzQn6w' },
             { name: 'General-au', method: ['Everything', 'TopHeadLines'], title : 'General AU', category: 'general', country:'au', lang: ['en'],  domains: [''], sources:['abc-news-au', 'news-com-au', 'the-guardian-au'] },
             { name: 'Sports-au', method: ['Everything', 'TopHeadLines'], title : 'Sports', category: 'general', country:'au', lang: ['en'],  domains: [''], sources:['four-four-tow', 'the-sport-bible', 'talksport'] },
@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             { name: 'Geral-pt', method: ['Everything'] , title : 'Geral PT', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], lang: ['pt'],  sources:[''] },
             { name: 'Desporto-pt', method: ['Everything'] , title : 'Desporto PT', domains: ['ojogo.pt', 'sapo.pt', 'publico.pt', 'cmjornal.pt',], lang: ['pt'], query: ['jogo'], sources:[''] },
           ],
-          ptBr: [
+          br: [
             { liveNow: 'EuronewsBr', videoId: 'SyA-D7NUGvw' },
             { name: 'Geral-br', method: ['Everything', 'TopHeadLines']  , title : 'Geral BR', domains: ['sapo.pt', 'cmjornal.pt', 'www.jn.pt', 'www.dn.pt'], category: 'general', country:'us', lang: ['pt'],  domains: [''], sources:[''] },
             { name: 'Desporto', method: ['Everything', 'TopHeadLines']  , title : 'Desporto', domains: ['ojogo.pt', 'publico.pt'], category: 'general', country:'us', lang: ['pt'],  domains: [''], sources:[''] },
@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             language: {
               type: String,
-              value: 'enUs',
+              value: 'us',
               notify: true,
             },
             previous: {

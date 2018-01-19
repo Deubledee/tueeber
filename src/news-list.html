@@ -246,7 +246,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: 'computeSources',
             notify: true
           },
-
+          language: {
+            type: String,
+            notify: true
+          },
+          change: {
+            type: Boolean,
+            notify: true
+          },
           offline: Boolean,
 
           failure: Boolean,
@@ -334,16 +341,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       // Faz o trigger da mudança de linguagem \\
       categoryPageChanged(data) {
-        // console.log('categoryName', data)
+        console.log('categoryName', data, this.language)
         this.page = 1
         this.categoryName = data
         this.first = 1
         this.plusTen = '+ 10'
+        var lang = data.indexOf('-') ? data.split('-')[1] : 'us'
+        if (this.language !== lang && typeof lang === 'string') {
+          let prefix = this.route.prefix, path = this.route.path   
+          window.history.pushState({}, null, '/')
+          window.dispatchEvent(new CustomEvent('location-changed')) 
+         /* this.change = true
+          this.change = false*/
+          this.change = true
+          this.language = lang
+          console.log('language', this.route, this.change, lang)
+        /*  setTimeout(() => {
+            window.history.pushState({}, null, prefix + path)
+            window.dispatchEvent(new CustomEvent('location-changed'))
+          }, 100)
+          this.categoryPageChanged(this.route.path.split('/')[0])*/
+        }
       }
 
       computeSources(data) {
         //   console.log(data)
-        if (data !== null && data !== undefined) {
+        if (data !== null && data !== undefined && data.method !== undefined) {
           data.method.map((item) => {
             let par = 'compute' + item
             this.computeEverything(data)

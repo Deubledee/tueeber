@@ -279,7 +279,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     -->
     <app-box role="banner" class="sticky-nav" threshold="[[threshold]]">
       <app-toolbar class="sticky-nav-toolbar">
-        <paper-icon-button arial-label="Main navigation" icon="[[_menuIcon(drawerOpened)]]" on-click="_toggleDrawer"></paper-icon-button>
+        <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
+        <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
         <div class="sticky-nav-center">
           <div class="logo">
             <a href="/" aria-label$="[[_computeAppHomeLabel(appTitle)]]">[[appTitle]]</a>
@@ -292,8 +293,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <slot></slot>
           </div>
         </div>
-        <paper-icon-button icon="mail" aria-label="Send by mail"></paper-icon-button>
-        <paper-icon-button icon="share" aria-label="Share on social networks"></paper-icon-button>
+
+        <paper-icon-button arial-label="Main navigation" icon="[[_menuIcon(drawerOpened)]]" on-click="_toggleDrawer"></paper-icon-button>
       </app-toolbar>
 
       <div class="sticky-nav-menu" shown$="[[drawerOpened]]">
@@ -327,7 +328,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           categories: {
             type: Object,
-           // observer: '_log'
+            // observer: '_log'
           },
           language: {
             type: String,
@@ -367,7 +368,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       computeCategories(data, lang) {
-       //this.items = data[this.language]
+        //this.items = data[this.language]
         //console.log('header', data[lang])
         return data[lang]
       }
