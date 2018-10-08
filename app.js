@@ -14,10 +14,10 @@ const youtube = require('./routes/youtube');
 const newsapi = require('./routes/newsapi');
 const app = express();
 const responseTime = require('response-time')
-/*const server = new RedisServer({
+const server = new RedisServer({
   port: 6379,
   conf: 'redis.conf'
-});*/
+});
 var obj = {
   everything: [],
   topHeadLines: [],
@@ -26,13 +26,13 @@ var obj = {
     return t
   }
 }
-/*server.open((err) => {
+server.open((err) => {
   if (err === null) {
     // You may now connect a client to the Redis
     // server bound to `server.port` (e.g. 6379).
     console.log('server open')
   }
-});*/
+});
 
 const client = redis.createClient(process.env.REDIS_URL)
 //const client = redis.createClient()
