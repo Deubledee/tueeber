@@ -1,8 +1,8 @@
 const express = require('express');
 const expressSession = require("express-session")
-var RedisStore = require('connect-redis')(expressSession);
+//var RedisStore = require('connect-redis')(expressSession);
 const redis = require('redis');
-const RedisServer = require('redis-server');
+//const RedisServer = require('redis-server');
 var commands = require('redis-commands');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -14,10 +14,10 @@ const youtube = require('./routes/youtube');
 const newsapi = require('./routes/newsapi');
 const app = express();
 const responseTime = require('response-time')
-const server = new RedisServer({
+/*const server = new RedisServer({
   port: 6379,
   conf: 'redis.conf'
-});
+});*/
 var obj = {
   everything: [],
   topHeadLines: [],
