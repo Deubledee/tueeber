@@ -1,0 +1,49 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - polymer-cli > web-component-tester > send > debug:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:hawk:20160119':
+    - youtube-node > request > hawk:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:hoek:20180212':
+    - youtube-node > request > hawk > hoek:
+        patched: '2018-12-05T05:11:57.297Z'
+    - youtube-node > request > hawk > boom > hoek:
+        patched: '2018-12-05T05:11:57.297Z'
+    - youtube-node > request > hawk > sntp > hoek:
+        patched: '2018-12-05T05:11:57.297Z'
+    - youtube-node > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:http-signature:20150122':
+    - youtube-node > request > http-signature:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:lodash:20180130':
+    - npm > cli-table2 > lodash:
+        patched: '2018-12-05T05:11:57.297Z'
+    - polymer-cli > web-component-tester > lodash:
+        patched: '2018-12-05T05:11:57.297Z'
+    - polymer-cli > web-component-tester > stacky > lodash:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:mime:20170907':
+    - polymer-cli > web-component-tester > send > mime:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:minimatch:20160620':
+    - redis-notifier > grunt-contrib-jshint > jshint > cli > glob > minimatch:
+        patched: '2018-12-05T05:11:57.297Z'
+    - redis-notifier > grunt-contrib-jshint > jshint > minimatch:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:ms:20151024':
+    - polymer-cli > web-component-tester > send > ms:
+        patched: '2018-12-05T05:11:57.297Z'
+    - polymer-cli > web-component-tester > send > debug > ms:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:request:20160119':
+    - youtube-node > request:
+        patched: '2018-12-05T05:11:57.297Z'
+  'npm:tunnel-agent:20170305':
+    - youtube-node > request > tunnel-agent:
+        patched: '2018-12-05T05:11:57.297Z'
