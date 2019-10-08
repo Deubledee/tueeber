@@ -33,7 +33,7 @@
     "newsapi": "^2.1.0",
     "npm": "^5.6.0",
     "pkg-config": "^1.1.1",
-    "polymer-cli": "^1.5.7",
+    "polymer-cli": "^1.9.3",
     "prpl-server": "^1.0.0",
     "redis": "^2.8.0",
     "redis-notifier": "^1.0.0",
